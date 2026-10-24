@@ -18,7 +18,15 @@ export type ProjectCategory =
   | 'Expansão da Rede'
   | 'Construção de Subestações'
   | 'Reabilitação de Infra-estruturas'
-  | 'Instalação de Postos de Transformação';
+  | 'Instalação de Postos de Transformação'
+  | 'Energia Solar'
+  | 'Energia Hídrica'
+  | 'Energia Térmica a Gás'
+  | 'Linha de Transmissão'
+  | 'Tecnologias de Informação'
+  | 'Hidrogénio Verde'
+  | 'Infraestrutura'
+  | 'Outro';
 
 export type ProjectStatus = 'Por Iniciar' | 'Em Execução' | 'Concluído' | 'Atrasado' | 'Em Risco';
 
@@ -149,6 +157,10 @@ export interface Project {
   spentBudget: number;      // MZN
   commitments: number;      // MZN
   fundingSource: string;
+  financingType: string;    // Tipo de Financiamento (Donativo, Empréstimo, Capital Próprio, etc.)
+  modality: string;         // Modalidade (Direto, Indireto, Directo para a SPV, etc.)
+  phase: string;            // Fase actual do projecto
+  constraints: string;      // Constrangimentos actuais
   risksNotes: string;
   observations: string;
   lastUpdated: string;

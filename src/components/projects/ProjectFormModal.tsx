@@ -67,6 +67,10 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
     spentBudget: 0,
     commitments: 0,
     fundingSource: 'Banco Mundial & EDM',
+    financingType: 'Donativo',
+    modality: 'Directo',
+    phase: 'Execução',
+    constraints: '',
     risksNotes: '',
     observations: '',
   });
@@ -97,6 +101,10 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
         spentBudget: 0,
         commitments: 0,
         fundingSource: 'Governo de Moçambique & EDM',
+        financingType: 'Donativo',
+        modality: 'Directo',
+        phase: 'Preparação',
+        constraints: '',
         risksNotes: '',
         observations: '',
       });
@@ -456,7 +464,7 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                 />
               </div>
 
-              <div className="md:col-span-3">
+              <div className="md:col-span-1">
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Fonte de Financiamento
                 </label>
@@ -464,7 +472,55 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
                   type="text"
                   value={formData.fundingSource || ''}
                   onChange={e => setFormData({ ...formData, fundingSource: e.target.value })}
-                  placeholder="Ex: Banco Mundial, BAD, KfW, Governo de Moçambique ou EDM Capital Próprio"
+                  placeholder="Ex: Banco Mundial, ASDI, BAD, KfW"
+                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
+                />
+              </div>
+
+              <div className="md:col-span-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Tipo de Financiamento
+                </label>
+                <input
+                  type="text"
+                  value={formData.financingType || ''}
+                  onChange={e => setFormData({ ...formData, financingType: e.target.value })}
+                  placeholder="Ex: Donativo, Empréstimo, Capital Próprio"
+                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
+                />
+              </div>
+
+              <div className="md:col-span-1">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Modalidade & Fase
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  <input
+                    type="text"
+                    value={formData.modality || ''}
+                    onChange={e => setFormData({ ...formData, modality: e.target.value })}
+                    placeholder="Modalidade (Ex: Directo, Indireto)"
+                    className="w-full text-xs px-2.5 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
+                  />
+                  <input
+                    type="text"
+                    value={formData.phase || ''}
+                    onChange={e => setFormData({ ...formData, phase: e.target.value })}
+                    placeholder="Fase (Ex: Execução, Concurso)"
+                    className="w-full text-xs px-2.5 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
+                  />
+                </div>
+              </div>
+
+              <div className="md:col-span-3">
+                <label className="block text-xs font-semibold text-slate-700 mb-1">
+                  Constrangimentos Actuais
+                </label>
+                <input
+                  type="text"
+                  value={formData.constraints || ''}
+                  onChange={e => setFormData({ ...formData, constraints: e.target.value })}
+                  placeholder="Ex: Desembaraço aduaneiro no Porto de Maputo pendente, atrasos de material..."
                   className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
                 />
               </div>

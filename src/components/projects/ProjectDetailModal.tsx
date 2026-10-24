@@ -347,18 +347,28 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                   <p className="text-xs text-slate-700 leading-relaxed">
                     {project.description}
                   </p>
-                  <div className="pt-2 border-t border-slate-100 grid grid-cols-2 gap-3 text-xs">
+                  <div className="pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                     <div>
-                      <span className="text-slate-400 block">Fonte de Financiamento</span>
-                      <span className="font-semibold text-slate-900">{project.fundingSource}</span>
+                      <span className="text-slate-400 block">Fonte Financiamento</span>
+                      <span className="font-semibold text-slate-900">{project.fundingSource || '—'}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block">Tipo Financiamento</span>
+                      <span className="font-semibold text-slate-900">{project.financingType || '—'}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block">Modalidade</span>
+                      <span className="font-semibold text-slate-900">{project.modality || '—'}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block">Fase do Projecto</span>
+                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold text-[11px] border border-blue-200">
+                        {project.phase || '—'}
+                      </span>
                     </div>
                     <div>
                       <span className="text-slate-400 block">Localidade</span>
-                      <span className="font-semibold text-slate-900">{project.locality}</span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block">Data de Início</span>
-                      <span className="font-semibold text-slate-900">{formatDatePt(project.startDate)}</span>
+                      <span className="font-semibold text-slate-900">{project.locality || '—'}</span>
                     </div>
                     <div>
                       <span className="text-slate-400 block">Conclusão Prevista</span>
@@ -369,8 +379,17 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
 
                 <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    Observações e Riscos Críticos
+                    Observações, Constrangimentos e Riscos
                   </h4>
+                  {project.constraints && (
+                    <div className="p-3 bg-red-50 rounded-xl border border-red-200 text-xs text-red-900 flex items-start gap-2">
+                      <AlertTriangle className="w-4 h-4 shrink-0 text-red-600 mt-0.5" />
+                      <div>
+                        <strong>Constrangimentos Identificados:</strong>
+                        <p className="mt-0.5 leading-relaxed">{project.constraints}</p>
+                      </div>
+                    </div>
+                  )}
                   <div className="p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 flex items-start gap-2">
                     <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
                     <div>
@@ -380,7 +399,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                   </div>
                   <div>
                     <span className="text-xs text-slate-400 block font-medium">Observações da Direcção:</span>
-                    <p className="text-xs text-slate-700 mt-1">{project.observations || 'Trabalhos a decorrer em conformidade com o plano de trabalho anual.'}</p>
+                    <p className="text-xs text-slate-700 mt-1">{project.observations || 'Trabalhos a decorrer em conformidade com o plano oficial.'}</p>
                   </div>
                 </div>
               </div>

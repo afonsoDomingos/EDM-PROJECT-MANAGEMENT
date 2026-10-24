@@ -349,6 +349,11 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                         <span className="font-mono text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-semibold">
                           {p.code}
                         </span>
+                        {p.phase && (
+                          <span className="font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded text-[10px]">
+                            {p.phase}
+                          </span>
+                        )}
                         <span className="hidden sm:inline">• {p.manager}</span>
                       </div>
                     </td>
@@ -366,7 +371,7 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                     <td className="py-3.5 px-3 hidden lg:table-cell">
                       <span className="text-slate-700 font-medium">{p.category}</span>
                       <div className="text-[11px] text-slate-400 truncate max-w-xs">
-                        {p.fundingSource}
+                        {p.fundingSource} {p.modality ? `• ${p.modality}` : ''}
                       </div>
                     </td>
 
