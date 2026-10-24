@@ -115,17 +115,9 @@ export const ExecutiveCharts: React.FC = () => {
       {/* Chart 1: Physical vs Financial Execution Comparison */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 font-heading">
-              Comparação: Execução Física vs Financeira
-            </h4>
-            <p className="text-xs text-slate-500">
-              Desvio entre avanço de obra física e desembolso orçamental
-            </p>
-          </div>
-          <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
-            Principais Projectos
-          </span>
+          <h4 className="text-sm font-bold text-slate-900 font-heading">
+            Execução Física vs Financeira
+          </h4>
         </div>
 
         <div className="h-72 w-full">
@@ -146,17 +138,9 @@ export const ExecutiveCharts: React.FC = () => {
       {/* Chart 2: Project Distribution by Status */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 font-heading">
-              Distribuição de Projectos por Estado
-            </h4>
-            <p className="text-xs text-slate-500">
-              Visão consolidada do estado operacional dos empreendimentos
-            </p>
-          </div>
-          <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
-            100% Portfólio
-          </span>
+          <h4 className="text-sm font-bold text-slate-900 font-heading">
+            Projectos por Estado
+          </h4>
         </div>
 
         <div className="h-72 w-full flex items-center justify-center">
@@ -193,14 +177,9 @@ export const ExecutiveCharts: React.FC = () => {
       {/* Chart 3: Distribution by Region */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 font-heading">
-              Projectos e Orçamento por Região
-            </h4>
-            <p className="text-xs text-slate-500">
-              Descentralização geográfica: Norte, Centro e Sul
-            </p>
-          </div>
+          <h4 className="text-sm font-bold text-slate-900 font-heading">
+            Projectos por Região
+          </h4>
         </div>
 
         <div className="h-64 w-full">
@@ -231,14 +210,9 @@ export const ExecutiveCharts: React.FC = () => {
       {/* Chart 4: Budget Distribution by Category */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
         <div className="flex items-center justify-between mb-4">
-          <div>
-            <h4 className="text-sm font-bold text-slate-900 font-heading">
-              Distribuição Orçamental por Categoria
-            </h4>
-            <p className="text-xs text-slate-500">
-              Volume financeiro aprovado por tipologia de infra-estrutura
-            </p>
-          </div>
+          <h4 className="text-sm font-bold text-slate-900 font-heading">
+            Orçamento por Categoria
+          </h4>
         </div>
 
         <div className="h-64 w-full flex items-center justify-center">

@@ -138,9 +138,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
               {filteredProjects.length} de {projects.length}
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-0.5">
-            Gestão completa de empreendimentos de transporte, distribuição e electrificação rural
-          </p>
+
         </div>
 
         <div className="flex items-center gap-2">
@@ -285,22 +283,13 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     {p.name}
                   </h4>
 
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2 leading-relaxed">
-                    {p.description}
-                  </p>
-
-                  <div className="mt-4 pt-3 border-t border-slate-100 space-y-2 text-xs">
-                    <div className="flex items-center justify-between text-slate-600">
-                      <span className="flex items-center gap-1.5">
-                        <MapPin className="w-3.5 h-3.5 text-[#F7942D]" />
-                        {p.province} ({p.region})
+                  <div className="mt-3 pt-3 border-t border-slate-100 space-y-1.5 text-xs">
+                    <div className="flex items-center justify-between text-slate-500">
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-[#F7942D]" />
+                        {p.province}
                       </span>
-                      <span className="font-medium text-slate-500">{p.category}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-slate-500 text-[11px]">
-                      <span>Gestor: <strong>{p.manager}</strong></span>
-                      <span>{formatDatePt(p.expectedEndDate)}</span>
+                      <span className="text-[11px]">{formatDatePt(p.expectedEndDate)}</span>
                     </div>
                   </div>
                 </div>

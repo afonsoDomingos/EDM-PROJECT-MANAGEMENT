@@ -161,9 +161,6 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                 {filteredProjects.length} de {projects.length}
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-0.5">
-              Acompanhamento integrado de prazos, execução física e financeira
-            </p>
           </div>
 
           <div className="flex items-center gap-2">
