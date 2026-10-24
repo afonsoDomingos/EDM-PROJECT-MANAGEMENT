@@ -5,8 +5,7 @@
     "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": false,
-    "noEmit": true
+    "strict": false
   },
   "include": ["**/*", "../src/data/initialData.ts", "../src/types/index.ts"]
 }

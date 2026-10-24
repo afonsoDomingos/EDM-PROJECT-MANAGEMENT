@@ -14,22 +14,7 @@ export default defineConfig({
     },
   },
   build: {
-    chunkSizeWarningLimit: 1000,
-    rollupOptions: {
-      output: {
-        manualChunks(id: string) {
-          if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
-            return 'vendor-react';
-          }
-          if (id.includes('node_modules/recharts/')) {
-            return 'vendor-charts';
-          }
-          if (id.includes('node_modules/lucide-react/') || id.includes('node_modules/react-icons/')) {
-            return 'vendor-icons';
-          }
-        },
-      },
-    },
+    chunkSizeWarningLimit: 1500,
   },
 })
 
