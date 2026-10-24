@@ -36,7 +36,7 @@ export const FinancialOverview: React.FC = () => {
     supplier: '',
     amount: 0,
     invoiceNumber: '',
-    approvedBy: 'Eng. Marcelino Gildo',
+    approvedBy: 'Eng. António Nhassego',
     category: 'Equipamento' as any,
   });
 
@@ -76,7 +76,7 @@ export const FinancialOverview: React.FC = () => {
       supplier: '',
       amount: 0,
       invoiceNumber: '',
-      approvedBy: 'Eng. Marcelino Gildo',
+      approvedBy: 'Eng. António Nhassego',
       category: 'Equipamento',
     });
   };

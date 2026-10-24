@@ -3,8 +3,8 @@ import { Project, Task, Risk, ExpenseRecord, Milestone, ProjectDocument, AuditLo
 export const INITIAL_USERS: User[] = [
   {
     id: 'usr-1',
-    name: 'Eng. Marcelino Gildo',
-    email: 'marcelino.gildo@edm.co.mz',
+    name: 'Eng. António Nhassego',
+    email: 'antonio.nhassego@edm.co.mz',
     role: 'Director',
     department: 'Conselho de Administração / Direcção Executiva',
   },
@@ -690,7 +690,7 @@ export const INITIAL_EXPENSES: ExpenseRecord[] = [
     supplier: 'KEC International & Cobra Instalaciones',
     amount: 145000000,
     invoiceNumber: 'INV-KEC-2025-089',
-    approvedBy: 'Eng. Marcelino Gildo',
+    approvedBy: 'Eng. António Nhassego',
     category: 'Obras Civis',
   },
   {
@@ -723,7 +723,7 @@ export const INITIAL_EXPENSES: ExpenseRecord[] = [
     supplier: 'Siemens Energy Moçambique',
     amount: 160000000,
     invoiceNumber: 'SE-MZ-2025-782',
-    approvedBy: 'Eng. Marcelino Gildo',
+    approvedBy: 'Eng. António Nhassego',
     category: 'Equipamento',
   },
   {
@@ -894,7 +894,7 @@ export const INITIAL_AUDIT_LOGS: AuditLog[] = [
   {
     id: 'LOG-004',
     timestamp: '2025-05-17 11:20',
-    userName: 'Eng. Marcelino Gildo',
+    userName: 'Eng. António Nhassego',
     userRole: 'Director',
     action: 'Edição',
     entity: 'Projecto',

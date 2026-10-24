@@ -389,7 +389,7 @@ export const ExecutiveReports: React.FC = () => {
           </div>
           <div>
             <div className="border-b border-slate-400 w-36 mx-auto mb-1.5" />
-            <p className="font-bold">Eng. Marcelino Gildo</p>
+            <p className="font-bold">Eng. António Nhassego</p>
             <p className="text-[10px] text-slate-400">Director de Projectos</p>
           </div>
           <div className="hidden sm:block">
