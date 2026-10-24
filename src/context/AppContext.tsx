@@ -10,6 +10,7 @@ import {
   User,
   AppNotification,
   UserRole,
+  GenerationPlant,
 } from '../types';
 import {
   INITIAL_PROJECTS,
@@ -22,9 +23,12 @@ import {
   INITIAL_NOTIFICATIONS,
   INITIAL_USERS,
 } from '../data/initialData';
+import { INITIAL_GENERATION_PLANTS } from '../data/generationData';
 
 interface AppContextType {
   projects: Project[];
+  generationPlants: GenerationPlant[];
+  updateGenerationPlant: (plant: GenerationPlant) => void;
   tasks: Task[];
   risks: Risk[];
   expenses: ExpenseRecord[];
@@ -107,6 +111,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_NOTIFICATIONS);
   const [users, setUsers] = useState<User[]>(INITIAL_USERS);
   const [currentUser, setCurrentUser] = useState<User>(INITIAL_USERS[0]); // default Director
+  const [generationPlants, setGenerationPlants] = useState<GenerationPlant[]>(INITIAL_GENERATION_PLANTS);
+
+  const updateGenerationPlant = (updated: GenerationPlant) => {
+    setGenerationPlants(prev => prev.map(p => (p.id === updated.id ? updated : p)));
+  };
 
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
@@ -520,6 +529,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const value = useMemo(
     () => ({
       projects,
+      generationPlants,
+      updateGenerationPlant,
       tasks,
       risks,
       expenses,

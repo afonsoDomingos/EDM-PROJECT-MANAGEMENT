@@ -8,41 +8,6 @@ export const INITIAL_USERS: User[] = [
     role: 'Director',
     department: 'Conselho de Administração / Direcção Executiva',
   },
-  {
-    id: 'usr-2',
-    name: 'Eng. Armindo Macaringue',
-    email: 'armindo.macaringue@edm.co.mz',
-    role: 'Gestor de projectos',
-    department: 'Direcção de Transporte de Energia (DTR)',
-  },
-  {
-    id: 'usr-3',
-    name: 'Dra. Teresa Cossa',
-    email: 'teresa.cossa@edm.co.mz',
-    role: 'Gestor de projectos',
-    department: 'Direcção de Electrificação Rural (DER)',
-  },
-  {
-    id: 'usr-4',
-    name: 'Eng. Zacarias Mucavele',
-    email: 'zacarias.mucavele@edm.co.mz',
-    role: 'Gestor de projectos',
-    department: 'Direcção de Engenharia e Planeamento',
-  },
-  {
-    id: 'usr-5',
-    name: 'Eng. Tomás Mondlane',
-    email: 'tomas.mondlane@edm.co.mz',
-    role: 'Técnico',
-    department: 'Direcção de Protecção e Manutenção',
-  },
-  {
-    id: 'usr-6',
-    name: 'Dr. Salvador Cossa',
-    email: 'salvador.cossa@edm.co.mz',
-    role: 'Administrador',
-    department: 'Departamento de Tecnologias de Informação',
-  },
 ];
 
 export const INITIAL_PROJECTS: Project[] = [

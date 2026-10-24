@@ -2,6 +2,7 @@ import React from 'react';
 import {
   LayoutDashboard,
   FolderGit2,
+  Zap,
   CalendarDays,
   CheckSquare,
   DollarSign,
@@ -43,6 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const navItems = [
     { id: 'dashboard',   label: 'Dashboard Executivo',     icon: LayoutDashboard, badge: null },
     { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
+    { id: 'generation',  label: 'Centrais & Geração (MW)', icon: Zap,             badge: '27 MW', badgeColor: 'bg-orange-100 text-orange-800 font-mono' },
     { id: 'schedule',    label: 'Cronogramas & Prazos',    icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
     { id: 'activities',  label: 'Actividades & Tarefas',   icon: CheckSquare,     badge: pendingTasksCount > 0 ? pendingTasksCount : null },
     { id: 'financial',   label: 'Gestão Financeira',       icon: DollarSign,      badge: null },

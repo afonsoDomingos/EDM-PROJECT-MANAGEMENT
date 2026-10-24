@@ -246,34 +246,21 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
                   </div>
                 </div>
 
-                <div className="p-3 space-y-1">
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-2 mb-2">
-                    Alternar perfil
-                  </p>
-                  {users.map(u => (
-                    <button
-                      key={u.id}
-                      onClick={() => {
-                        setCurrentUser(u);
-                        setShowUserMenu(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition ${
-                        currentUser.id === u.id
-                          ? 'bg-orange-50 text-[#c26508] font-bold border border-orange-200'
-                          : 'hover:bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      <div>
-                        <p className="font-semibold">{u.name}</p>
-                        <p className="text-[10px] text-slate-500">{u.role}</p>
-                      </div>
-                      {currentUser.id === u.id && (
-                        <span className="text-[10px] font-bold text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                          Activo
-                        </span>
-                      )}
-                    </button>
-                  ))}
+                <div className="p-4 space-y-2.5 text-xs text-slate-600 bg-white">
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Departamento</span>
+                    <span className="font-semibold text-slate-800">{currentUser.department}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Correio Electrónico</span>
+                    <span className="font-mono text-slate-700">{currentUser.email}</span>
+                  </div>
+                  <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
+                    <span className="text-slate-500">Nível de Acesso</span>
+                    <span className="font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                      Acesso Total (Director)
+                    </span>
+                  </div>
                 </div>
               </div>
             )}

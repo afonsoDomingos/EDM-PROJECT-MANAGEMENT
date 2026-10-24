@@ -13,6 +13,7 @@ import { RiskMatrix } from './components/risks/RiskMatrix';
 import { ExecutiveReports } from './components/reports/ExecutiveReports';
 import { AuditLogView } from './components/audit/AuditLogView';
 import { SettingsAndUsersView } from './components/settings/SettingsAndUsersView';
+import { GenerationPipelineView } from './components/generation/GenerationPipelineView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
 import { Project } from './types';
@@ -71,6 +72,8 @@ const MainLayout: React.FC = () => {
               onOpenEditModal={handleOpenEdit}
             />
           )}
+
+          {activeTab === 'generation' && <GenerationPipelineView />}
 
           {activeTab === 'schedule' && <ScheduleGanttView />}
 

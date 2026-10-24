@@ -178,3 +178,27 @@ export interface AppNotification {
   read: boolean;
   category: 'Prazo' | 'Orçamento' | 'Risco' | 'Marco' | 'Auditoria';
 }
+
+export type GenerationStatus =
+  | 'Em operação'
+  | 'Em construção'
+  | 'Em estudos de viabilidade'
+  | 'Carteira de Projecto'
+  | 'Na fase Conceptual'
+  | 'Em Desenvolvimento';
+
+export type GenerationSource = 'Térmica a Gás' | 'Hídrica' | 'Dual Fuel / HFO' | 'FSRU / Gás' | 'Outro';
+
+export interface GenerationPlant {
+  id: string;
+  item: number;
+  name: string;
+  location: string;
+  province: string;
+  capacityMW: number;
+  status: GenerationStatus;
+  sourceType: GenerationSource;
+  partner?: string;
+  notes?: string;
+}
+

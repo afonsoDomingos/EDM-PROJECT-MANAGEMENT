@@ -8,12 +8,13 @@ import {
   TrendingUp,
   DollarSign,
   PieChart,
+  Zap,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { formatCompactMZN, formatCurrency, formatPercent, calculateFinancialExecution } from '../../utils/formatters';
 
 export const ExecutiveKpiCards: React.FC = () => {
-  const { projects } = useApp();
+  const { projects, generationPlants, setActiveTab } = useApp();
 
   const totalProjects = projects.length;
   const inExecution = projects.filter(p => p.status === 'Em Execução').length;
@@ -145,6 +146,34 @@ export const ExecutiveKpiCards: React.FC = () => {
           </div>
         );
       })}
+
+      {/* Quick link banner to Generation Pipeline */}
+      <div
+        onClick={() => setActiveTab('generation')}
+        className="col-span-1 sm:col-span-2 lg:col-span-4 p-4 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/5 border border-orange-200/90 hover:border-orange-400 hover:shadow-sm cursor-pointer transition flex items-center justify-between"
+      >
+        <div className="flex items-center gap-3.5">
+          <div className="w-10 h-10 rounded-xl bg-[#F7942D] text-white flex items-center justify-center shadow-xs shrink-0">
+            <Zap className="w-5 h-5" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-slate-900">
+                Pipeline Estratégico de Centrais Eléctricas (2026)
+              </span>
+              <span className="text-[10px] font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">
+                27 Centrais • {generationPlants.reduce((acc, p) => acc + p.capacityMW, 0).toLocaleString('pt-PT')} MW
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-500 mt-0.5 block">
+              Monitorização da capacidade energética nacional: centrais térmicas a gás, hídricas, dual fuel e offshore em operação e desenvolvimento.
+            </span>
+          </div>
+        </div>
+        <button className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-[#c26508] bg-white px-3.5 py-2 rounded-xl border border-orange-200 shadow-2xs hover:bg-orange-50 transition shrink-0">
+          Explorar Matriz MW →
+        </button>
+      </div>
     </div>
   );
 };
