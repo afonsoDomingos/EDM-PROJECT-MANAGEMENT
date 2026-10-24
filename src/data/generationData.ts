@@ -1,4 +1,4 @@
-import { GenerationPlant } from '../types';
+import { GenerationPlant } from '../types/index.js';
 
 export const INITIAL_GENERATION_PLANTS: GenerationPlant[] = [
   {

@@ -1,4 +1,4 @@
-import { Project, Task, Risk, ExpenseRecord, Milestone, ProjectDocument, AuditLog, User, AppNotification } from '../types';
+import { Project, Task, Risk, ExpenseRecord, Milestone, ProjectDocument, AuditLog, User, AppNotification } from '../types/index.js';
 
 export const INITIAL_USERS: User[] = [
   {

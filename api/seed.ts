@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { connectDB } from './_lib/db';
+import { connectDB } from './_lib/db.js';
 import {
   ProjectModel,
   TaskModel,
@@ -10,7 +10,7 @@ import {
   AuditLogModel,
   NotificationModel,
   UserModel,
-} from './_lib/models';
+} from './_lib/models.js';
 
 // Import seed data — path relative to project root
 import {
@@ -23,7 +23,7 @@ import {
   INITIAL_AUDIT_LOGS,
   INITIAL_NOTIFICATIONS,
   INITIAL_USERS,
-} from '../src/data/initialData';
+} from '../src/data/initialData.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== 'POST') {
@@ -46,15 +46,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     ]);
 
     await Promise.all([
-      ProjectModel.insertMany(INITIAL_PROJECTS),
-      TaskModel.insertMany(INITIAL_TASKS),
-      RiskModel.insertMany(INITIAL_RISKS),
-      ExpenseModel.insertMany(INITIAL_EXPENSES),
-      MilestoneModel.insertMany(INITIAL_MILESTONES),
-      DocumentModel.insertMany(INITIAL_DOCUMENTS),
-      AuditLogModel.insertMany(INITIAL_AUDIT_LOGS),
-      NotificationModel.insertMany(INITIAL_NOTIFICATIONS),
-      UserModel.insertMany(INITIAL_USERS),
+      ProjectModel.insertMany(INITIAL_PROJECTS as any),
+      TaskModel.insertMany(INITIAL_TASKS as any),
+      RiskModel.insertMany(INITIAL_RISKS as any),
+      ExpenseModel.insertMany(INITIAL_EXPENSES as any),
+      MilestoneModel.insertMany(INITIAL_MILESTONES as any),
+      DocumentModel.insertMany(INITIAL_DOCUMENTS as any),
+      AuditLogModel.insertMany(INITIAL_AUDIT_LOGS as any),
+      NotificationModel.insertMany(INITIAL_NOTIFICATIONS as any),
+      UserModel.insertMany(INITIAL_USERS as any),
     ]);
 
     res.json({ message: 'Dados de demonstração repostos com sucesso no MongoDB Atlas.' });

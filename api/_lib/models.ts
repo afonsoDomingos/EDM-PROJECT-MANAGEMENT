@@ -24,6 +24,10 @@ const ProjectSchema = new Schema(
     spentBudget: { type: Number, default: 0 },
     commitments: { type: Number, default: 0 },
     fundingSource: { type: String, default: '' },
+    financingType: { type: String, default: '' },
+    modality: { type: String, default: '' },
+    phase: { type: String, default: '' },
+    constraints: { type: String, default: '' },
     risksNotes: { type: String, default: '' },
     observations: { type: String, default: '' },
     lastUpdated: { type: String, default: () => new Date().toISOString().split('T')[0] },
@@ -160,12 +164,13 @@ const UserSchema = new Schema(
 );
 
 // Use cached models to avoid re-compilation in serverless
-export const ProjectModel = mongoose.models.Project || mongoose.model('Project', ProjectSchema);
-export const TaskModel = mongoose.models.Task || mongoose.model('Task', TaskSchema);
-export const RiskModel = mongoose.models.Risk || mongoose.model('Risk', RiskSchema);
-export const ExpenseModel = mongoose.models.Expense || mongoose.model('Expense', ExpenseSchema);
-export const MilestoneModel = mongoose.models.Milestone || mongoose.model('Milestone', MilestoneSchema);
-export const DocumentModel = mongoose.models.Document || mongoose.model('Document', DocumentSchema);
-export const AuditLogModel = mongoose.models.AuditLog || mongoose.model('AuditLog', AuditLogSchema);
-export const NotificationModel = mongoose.models.Notification || mongoose.model('Notification', NotificationSchema);
-export const UserModel = mongoose.models.User || mongoose.model('User', UserSchema);
+export const ProjectModel = (mongoose.models.Project || mongoose.model('Project', ProjectSchema)) as mongoose.Model<any>;
+export const TaskModel = (mongoose.models.Task || mongoose.model('Task', TaskSchema)) as mongoose.Model<any>;
+export const RiskModel = (mongoose.models.Risk || mongoose.model('Risk', RiskSchema)) as mongoose.Model<any>;
+export const ExpenseModel = (mongoose.models.Expense || mongoose.model('Expense', ExpenseSchema)) as mongoose.Model<any>;
+export const MilestoneModel = (mongoose.models.Milestone || mongoose.model('Milestone', MilestoneSchema)) as mongoose.Model<any>;
+export const DocumentModel = (mongoose.models.Document || mongoose.model('Document', DocumentSchema)) as mongoose.Model<any>;
+export const AuditLogModel = (mongoose.models.AuditLog || mongoose.model('AuditLog', AuditLogSchema)) as mongoose.Model<any>;
+export const NotificationModel = (mongoose.models.Notification || mongoose.model('Notification', NotificationSchema)) as mongoose.Model<any>;
+export const UserModel = (mongoose.models.User || mongoose.model('User', UserSchema)) as mongoose.Model<any>;
+
