@@ -8,15 +8,23 @@ import {
   AlertCircle,
   Menu,
   RotateCcw,
+  PhoneCall,
+  PanelLeft,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
+export const Header: React.FC<HeaderProps> = ({
+  onToggleSidebar,
+  isCollapsed,
+  onToggleCollapse,
+}) => {
   const {
     currentUser,
     setCurrentUser,
@@ -38,40 +46,47 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const unreadCount = notifications.filter(n => !n.read).length;
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-sm">
-      {/* Slim Prototype Bar */}
-      <div className="bg-amber-50 border-b border-amber-200 px-4 py-1 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-amber-800">
-          <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500" />
-          <span className="font-semibold">Protótipo de Demonstração — Dados Fictícios</span>
-          <span
-            className={`hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
-              isMongoConnected
-                ? 'bg-emerald-100 text-emerald-700'
-                : 'bg-slate-100 text-slate-500'
-            }`}
-          >
-            <span className={`w-1.5 h-1.5 rounded-full ${isMongoConnected ? 'bg-emerald-500' : 'bg-slate-400'}`} />
-            {isMongoConnected ? 'MongoDB Conectado' : 'A conectar...'}
+    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-xs">
+      {/* Vibrant EDM Orange Banner */}
+      <div className="bg-[#F7942D] px-4 sm:px-6 py-1.5 flex items-center justify-between text-slate-950 font-semibold text-xs shadow-inner">
+        <div className="flex items-center gap-2.5 overflow-hidden">
+          <span className="w-2.5 h-2.5 rounded-full bg-amber-900/60 shrink-0" />
+          <span className="font-extrabold text-[11px] sm:text-xs tracking-tight uppercase truncate text-slate-950">
+            PROTÓTIPO DE DEMONSTRAÇÃO — DADOS FICTÍCIOS
+          </span>
+          <span className="hidden lg:inline text-slate-900/75 text-[11px] font-medium">
+            | Referência visual inspirada no portal corporativo EDM.
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-black/15 text-slate-950 border border-black/10 shrink-0">
+            <span className={`w-1.5 h-1.5 rounded-full ${isMongoConnected ? 'bg-emerald-600' : 'bg-amber-700'}`} />
+            {isMongoConnected ? 'MongoDB Conectado' : 'Conectando ao MongoDB...'}
           </span>
         </div>
-        <button
-          onClick={() => {
-            if (window.confirm('Repor os dados fictícios originais?')) {
-              resetToInitialData();
-            }
-          }}
-          className="flex items-center gap-1 text-[11px] font-semibold text-amber-700 hover:text-amber-900 transition"
-          title="Repor dados originais"
-        >
-          <RotateCcw className="w-3 h-3" />
-          Repor Dados
-        </button>
+
+        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
+          <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-black text-slate-950">
+            <PhoneCall className="w-3.5 h-3.5" />
+            <span>Piquete 24h: <strong>1455</strong></span>
+          </div>
+
+          <button
+            onClick={() => {
+              if (window.confirm('Repor os dados de demonstração originais?')) {
+                resetToInitialData();
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/10 hover:bg-black/20 text-slate-950 text-[10px] font-bold transition border border-black/15 shadow-2xs"
+            title="Repor dados originais"
+          >
+            <RotateCcw className="w-3 h-3" />
+            Repor Dados
+          </button>
+        </div>
       </div>
 
       {/* Main Header Bar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
-        {/* Left: Hamburger + Logo */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
+        {/* Left: Hamburger / Collapse Toggle + Logo */}
         <div className="flex items-center gap-3">
           <button
             onClick={onToggleSidebar}
@@ -80,6 +95,16 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           >
             <Menu className="w-5 h-5" />
           </button>
+
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              className="hidden lg:flex p-2 rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 transition"
+              title={isCollapsed ? 'Expandir Menu Lateral' : 'Recolher Menu Lateral'}
+            >
+              <PanelLeft className="w-5 h-5" />
+            </button>
+          )}
 
           <div
             className="flex items-center gap-2.5 cursor-pointer select-none"

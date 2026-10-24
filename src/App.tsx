@@ -22,6 +22,7 @@ const MainLayout: React.FC = () => {
   const { activeTab, selectedProjectId, setSelectedProjectId, projects } = useApp();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<Project | null>(null);
 
@@ -39,17 +40,26 @@ const MainLayout: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800">
-      {/* Top Header */}
-      <Header onToggleSidebar={() => setSidebarOpen(prev => !prev)} />
+    <div className="min-h-screen flex bg-slate-50 text-slate-800">
+      {/* Sidebar - Docked to left */}
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+      />
 
-      {/* Main Container */}
-      <div className="flex-1 flex w-full max-w-7xl mx-auto">
-        {/* Sidebar */}
-        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      {/* Main Column: Header + Scrollable Content */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Header with vibrant orange bar */}
+        <Header
+          onToggleSidebar={() => setSidebarOpen(prev => !prev)}
+          isCollapsed={sidebarCollapsed}
+          onToggleCollapse={() => setSidebarCollapsed(prev => !prev)}
+        />
 
         {/* Content Area */}
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto overflow-y-auto">
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               <ExecutiveKpiCards />
