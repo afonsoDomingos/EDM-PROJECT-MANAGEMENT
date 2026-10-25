@@ -49,15 +49,12 @@ export const Header: React.FC<HeaderProps> = ({
     <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-xs">
       {/* Vibrant EDM Orange Banner */}
       <div className="bg-[#F7942D] px-4 sm:px-6 py-1.5 flex items-center justify-between text-slate-950 font-semibold text-xs shadow-inner">
-        <div className="flex items-center gap-2.5 overflow-hidden">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-900/60 shrink-0" />
-          <span className="font-extrabold text-[11px] sm:text-xs tracking-tight uppercase truncate text-slate-950">
-            PROTÓTIPO DE DEMONSTRAÇÃO — DADOS FICTÍCIOS
+        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
+          <span className="w-2 h-2 rounded-full bg-slate-900/60 shrink-0" />
+          <span className="font-black text-[11px] sm:text-xs tracking-tight uppercase truncate text-slate-950">
+            PROTÓTIPO EDM — DADOS FICTÍCIOS
           </span>
-          <span className="hidden lg:inline text-slate-900/75 text-[11px] font-medium">
-            | Referência visual inspirada no portal corporativo EDM.
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-black/15 text-slate-950 border border-black/10 shrink-0">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/15 text-slate-950 border border-black/10 shrink-0">
             <span className={`w-1.5 h-1.5 rounded-full ${isMongoConnected ? 'bg-emerald-600' : 'bg-amber-700'}`} />
             {isMongoConnected ? 'MongoDB Conectado' : 'Conectando ao MongoDB...'}
           </span>

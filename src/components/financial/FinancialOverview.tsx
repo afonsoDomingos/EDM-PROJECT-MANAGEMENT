@@ -252,18 +252,18 @@ export const FinancialOverview: React.FC = () => {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left text-xs border-collapse min-w-[780px] lg:min-w-full">
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase text-[10px]">
               <tr>
-                <th className="py-3 px-4">Projecto</th>
-                <th className="py-3 px-3 text-right">Orçamento Revisto</th>
-                <th className="py-3 px-3 text-right">Despesas Acumuladas</th>
-                <th className="py-3 px-3 text-right">Saldo Orçamental</th>
-                <th className="py-3 px-3 text-center">Exec. Financeira</th>
-                <th className="py-3 px-3 text-center">Exec. Física</th>
-                <th className="py-3 px-3 text-center">Desvio (%)</th>
-                <th className="py-3 px-4 text-center">Estado Financeiro</th>
+                <th className="py-3 px-4 min-w-[200px]">Projecto</th>
+                <th className="py-3 px-3 text-right whitespace-nowrap">Orçamento Revisto</th>
+                <th className="py-3 px-3 text-right whitespace-nowrap">Despesas Acumuladas</th>
+                <th className="py-3 px-3 text-right whitespace-nowrap">Saldo Orçamental</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Exec. Financeira</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Exec. Física</th>
+                <th className="py-3 px-3 text-center whitespace-nowrap">Desvio (%)</th>
+                <th className="py-3 px-4 text-center whitespace-nowrap">Estado Financeiro</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">

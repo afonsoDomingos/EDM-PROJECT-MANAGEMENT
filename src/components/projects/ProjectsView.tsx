@@ -372,60 +372,62 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       ) : (
         /* TABLE VIEW */
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs">
-          <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase text-[10px]">
-              <tr>
-                <th className="py-3 px-4">Código & Nome</th>
-                <th className="py-3 px-3">Localização</th>
-                <th className="py-3 px-3">Gestor</th>
-                <th className="py-3 px-3 text-center">Exec. Física</th>
-                <th className="py-3 px-3 text-center">Exec. Financeira</th>
-                <th className="py-3 px-3 text-right">Orçamento</th>
-                <th className="py-3 px-3 text-center">Estado</th>
-                <th className="py-3 px-4 text-right">Acções</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
-              {filteredProjects.map(p => {
-                const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
-                return (
-                  <tr
-                    key={p.id}
-                    onClick={() => setSelectedProjectId(p.id)}
-                    className="hover:bg-slate-50 cursor-pointer transition"
-                  >
-                    <td className="py-3 px-4">
-                      <div className="font-bold text-slate-900">{p.name}</div>
-                      <span className="font-mono text-[10px] text-slate-500">{p.code} • {p.category}</span>
-                    </td>
-                    <td className="py-3 px-3">{p.province} ({p.region})</td>
-                    <td className="py-3 px-3">{p.manager}</td>
-                    <td className="py-3 px-3 text-center font-mono font-bold text-[#F7942D]">
-                      {p.physicalProgress}%
-                    </td>
-                    <td className="py-3 px-3 text-center font-mono font-bold text-[#c26508]">
-                      {formatPercent(finExec)}
-                    </td>
-                    <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
-                      {formatCompactMZN(p.revisedBudget)}
-                    </td>
-                    <td className="py-3 px-3 text-center">{getStatusBadge(p.status)}</td>
-                    <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={e => {
-                          e.stopPropagation();
-                          setSelectedProjectId(p.id);
-                        }}
-                        className="px-2.5 py-1 text-xs font-semibold bg-slate-100 hover:bg-[#F7942D] hover:text-white rounded-lg transition"
-                      >
-                        Detalhes
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto w-full">
+            <table className="w-full text-left text-xs border-collapse min-w-[680px] lg:min-w-full">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-700 font-bold uppercase text-[10px]">
+                <tr>
+                  <th className="py-3 px-4">Código & Nome</th>
+                  <th className="py-3 px-3 hidden md:table-cell">Localização</th>
+                  <th className="py-3 px-3 hidden lg:table-cell">Gestor</th>
+                  <th className="py-3 px-3 text-center whitespace-nowrap">Exec. Física</th>
+                  <th className="py-3 px-3 text-center hidden sm:table-cell whitespace-nowrap">Exec. Financeira</th>
+                  <th className="py-3 px-3 text-right hidden sm:table-cell whitespace-nowrap">Orçamento</th>
+                  <th className="py-3 px-3 text-center whitespace-nowrap">Estado</th>
+                  <th className="py-3 px-4 text-right whitespace-nowrap">Acções</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-slate-700">
+                {filteredProjects.map(p => {
+                  const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
+                  return (
+                    <tr
+                      key={p.id}
+                      onClick={() => setSelectedProjectId(p.id)}
+                      className="hover:bg-slate-50 cursor-pointer transition"
+                    >
+                      <td className="py-3 px-4 min-w-[200px]">
+                        <div className="font-bold text-slate-900 leading-snug">{p.name}</div>
+                        <span className="font-mono text-[10px] text-slate-500">{p.code} • {p.category}</span>
+                      </td>
+                      <td className="py-3 px-3 hidden md:table-cell whitespace-nowrap">{p.province} ({p.region})</td>
+                      <td className="py-3 px-3 hidden lg:table-cell whitespace-nowrap">{p.manager}</td>
+                      <td className="py-3 px-3 text-center font-mono font-bold text-[#F7942D] whitespace-nowrap">
+                        {p.physicalProgress}%
+                      </td>
+                      <td className="py-3 px-3 text-center font-mono font-bold text-[#c26508] hidden sm:table-cell whitespace-nowrap">
+                        {formatPercent(finExec)}
+                      </td>
+                      <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 hidden sm:table-cell whitespace-nowrap">
+                        {formatCompactMZN(p.revisedBudget)}
+                      </td>
+                      <td className="py-3 px-3 text-center whitespace-nowrap">{getStatusBadge(p.status)}</td>
+                      <td className="py-3 px-4 text-right whitespace-nowrap">
+                        <button
+                          onClick={e => {
+                            e.stopPropagation();
+                            setSelectedProjectId(p.id);
+                          }}
+                          className="px-2.5 py-1 text-xs font-semibold bg-slate-100 hover:bg-[#F7942D] hover:text-white rounded-lg transition"
+                        >
+                          Detalhes
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

@@ -475,18 +475,18 @@ export const GenerationPipelineView: React.FC = () => {
 
       {/* Main Table View */}
       <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+        <div className="overflow-x-auto w-full">
+          <table className="w-full text-left border-collapse text-xs min-w-[720px] lg:min-w-full">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                <th className="py-3.5 px-4">Item</th>
-                <th className="py-3.5 px-4">Central de Geração</th>
-                <th className="py-3.5 px-4">Localização / Província</th>
-                <th className="py-3.5 px-4">Fonte</th>
-                <th className="py-3.5 px-4 text-right">Capacidade (MW)</th>
-                <th className="py-3.5 px-4">Estado do Projecto</th>
-                <th className="py-3.5 px-4">Parceiro / Operador</th>
-                <th className="py-3.5 px-4 text-center">Acção</th>
+                <th className="py-3.5 px-4 hidden sm:table-cell">Item</th>
+                <th className="py-3.5 px-4 min-w-[200px]">Central de Geração</th>
+                <th className="py-3.5 px-4 hidden md:table-cell">Localização</th>
+                <th className="py-3.5 px-4 hidden sm:table-cell">Fonte</th>
+                <th className="py-3.5 px-4 text-right whitespace-nowrap">Capacidade (MW)</th>
+                <th className="py-3.5 px-4 whitespace-nowrap">Estado do Projecto</th>
+                <th className="py-3.5 px-4 hidden lg:table-cell">Parceiro / Operador</th>
+                <th className="py-3.5 px-4 text-center whitespace-nowrap">Acção</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -500,12 +500,12 @@ export const GenerationPipelineView: React.FC = () => {
                     onClick={() => setSelectedPlant(plant)}
                     className="hover:bg-orange-50/40 transition cursor-pointer group"
                   >
-                    <td className="py-3.5 px-4 font-mono font-bold text-slate-400 group-hover:text-slate-700">
+                    <td className="py-3.5 px-4 font-mono font-bold text-slate-400 group-hover:text-slate-700 hidden sm:table-cell">
                       #{plant.item}
                     </td>
 
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900 group-hover:text-[#c26508] transition">
+                    <td className="py-3.5 px-4 min-w-[200px]">
+                      <div className="font-bold text-slate-900 group-hover:text-[#c26508] transition leading-snug">
                         {plant.name}
                       </div>
                       <div className="text-[11px] text-slate-400 truncate max-w-sm mt-0.5">
@@ -513,7 +513,7 @@ export const GenerationPipelineView: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 hidden md:table-cell">
                       <div className="flex items-center gap-1 font-semibold text-slate-800">
                         <MapPin className="w-3.5 h-3.5 text-[#F7942D]" />
                         {plant.location}
@@ -521,14 +521,14 @@ export const GenerationPipelineView: React.FC = () => {
                       <div className="text-[10px] text-slate-400 pl-4">{plant.province}</div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 hidden sm:table-cell">
                       <div className="inline-flex items-center gap-1.5 font-medium text-slate-700">
                         {getSourceIcon(plant.sourceType)}
                         <span>{plant.sourceType}</span>
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-right">
+                    <td className="py-3.5 px-4 text-right whitespace-nowrap">
                       <div className="font-mono font-extrabold text-sm text-slate-900">
                         {plant.capacityMW.toLocaleString('pt-PT')} <span className="text-[10px] font-normal text-slate-400">MW</span>
                       </div>
@@ -540,7 +540,7 @@ export const GenerationPipelineView: React.FC = () => {
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold border ${badge.bg}`}
                       >
@@ -549,13 +549,13 @@ export const GenerationPipelineView: React.FC = () => {
                       </span>
                     </td>
 
-                    <td className="py-3.5 px-4">
+                    <td className="py-3.5 px-4 hidden lg:table-cell">
                       <div className="text-slate-700 font-medium truncate max-w-xs">
                         {plant.partner || 'EDM'}
                       </div>
                     </td>
 
-                    <td className="py-3.5 px-4 text-center">
+                    <td className="py-3.5 px-4 text-center whitespace-nowrap">
                       <button
                         onClick={e => {
                           e.stopPropagation();

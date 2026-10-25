@@ -262,9 +262,9 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
         </div>
       </div>
 
-      {/* Table Body */}
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs text-slate-600 border-collapse">
+      {/* Table Body with Responsive Scroll */}
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-left text-xs text-slate-600 border-collapse min-w-[680px] lg:min-w-full">
           <thead className="bg-slate-50/75 border-b border-slate-200 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
             <tr>
               <th
@@ -293,19 +293,19 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
               </th>
               <th
                 onClick={() => toggleSort('physicalProgress')}
-                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-center"
+                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-center whitespace-nowrap"
               >
                 <div className="flex items-center justify-center gap-1">
                   Exec. Física
                   <ArrowUpDown className="w-3 h-3 text-slate-400" />
                 </div>
               </th>
-              <th className="py-3 px-3 text-center hidden sm:table-cell">
+              <th className="py-3 px-3 text-center hidden sm:table-cell whitespace-nowrap">
                 Exec. Financeira
               </th>
               <th
                 onClick={() => toggleSort('revisedBudget')}
-                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-right hidden sm:table-cell"
+                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-right hidden sm:table-cell whitespace-nowrap"
               >
                 <div className="flex items-center justify-end gap-1">
                   Orçamento
@@ -314,11 +314,11 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
               </th>
               <th
                 onClick={() => toggleSort('status')}
-                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-center"
+                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-center whitespace-nowrap"
               >
                 Estado
               </th>
-              <th className="py-3 px-4 text-right">Acção</th>
+              <th className="py-3 px-4 text-right whitespace-nowrap">Acção</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
@@ -340,21 +340,18 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                       setSelectedProjectId(p.id);
                     }}
                   >
-                    {/* Code & Name */}
-                    <td className="py-3.5 px-4">
-                      <div className="font-bold text-slate-900 group-hover:text-[#c26508] transition">
+                    {/* Code & Name (Clean, without excessive phase text) */}
+                    <td className="py-3.5 px-4 min-w-[220px]">
+                      <div className="font-bold text-slate-900 group-hover:text-[#c26508] transition leading-snug">
                         {p.name}
                       </div>
-                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500">
-                        <span className="font-mono text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-semibold">
+                      <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-500">
+                        <span className="font-mono text-slate-700 bg-slate-100 px-1.5 py-0.5 rounded font-semibold text-[10px]">
                           {p.code}
                         </span>
-                        {p.phase && (
-                          <span className="font-semibold text-[#c26508] bg-orange-50 border border-orange-200/80 px-1.5 py-0.5 rounded text-[10px]">
-                            {p.phase}
-                          </span>
-                        )}
-                        <span className="hidden sm:inline">• {p.manager}</span>
+                        <span className="truncate max-w-[220px] text-slate-500">
+                          • {p.manager}
+                        </span>
                       </div>
                     </td>
 
