@@ -282,14 +282,23 @@ export const FinancialOverview: React.FC = () => {
                       <div className="font-bold text-slate-900">{p.name}</div>
                       <span className="font-mono text-[10px] text-slate-500">{p.code} • {p.fundingSource}</span>
                     </td>
-                    <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
-                      {formatCurrency(p.revisedBudget)}
+                    <td
+                      className="py-3 px-3 text-right font-mono font-bold text-slate-900 whitespace-nowrap"
+                      title={formatCurrency(p.revisedBudget)}
+                    >
+                      {formatCompactMZN(p.revisedBudget)}
                     </td>
-                    <td className="py-3 px-3 text-right font-mono font-bold text-[#c26508]">
-                      {formatCurrency(p.spentBudget)}
+                    <td
+                      className="py-3 px-3 text-right font-mono font-bold text-[#c26508] whitespace-nowrap"
+                      title={formatCurrency(p.spentBudget)}
+                    >
+                      {formatCompactMZN(p.spentBudget)}
                     </td>
-                    <td className="py-3 px-3 text-right font-mono font-bold text-emerald-700">
-                      {formatCurrency(balance)}
+                    <td
+                      className="py-3 px-3 text-right font-mono font-bold text-emerald-700 whitespace-nowrap"
+                      title={formatCurrency(balance)}
+                    >
+                      {formatCompactMZN(balance)}
                     </td>
                     <td className="py-3 px-3 text-center font-mono font-bold text-slate-800">
                       {formatPercent(finExec)}

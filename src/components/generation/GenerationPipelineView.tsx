@@ -333,7 +333,7 @@ export const GenerationPipelineView: React.FC = () => {
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={mwByProvinceData} margin={{ top: 10, right: 10, left: -10, bottom: 20 }}>
+              <BarChart data={mwByProvinceData} margin={{ top: 10, right: 15, left: 15, bottom: 20 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748B' }} angle={-25} textAnchor="end" />
                 <YAxis tick={{ fontSize: 11, fill: '#64748B' }} tickFormatter={v => `${v} MW`} />
@@ -504,12 +504,9 @@ export const GenerationPipelineView: React.FC = () => {
                       #{plant.item}
                     </td>
 
-                    <td className="py-3.5 px-4 min-w-[200px]">
+                    <td className="py-3.5 px-4 min-w-[220px]" title={plant.notes || undefined}>
                       <div className="font-bold text-slate-900 group-hover:text-[#c26508] transition leading-snug">
                         {plant.name}
-                      </div>
-                      <div className="text-[11px] text-slate-400 truncate max-w-sm mt-0.5">
-                        {plant.notes || 'Sem observações adicionais'}
                       </div>
                     </td>
 

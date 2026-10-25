@@ -66,17 +66,35 @@ export const ExecutiveCharts: React.FC = () => {
     { region: 'Região Sul', projectos: regionCounts['Sul'], orcamento: regionBudget['Sul'] },
   ];
 
-  // 4. Budget by Category
+  // 4. Budget by Category (Top 4 + Outras for executive cleanliness)
   const categoryBudgets: Record<string, number> = {};
+  let totalCatBudget = 0;
   projects.forEach(p => {
     categoryBudgets[p.category] = (categoryBudgets[p.category] || 0) + p.revisedBudget;
+    totalCatBudget += p.revisedBudget;
   });
-  const categoryData = Object.entries(categoryBudgets).map(([name, value], index) => ({
+
+  const sortedCategories = Object.entries(categoryBudgets).sort((a, b) => b[1] - a[1]);
+  const top4 = sortedCategories.slice(0, 4);
+  const othersValue = sortedCategories.slice(4).reduce((acc, curr) => acc + curr[1], 0);
+
+  const categoryData = top4.map(([name, value], index) => ({
     name,
     value,
     formatted: formatCompactMZN(value),
+    percent: totalCatBudget > 0 ? ((value / totalCatBudget) * 100).toFixed(1) : '0',
     color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
   }));
+
+  if (othersValue > 0) {
+    categoryData.push({
+      name: 'Outras Categorias',
+      value: othersValue,
+      formatted: formatCompactMZN(othersValue),
+      percent: totalCatBudget > 0 ? ((othersValue / totalCatBudget) * 100).toFixed(1) : '0',
+      color: '#94a3b8',
+    });
+  }
 
   // Custom tooltips
   const CustomBarTooltip = ({ active, payload, label }: any) => {
@@ -97,12 +115,12 @@ export const ExecutiveCharts: React.FC = () => {
 
   const CustomCategoryTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
-      const data = payload[0];
+      const data = payload[0].payload;
       return (
         <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
           <p className="font-bold text-slate-100">{data.name}</p>
           <p className="text-orange-400 font-semibold mt-0.5">
-            Orçamento: {formatCompactMZN(data.value)}
+            Orçamento: {data.formatted} ({data.percent}%)
           </p>
         </div>
       );
@@ -220,20 +238,18 @@ export const ExecutiveCharts: React.FC = () => {
             <PieChart>
               <Pie
                 data={categoryData}
-                outerRadius={85}
+                innerRadius={52}
+                outerRadius={82}
+                paddingAngle={3}
                 dataKey="value"
                 nameKey="name"
-                label={({ name, percent }: any) =>
-                  `${(percent * 100).toFixed(0)}%`
-                }
-                labelLine={false}
               >
                 {categoryData.map((entry, index) => (
                   <Cell key={`cat-cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
               <Tooltip content={<CustomCategoryTooltip />} />
-              <Legend wrapperStyle={{ fontSize: '10px' }} />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />
             </PieChart>
           </ResponsiveContainer>
         </div>
