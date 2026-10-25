@@ -23,7 +23,7 @@ const STATUS_COLORS: Record<string, string> = {
   'Por Iniciar': '#94a3b8',
 };
 
-const CATEGORY_COLORS = ['#F7942D', '#3b82f6', '#10b981', '#8b5cf6', '#ec4899'];
+const CATEGORY_COLORS = ['#F7942D', '#ea580c', '#10b981', '#d97706', '#0f172a'];
 
 export const ExecutiveCharts: React.FC = () => {
   const { projects } = useApp();
@@ -129,7 +129,7 @@ export const ExecutiveCharts: React.FC = () => {
               <Tooltip content={<CustomBarTooltip />} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
               <Bar dataKey="Execução Física (%)" fill="#F7942D" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Execução Financeira (%)" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Execução Financeira (%)" fill="#c26508" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

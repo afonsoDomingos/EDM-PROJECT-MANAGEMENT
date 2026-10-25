@@ -319,7 +319,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     </div>
                     <div className="text-right">
                       <span className="text-[10px] text-slate-400 block uppercase">Exec. Financeira</span>
-                      <span className="font-mono font-bold text-blue-700">
+                      <span className="font-mono font-bold text-[#c26508]">
                         {formatPercent(finExec)}
                       </span>
                     </div>
@@ -403,7 +403,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     <td className="py-3 px-3 text-center font-mono font-bold text-[#F7942D]">
                       {p.physicalProgress}%
                     </td>
-                    <td className="py-3 px-3 text-center font-mono font-bold text-blue-700">
+                    <td className="py-3 px-3 text-center font-mono font-bold text-[#c26508]">
                       {formatPercent(finExec)}
                     </td>
                     <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">

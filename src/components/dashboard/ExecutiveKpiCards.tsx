@@ -39,8 +39,8 @@ export const ExecutiveKpiCards: React.FC = () => {
       value: totalProjects,
       subtitle: `${inExecution} em curso activo`,
       icon: FolderKanban,
-      color: 'bg-blue-50 text-blue-600 border-blue-200',
-      iconBg: 'bg-blue-500 text-white',
+      color: 'bg-orange-50 text-[#c26508] border-orange-200/80',
+      iconBg: 'bg-[#F7942D] text-white',
     },
     {
       title: 'Em Execução',
@@ -79,8 +79,8 @@ export const ExecutiveKpiCards: React.FC = () => {
       value: formatPercent(avgPhysical),
       subtitle: 'Avanço ponderado de obras',
       icon: TrendingUp,
-      color: 'bg-indigo-50 text-indigo-700 border-indigo-200',
-      iconBg: 'bg-indigo-600 text-white',
+      color: 'bg-slate-50 text-slate-800 border-slate-200',
+      iconBg: 'bg-slate-800 text-white',
       progress: avgPhysical,
     },
     {

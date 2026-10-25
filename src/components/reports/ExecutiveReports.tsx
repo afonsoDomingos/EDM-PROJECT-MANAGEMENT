@@ -370,7 +370,7 @@ export const ExecutiveReports: React.FC = () => {
                       <td className="p-2.5 text-center font-semibold">{p.status}</td>
                       <td className="p-2.5 text-center font-mono font-bold text-[#F7942D]">{p.physicalProgress}%</td>
                       <td className="p-2.5 text-right font-mono font-bold">{formatCurrency(p.revisedBudget)}</td>
-                      <td className="p-2.5 text-right font-mono text-blue-700">{formatCurrency(p.spentBudget)}</td>
+                      <td className="p-2.5 text-right font-mono text-[#c26508] font-bold">{formatCurrency(p.spentBudget)}</td>
                       <td className="p-2.5 text-center font-mono font-bold">{formatPercent(finExec)}</td>
                     </tr>
                   );

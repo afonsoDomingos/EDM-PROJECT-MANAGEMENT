@@ -152,10 +152,10 @@ export const FinancialOverview: React.FC = () => {
         </div>
 
         <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-xs font-bold text-blue-700 uppercase tracking-wide">
+          <span className="text-xs font-bold text-[#c26508] uppercase tracking-wide">
             Despesas Liquidadas
           </span>
-          <h3 className="text-2xl font-black text-blue-700 mt-1 font-mono">
+          <h3 className="text-2xl font-black text-[#c26508] mt-1 font-mono">
             {formatCompactMZN(totalSpent)}
           </h3>
           <p className="text-xs text-slate-400 mt-1">
@@ -285,7 +285,7 @@ export const FinancialOverview: React.FC = () => {
                     <td className="py-3 px-3 text-right font-mono font-bold text-slate-900">
                       {formatCurrency(p.revisedBudget)}
                     </td>
-                    <td className="py-3 px-3 text-right font-mono font-bold text-blue-700">
+                    <td className="py-3 px-3 text-right font-mono font-bold text-[#c26508]">
                       {formatCurrency(p.spentBudget)}
                     </td>
                     <td className="py-3 px-3 text-right font-mono font-bold text-emerald-700">

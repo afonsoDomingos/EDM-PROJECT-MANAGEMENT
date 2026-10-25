@@ -75,48 +75,58 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed lg:sticky top-0 h-screen shrink-0 z-40 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out shadow-xs ${
+        className={`fixed lg:sticky top-0 lg:top-[86px] h-screen lg:h-[calc(100vh-86px)] shrink-0 z-40 lg:z-20 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out shadow-xs ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
       >
-        {/* Sidebar Header */}
-        <div className="h-16 px-4 border-b border-slate-100 flex items-center justify-between">
-          <div className={`flex items-center gap-3 overflow-hidden ${isCollapsed ? 'lg:justify-center lg:w-full' : ''}`}>
+        {/* Mobile Header */}
+        <div className="lg:hidden h-14 px-4 border-b border-slate-100 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
             <img
               src="/logo-edm.webp"
               alt="EDM"
               className="h-7 w-auto object-contain shrink-0"
             />
-            {!isCollapsed && (
-              <div className="min-w-0 transition-opacity duration-200">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-800 truncate block">
-                  EDM PORTAL
-                </span>
-                <span className="text-[10px] text-[#c26508] font-bold block truncate">
-                  Project Management
-                </span>
-              </div>
-            )}
+            <span className="font-black text-xs uppercase tracking-wider text-slate-800">
+              EDM PORTAL
+            </span>
           </div>
-
-          {/* Desktop Collapse Toggle */}
-          {onToggleCollapse && (
-            <button
-              onClick={onToggleCollapse}
-              className="hidden lg:flex p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
-              title={isCollapsed ? 'Expandir Menu' : 'Recolher Menu'}
-            >
-              {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-            </button>
-          )}
-
-          {/* Mobile Close Button */}
           <button
             onClick={onClose}
-            className="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Desktop Header / Collapse Bar */}
+        <div className="hidden lg:flex h-11 px-3 border-b border-slate-100 items-center justify-between">
+          {!isCollapsed ? (
+            <>
+              <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 pl-1">
+                Menu Principal
+              </span>
+              {onToggleCollapse && (
+                <button
+                  onClick={onToggleCollapse}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                  title="Recolher Menu Lateral"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+              )}
+            </>
+          ) : (
+            onToggleCollapse && (
+              <button
+                onClick={onToggleCollapse}
+                className="w-full flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition"
+                title="Expandir Menu Lateral"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            )
+          )}
         </div>
 
         {/* Navigation Items */}

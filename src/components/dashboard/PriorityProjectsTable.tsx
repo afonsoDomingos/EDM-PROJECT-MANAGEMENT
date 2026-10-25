@@ -350,7 +350,7 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                           {p.code}
                         </span>
                         {p.phase && (
-                          <span className="font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-1.5 py-0.5 rounded text-[10px]">
+                          <span className="font-semibold text-[#c26508] bg-orange-50 border border-orange-200/80 px-1.5 py-0.5 rounded text-[10px]">
                             {p.phase}
                           </span>
                         )}

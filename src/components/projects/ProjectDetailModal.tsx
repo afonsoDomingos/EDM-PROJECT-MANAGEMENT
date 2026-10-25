@@ -298,16 +298,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                   </div>
                 </div>
 
-                <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100">
-                  <span className="text-[11px] font-bold text-blue-800 uppercase">
+                <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/80">
+                  <span className="text-[11px] font-bold text-amber-900 uppercase">
                     Execução Financeira
                   </span>
-                  <p className="text-2xl font-black text-blue-700 mt-1 font-mono">
+                  <p className="text-2xl font-black text-[#c26508] mt-1 font-mono">
                     {formatPercent(financialExecution)}
                   </p>
-                  <div className="w-full bg-blue-200 h-1.5 rounded-full mt-2 overflow-hidden">
+                  <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2 overflow-hidden">
                     <div
-                      className="bg-blue-600 h-full rounded-full"
+                      className="bg-[#F7942D] h-full rounded-full"
                       style={{ width: `${Math.min(financialExecution, 100)}%` }}
                     />
                   </div>
@@ -340,38 +340,49 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
 
               {/* Information Grid */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-3">
+                <div className="p-5 rounded-2xl bg-white border border-slate-200 space-y-4">
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                     Detalhes do Âmbito
                   </h4>
                   <p className="text-xs text-slate-700 leading-relaxed">
                     {project.description}
                   </p>
+
+                  {/* Clean Fase do Projecto Highlight Card */}
+                  {project.phase && (
+                    <div className="p-3 rounded-xl bg-orange-50/80 border border-orange-200/80">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-[#c26508] block">
+                        Fase Actual do Projecto
+                      </span>
+                      <p className="text-xs font-semibold text-slate-900 mt-0.5 leading-snug">
+                        {project.phase}
+                      </p>
+                    </div>
+                  )}
+
                   <div className="pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs">
                     <div>
-                      <span className="text-slate-400 block">Fonte Financiamento</span>
+                      <span className="text-slate-400 block text-[11px]">Fonte Financiamento</span>
                       <span className="font-semibold text-slate-900">{project.fundingSource || '—'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Tipo Financiamento</span>
+                      <span className="text-slate-400 block text-[11px]">Tipo Financiamento</span>
                       <span className="font-semibold text-slate-900">{project.financingType || '—'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Modalidade</span>
+                      <span className="text-slate-400 block text-[11px]">Modalidade</span>
                       <span className="font-semibold text-slate-900">{project.modality || '—'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Fase do Projecto</span>
-                      <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 font-semibold text-[11px] border border-blue-200">
-                        {project.phase || '—'}
-                      </span>
-                    </div>
-                    <div>
-                      <span className="text-slate-400 block">Localidade</span>
+                      <span className="text-slate-400 block text-[11px]">Localidade</span>
                       <span className="font-semibold text-slate-900">{project.locality || '—'}</span>
                     </div>
                     <div>
-                      <span className="text-slate-400 block">Conclusão Prevista</span>
+                      <span className="text-slate-400 block text-[11px]">Província & Região</span>
+                      <span className="font-semibold text-slate-900">{project.province} ({project.region})</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-400 block text-[11px]">Conclusão Prevista</span>
                       <span className="font-semibold text-slate-900">{formatDatePt(project.expectedEndDate)}</span>
                     </div>
                   </div>
@@ -673,7 +684,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                 </div>
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
                   <span className="text-xs text-slate-500 font-medium">Despesas Acumuladas</span>
-                  <p className="text-lg font-bold text-blue-700 mt-0.5">
+                  <p className="text-lg font-bold text-[#c26508] font-mono mt-0.5">
                     {formatCurrency(project.spentBudget)}
                   </p>
                 </div>
