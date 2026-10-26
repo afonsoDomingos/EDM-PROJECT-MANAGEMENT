@@ -14,7 +14,7 @@ import {
   Lightbulb,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { formatPercent, formatCompactMZN, formatCurrency } from '../../utils/formatters';
+import { formatPercent } from '../../utils/formatters';
 
 interface AnomalyItem {
   projectId: string;
@@ -23,10 +23,10 @@ interface AnomalyItem {
   manager: string;
   province: string;
   physical: number;
-  financial: number;
-  variance: number;
+  phase: string;
+  expectedEndDate: string;
   severity: 'Crítica' | 'Alta' | 'Moderada';
-  type: 'Derrapagem Financeira' | 'Atraso Crítico' | 'Desempenho Notável';
+  type: 'Atraso no Caminho Crítico' | 'Risco de Prazo de Conclusão' | 'Avanço Físico Exemplar';
   diagnostic: string;
   recommendation: string;
 }
@@ -39,13 +39,10 @@ export const ExecutivePredictiveInsights: React.FC = () => {
     const anomalies: AnomalyItem[] = [];
 
     projects.forEach(p => {
-      const finExec =
-        p.revisedBudget > 0 ? (p.spentBudget / p.revisedBudget) * 100 : 0;
       const physical = p.physicalProgress || 0;
-      const variance = finExec - physical;
 
-      // 1. High financial divergence: spent much more than physical progress
-      if (variance > 18 && p.status !== 'Concluído') {
+      // 1. Critical Delay: Delayed status or high priority with low physical progress
+      if (p.status === 'Atrasado' || (p.status === 'Em Risco' && p.priority === 'Crítica')) {
         anomalies.push({
           projectId: p.id,
           code: p.code,
@@ -53,17 +50,17 @@ export const ExecutivePredictiveInsights: React.FC = () => {
           manager: p.manager,
           province: p.province,
           physical,
-          financial: finExec,
-          variance,
-          severity: variance > 30 ? 'Crítica' : 'Alta',
-          type: 'Derrapagem Financeira',
-          diagnostic: `Consumo financeiro de ${formatPercent(finExec)} contra avanço físico de apenas ${formatPercent(physical)} (diferencial de +${variance.toFixed(1)}%).`,
+          phase: p.phase || 'Obras Civis',
+          expectedEndDate: p.expectedEndDate,
+          severity: 'Crítica',
+          type: 'Atraso no Caminho Crítico',
+          diagnostic: `Avanço físico em ${formatPercent(physical)} com prazo previsto de conclusão em ${p.expectedEndDate}. ${p.constraints || 'Constrangimentos logísticos ou aprovação de materiais.'}`,
           recommendation:
-            'Auditoria imediata aos autos de medição. Suspender aditivos orçamentais e solicitar conferência de material nos estaleiros.',
+            'Acelerar mobilização de frentes de trabalho adicionais e convocar reunião de alinhamento com a equipa de fiscalização.',
         });
       }
-      // 2. Critical delay: Status delayed or low physical with high spent
-      else if (p.status === 'Atrasado' || p.status === 'Em Risco') {
+      // 2. Schedule Risk: In execution but low progress for remaining time
+      else if (p.status === 'Em Risco' || (p.status === 'Em Execução' && physical < 40)) {
         anomalies.push({
           projectId: p.id,
           code: p.code,
@@ -71,17 +68,17 @@ export const ExecutivePredictiveInsights: React.FC = () => {
           manager: p.manager,
           province: p.province,
           physical,
-          financial: finExec,
-          variance,
-          severity: p.priority === 'Crítica' ? 'Crítica' : 'Alta',
-          type: 'Atraso Crítico',
-          diagnostic: `Projecto classificado como '${p.status}'. ${p.constraints || 'Constrangimentos na cadeia de suprimentos e portos.'}`,
+          phase: p.phase || 'Montagem Electromecânica',
+          expectedEndDate: p.expectedEndDate,
+          severity: 'Alta',
+          type: 'Risco de Prazo de Conclusão',
+          diagnostic: `Projecto na fase '${p.phase || 'Execução'}' com avanço físico de ${formatPercent(physical)}. Alerta precoce para cumprimento da meta.`,
           recommendation:
-            'Aceleração do desembaraço alfandegário com os financiadores e revisão executiva do caminho crítico com a fiscalização.',
+            'Revisão técnica do plano de acção semanal e priorização de fornecimento de componentes críticos na subestação/linha.',
         });
       }
-      // 3. High performance: high physical execution with controlled spending
-      else if (physical >= 85 && finExec <= physical && p.status === 'Em Execução') {
+      // 3. High physical performance
+      else if (physical >= 80 && p.status !== 'Concluído') {
         anomalies.push({
           projectId: p.id,
           code: p.code,
@@ -89,13 +86,13 @@ export const ExecutivePredictiveInsights: React.FC = () => {
           manager: p.manager,
           province: p.province,
           physical,
-          financial: finExec,
-          variance,
+          phase: p.phase || 'Comissionamento',
+          expectedEndDate: p.expectedEndDate,
           severity: 'Moderada',
-          type: 'Desempenho Notável',
-          diagnostic: `Execução física em ${formatPercent(physical)} dentro da dotação orçamental (${formatPercent(finExec)}).`,
+          type: 'Avanço Físico Exemplar',
+          diagnostic: `Execução física avançada em ${formatPercent(physical)}. Conclusão dos ensaios preliminares e montagem dentro do programado.`,
           recommendation:
-            'Projecto em fase de testes e recepção provisória. Agendar vistoria final com a Direcção Executiva.',
+            'Projecto pronto para ensaios de energização e comissionamento. Agendar vistoria com a Direcção de Produção e Transporte.',
         });
       }
     });
@@ -192,10 +189,10 @@ export const ExecutivePredictiveInsights: React.FC = () => {
                   {item.province} • Gestor: {item.manager}
                 </p>
 
-                {/* Physical vs Financial Bar comparison */}
+                {/* Physical Progress & Phase Indicator */}
                 <div className="mt-3 p-2.5 rounded-xl bg-slate-900/60 border border-slate-700/50 space-y-2 text-xs">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-slate-400">Avanço Físico:</span>
+                    <span className="text-slate-400">Avanço Físico Real:</span>
                     <span className="font-bold text-white">{formatPercent(item.physical)}</span>
                   </div>
                   <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
@@ -206,14 +203,11 @@ export const ExecutivePredictiveInsights: React.FC = () => {
                   </div>
 
                   <div className="flex items-center justify-between text-[11px] pt-1">
-                    <span className="text-slate-400">Consumo Financeiro:</span>
-                    <span className="font-bold text-[#F7942D]">{formatPercent(item.financial)}</span>
+                    <span className="text-slate-400">Fase Actual:</span>
+                    <span className="font-semibold text-orange-300 truncate max-w-[130px]">{item.phase}</span>
                   </div>
-                  <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden">
-                    <div
-                      className="bg-[#F7942D] h-full rounded-full"
-                      style={{ width: `${Math.min(item.financial, 100)}%` }}
-                    />
+                  <div className="text-[10px] text-slate-400">
+                    Término Previsto: <span className="text-slate-200 font-mono">{item.expectedEndDate}</span>
                   </div>
                 </div>
 

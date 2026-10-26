@@ -6,16 +6,16 @@ import {
   AlertOctagon,
   Clock,
   TrendingUp,
-  DollarSign,
-  PieChart,
   Zap,
   ArrowUpRight,
+  CheckSquare,
+  CalendarDays,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { formatCompactMZN, formatCurrency, formatPercent, calculateFinancialExecution } from '../../utils/formatters';
+import { formatPercent } from '../../utils/formatters';
 
 export const ExecutiveKpiCards: React.FC = () => {
-  const { projects, generationPlants, setActiveTab, setFilterStatus, clearFilters } = useApp();
+  const { projects, generationPlants, tasks, setActiveTab, setFilterStatus, clearFilters } = useApp();
 
   const totalProjects = projects.length;
   const inExecution = projects.filter(p => p.status === 'Em Execução').length;
@@ -28,11 +28,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       ? projects.reduce((acc, p) => acc + (p.physicalProgress || 0), 0) / totalProjects
       : 0;
 
-  const totalApprovedBudget = projects.reduce((acc, p) => acc + (p.approvedBudget || 0), 0);
-  const totalRevisedBudget = projects.reduce((acc, p) => acc + (p.revisedBudget || 0), 0);
-  const totalSpentBudget = projects.reduce((acc, p) => acc + (p.spentBudget || 0), 0);
+  const completedTasks = tasks.filter(t => t.status === 'Concluída').length;
+  const totalTasks = tasks.length;
+  const taskCompletionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
 
-  const globalFinancialExec = calculateFinancialExecution(totalSpentBudget, totalRevisedBudget);
+  const onScheduleProjects = projects.filter(p => p.status === 'Em Execução' || p.status === 'Concluído').length;
+  const scheduleAdherencePercent = totalProjects > 0 ? (onScheduleProjects / totalProjects) * 100 : 0;
 
   const kpis = [
     {
@@ -116,30 +117,31 @@ export const ExecutiveKpiCards: React.FC = () => {
       },
     },
     {
-      title: 'Orçamento Aprovado',
-      value: formatCompactMZN(totalApprovedBudget),
-      subtitle: `Revisto: ${formatCompactMZN(totalRevisedBudget)}`,
-      icon: DollarSign,
+      title: 'Marcos & Entregas Físicas',
+      value: `${completedTasks} / ${totalTasks}`,
+      subtitle: `${taskCompletionRate.toFixed(0)}% das entregas técnicas concluídas`,
+      icon: CheckSquare,
       color: 'bg-slate-50 text-slate-800 border-slate-200',
       iconBg: 'bg-slate-800 text-white',
-      tooltip: formatCurrency(totalApprovedBudget),
-      actionLabel: 'Abrir gestão financeira',
+      progress: taskCompletionRate,
+      tooltip: `${completedTasks} tarefas e marcos de engenharia validados`,
+      actionLabel: 'Ver actividades & tarefas',
       onClick: () => {
-        setActiveTab('financial');
+        setActiveTab('activities');
       },
     },
     {
-      title: 'Execução Financeira Global',
-      value: formatPercent(globalFinancialExec),
-      subtitle: `${formatCompactMZN(totalSpentBudget)} desembolsados`,
-      icon: PieChart,
+      title: 'Aderência ao Cronograma',
+      value: `${scheduleAdherencePercent.toFixed(0)}%`,
+      subtitle: `${onScheduleProjects} de ${totalProjects} no prazo planeado`,
+      icon: CalendarDays,
       color: 'bg-teal-50 text-teal-800 border-teal-200',
       iconBg: 'bg-teal-600 text-white',
-      progress: globalFinancialExec,
-      tooltip: `Desembolsado: ${formatCurrency(totalSpentBudget)}`,
-      actionLabel: 'Ver análise de despesas',
+      progress: scheduleAdherencePercent,
+      tooltip: `${delayed} com desvio temporal • ${atRisk} em risco`,
+      actionLabel: 'Ver cronogramas & prazos',
       onClick: () => {
-        setActiveTab('financial');
+        setActiveTab('schedule');
       },
     },
   ];

@@ -235,7 +235,6 @@ export type OrganizationalCategory =
   | 'Centros de Negócio'
   | 'Área de Serviço ao Cliente'
   | 'Divisões'
-  | 'PCA\'s Cessantes'
   | 'Delegações de Competência';
 
 export interface BoardMember {

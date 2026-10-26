@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ApprovalRequest, ApprovalStatus } from '../../types';
-import { formatCurrency, formatCompactMZN, formatDatePt } from '../../utils/formatters';
+import { formatDatePt } from '../../utils/formatters';
 
 export const ExecutiveApprovalsView: React.FC = () => {
   const {
@@ -40,9 +40,7 @@ export const ExecutiveApprovalsView: React.FC = () => {
   const pendingCount = approvalRequests.filter(r => r.status === 'Pendente').length;
   const approvedCount = approvalRequests.filter(r => r.status === 'Aprovado').length;
   const rejectedCount = approvalRequests.filter(r => r.status === 'Rejeitado').length;
-  const totalPendingAmount = approvalRequests
-    .filter(r => r.status === 'Pendente' && r.amount)
-    .reduce((sum, r) => sum + (r.amount || 0), 0);
+  const pendingProjectsCount = new Set(approvalRequests.filter(r => r.status === 'Pendente').map(r => r.projectId)).size;
 
   const filteredRequests = approvalRequests.filter(r => {
     if (filterStatus !== 'Todos' && r.status !== filterStatus) return false;
@@ -127,15 +125,15 @@ export const ExecutiveApprovalsView: React.FC = () => {
         <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
           <div>
             <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">
-              Montante em Apreciação
+              Empreendimentos em Despacho
             </p>
             <h3 className="text-2xl font-bold text-slate-900 mt-1 font-heading">
-              {formatCompactMZN(totalPendingAmount)}
+              {pendingProjectsCount}
             </h3>
-            <span className="text-[11px] text-slate-400">Em desembolsos e autos</span>
+            <span className="text-[11px] text-slate-400">Projectos com decisões pendentes</span>
           </div>
           <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">
-            <DollarSign className="w-5 h-5" />
+            <FolderGit2 className="w-5 h-5" />
           </div>
         </div>
 
@@ -280,14 +278,9 @@ export const ExecutiveApprovalsView: React.FC = () => {
                         Data do Pedido: {formatDatePt(req.requestedDate)}
                       </span>
                       {req.physicalProgressClaimed !== undefined && (
-                        <span className="flex items-center gap-1 text-[#c26508] font-bold">
+                        <span className="flex items-center gap-1 text-[#c26508] font-bold bg-orange-50 px-2 py-0.5 rounded-md border border-orange-200/60">
                           <TrendingUp className="w-3.5 h-3.5" />
                           Avanço Medido: {req.physicalProgressClaimed}%
-                        </span>
-                      )}
-                      {req.amount !== undefined && (
-                        <span className="flex items-center gap-1 font-bold text-slate-900 bg-slate-50 px-2.5 py-0.5 rounded-md border border-slate-200">
-                          Valor Solicitado: {formatCurrency(req.amount)}
                         </span>
                       )}
                     </div>
@@ -365,11 +358,11 @@ export const ExecutiveApprovalsView: React.FC = () => {
               </button>
             </div>
 
-            {selectedRequest.amount && (
+            {selectedRequest.physicalProgressClaimed !== undefined && (
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
-                <span className="text-slate-500">Impacto Orçamental Previsto:</span>
-                <span className="font-bold text-slate-900 text-sm font-mono">
-                  {formatCurrency(selectedRequest.amount)}
+                <span className="text-slate-500">Avanço Físico Submetido:</span>
+                <span className="font-bold text-[#F7942D] text-sm font-mono">
+                  {selectedRequest.physicalProgressClaimed}%
                 </span>
               </div>
             )}

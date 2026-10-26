@@ -414,56 +414,12 @@ export const ProjectFormModal: React.FC<ProjectFormModalProps> = ({
             </div>
           </div>
 
-          {/* Section 4: Gestão Financeira */}
+          {/* Section 4: Financiamento e Empreitada */}
           <div>
             <h4 className="text-xs font-bold text-[#F7942D] uppercase tracking-wider mb-3">
-              4. Orçamento e Despesas (MZN)
+              4. Financiamento e Enquadramento Institucional
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Orçamento Aprovado (MZN) *
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="1000"
-                  disabled={!canManageBudget()}
-                  value={formData.approvedBudget || 0}
-                  onChange={e => setFormData({ ...formData, approvedBudget: Number(e.target.value) })}
-                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D] disabled:bg-slate-100"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Orçamento Revisto (MZN) *
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="1000"
-                  disabled={!canManageBudget()}
-                  value={formData.revisedBudget || 0}
-                  onChange={e => setFormData({ ...formData, revisedBudget: Number(e.target.value) })}
-                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D] disabled:bg-slate-100"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Despesas Acumuladas (MZN)
-                </label>
-                <input
-                  type="number"
-                  min="0"
-                  step="1000"
-                  value={formData.spentBudget || 0}
-                  onChange={e => setFormData({ ...formData, spentBudget: Number(e.target.value) })}
-                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg focus:ring-1 focus:ring-[#F7942D]"
-                />
-              </div>
-
               <div className="md:col-span-1">
                 <label className="block text-xs font-semibold text-slate-700 mb-1">
                   Fonte de Financiamento

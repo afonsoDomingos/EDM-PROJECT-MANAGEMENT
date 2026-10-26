@@ -13,7 +13,6 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useApp } from '../../context/AppContext';
-import { calculateFinancialExecution, formatCompactMZN } from '../../utils/formatters';
 
 const STATUS_COLORS: Record<string, string> = {
   'Em Execução': '#F7942D',
@@ -43,50 +42,62 @@ export const ExecutiveCharts: React.FC = () => {
     color: STATUS_COLORS[name] || '#64748b',
   }));
 
-  // 2. Physical vs Financial Execution Comparison (top active projects)
+  // 2. Physical Execution Progress of Strategic Projects (top active projects)
   const comparisonData = projects
     .filter(p => p.status !== 'Por Iniciar')
     .slice(0, 8)
-    .map(p => {
-      const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
-      return {
-        name: p.code,
-        fullName: p.name,
-        'Execução Física (%)': p.physicalProgress,
-        'Execução Financeira (%)': finExec,
-      };
-    });
+    .map(p => ({
+      name: p.code,
+      fullName: p.name,
+      'Execução Física (%)': p.physicalProgress,
+    }));
 
   // 3. Projects by Region
   const regionCounts: Record<string, number> = { Norte: 0, Centro: 0, Sul: 0 };
-  const regionBudget: Record<string, number> = { Norte: 0, Centro: 0, Sul: 0 };
+  const regionPhysical: Record<string, { sum: number; count: number }> = {
+    Norte: { sum: 0, count: 0 },
+    Centro: { sum: 0, count: 0 },
+    Sul: { sum: 0, count: 0 },
+  };
   projects.forEach(p => {
     regionCounts[p.region] = (regionCounts[p.region] || 0) + 1;
-    regionBudget[p.region] = (regionBudget[p.region] || 0) + p.revisedBudget;
+    regionPhysical[p.region].sum += p.physicalProgress || 0;
+    regionPhysical[p.region].count += 1;
   });
   const regionData = [
-    { region: 'Região Norte', projectos: regionCounts['Norte'], orcamento: regionBudget['Norte'] },
-    { region: 'Região Centro', projectos: regionCounts['Centro'], orcamento: regionBudget['Centro'] },
-    { region: 'Região Sul', projectos: regionCounts['Sul'], orcamento: regionBudget['Sul'] },
+    {
+      region: 'Região Norte',
+      projectos: regionCounts['Norte'],
+      mediaFisica: regionPhysical['Norte'].count > 0 ? Math.round(regionPhysical['Norte'].sum / regionPhysical['Norte'].count) : 0,
+    },
+    {
+      region: 'Região Centro',
+      projectos: regionCounts['Centro'],
+      mediaFisica: regionPhysical['Centro'].count > 0 ? Math.round(regionPhysical['Centro'].sum / regionPhysical['Centro'].count) : 0,
+    },
+    {
+      region: 'Região Sul',
+      projectos: regionCounts['Sul'],
+      mediaFisica: regionPhysical['Sul'].count > 0 ? Math.round(regionPhysical['Sul'].sum / regionPhysical['Sul'].count) : 0,
+    },
   ];
 
-  // 4. Budget by Category (Top 4 + Outras for executive cleanliness)
-  const categoryBudgets: Record<string, number> = {};
-  let totalCatBudget = 0;
+  // 4. Projects by Category (Top 4 + Outras for executive cleanliness)
+  const categoryCounts: Record<string, number> = {};
+  const totalProjectsCount = projects.length;
   projects.forEach(p => {
-    categoryBudgets[p.category] = (categoryBudgets[p.category] || 0) + p.revisedBudget;
-    totalCatBudget += p.revisedBudget;
+    categoryCounts[p.category] = (categoryCounts[p.category] || 0) + 1;
   });
 
-  const sortedCategories = Object.entries(categoryBudgets).sort((a, b) => b[1] - a[1]);
+  const sortedCategories = Object.entries(categoryCounts).sort((a, b) => b[1] - a[1]);
   const top4 = sortedCategories.slice(0, 4);
   const othersValue = sortedCategories.slice(4).reduce((acc, curr) => acc + curr[1], 0);
 
   const categoryData = top4.map(([name, value], index) => ({
     name,
     value,
-    formatted: formatCompactMZN(value),
-    percent: totalCatBudget > 0 ? ((value / totalCatBudget) * 100).toFixed(1) : '0',
+    formatted: `${value} Projecto(s)`,
+    percent: totalProjectsCount > 0 ? ((value / totalProjectsCount) * 100).toFixed(0) : '0',
     color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
   }));
 
@@ -94,8 +105,8 @@ export const ExecutiveCharts: React.FC = () => {
     categoryData.push({
       name: 'Outras Categorias',
       value: othersValue,
-      formatted: formatCompactMZN(othersValue),
-      percent: totalCatBudget > 0 ? ((othersValue / totalCatBudget) * 100).toFixed(1) : '0',
+      formatted: `${othersValue} Projecto(s)`,
+      percent: totalProjectsCount > 0 ? ((othersValue / totalProjectsCount) * 100).toFixed(0) : '0',
       color: '#94a3b8',
     });
   }
@@ -141,7 +152,7 @@ export const ExecutiveCharts: React.FC = () => {
         <div className="bg-slate-900 text-white p-3 rounded-xl shadow-xl border border-slate-700 text-xs">
           <p className="font-bold text-slate-100">{data.name}</p>
           <p className="text-orange-400 font-semibold mt-0.5">
-            Orçamento: {data.formatted} ({data.percent}%)
+            {data.formatted} ({data.percent}% da carteira)
           </p>
         </div>
       );
@@ -151,18 +162,18 @@ export const ExecutiveCharts: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
-      {/* Chart 1: Physical vs Financial Execution Comparison */}
+      {/* Chart 1: Physical Execution Progress */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-bar-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
-            Execução Física vs Financeira
+            Avanço Físico dos Projectos Estratégicos
           </h4>
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
             <span className="relative flex h-1.5 w-1.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F7942D]"></span>
             </span>
-            <span>Loop Dinâmico</span>
+            <span>Acompanhamento Físico</span>
           </div>
         </div>
 
@@ -178,22 +189,13 @@ export const ExecutiveCharts: React.FC = () => {
                     <animate attributeName="stop-color" values="#c26508;#d97706;#c26508" dur="3s" repeatCount="indefinite" />
                   </stop>
                 </linearGradient>
-                <linearGradient id="barLoopOrange2" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ea580c">
-                    <animate attributeName="stop-color" values="#ea580c;#fb923c;#ea580c" dur="3s" repeatCount="indefinite" />
-                  </stop>
-                  <stop offset="100%" stopColor="#9a3412">
-                    <animate attributeName="stop-color" values="#9a3412;#c2410c;#9a3412" dur="3s" repeatCount="indefinite" />
-                  </stop>
-                </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} interval={0} angle={-25} textAnchor="end" />
               <YAxis unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
               <Tooltip content={<CustomBarTooltip />} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-              <Bar dataKey="Execução Física (%)" fill="url(#barLoopOrange1)" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Execução Financeira (%)" fill="url(#barLoopOrange2)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Execução Física (%)" fill="url(#barLoopOrange1)" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -305,10 +307,7 @@ export const ExecutiveCharts: React.FC = () => {
               <XAxis dataKey="region" tick={{ fontSize: 11, fill: '#64748b' }} />
               <YAxis yAxisId="left" tick={{ fontSize: 11, fill: '#64748b' }} />
               <Tooltip
-                formatter={(value: any, name: any) => {
-                  if (name === 'Orçamento (MZN)') return [formatCompactMZN(value), name];
-                  return [value, name];
-                }}
+                formatter={(value: any, name: any) => [`${value} projectos`, name]}
                 contentStyle={{
                   backgroundColor: '#0f172a',
                   borderRadius: '12px',
@@ -323,11 +322,11 @@ export const ExecutiveCharts: React.FC = () => {
         </div>
       </div>
 
-      {/* Chart 4: Budget Distribution by Category (with continuous category loop) */}
+      {/* Chart 4: Projects by Technical Category */}
       <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-donut-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
-            Orçamento por Categoria
+            Projectos por Categoria Técnica
           </h4>
           <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
             <span className="relative flex h-1.5 w-1.5">
@@ -342,7 +341,7 @@ export const ExecutiveCharts: React.FC = () => {
           {/* Centered Dynamic Loop Counter */}
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 transition-all duration-500">
             <span className="text-sm font-black text-slate-900 transition-all duration-300">
-              {categoryData[activeCatIndex]?.formatted || '0 MZN'}
+              {categoryData[activeCatIndex]?.formatted || '0 Projectos'}
             </span>
             <span className="text-[10px] font-bold text-[#c26508] transition-all duration-300 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/60 mt-0.5">
               {categoryData[activeCatIndex]?.percent}% • {categoryData[activeCatIndex]?.name.split(' ')[0]}

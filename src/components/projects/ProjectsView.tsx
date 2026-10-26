@@ -19,10 +19,8 @@ import {
 import { useApp } from '../../context/AppContext';
 import { Project, ProjectStatus } from '../../types';
 import {
-  formatCompactMZN,
   formatDatePt,
   formatPercent,
-  calculateFinancialExecution,
 } from '../../utils/formatters';
 
 interface ProjectsViewProps {
@@ -264,7 +262,6 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredProjects.map(p => {
-            const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
             return (
               <div
                 key={p.id}
@@ -309,18 +306,18 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                     </div>
                   </div>
 
-                  {/* Financial Stats */}
-                  <div className="flex items-center justify-between text-xs pt-1">
+                  {/* Timeline & Phase Info */}
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
                     <div>
-                      <span className="text-[10px] text-slate-400 block uppercase">Orçamento Revisto</span>
-                      <span className="font-mono font-bold text-slate-900">
-                        {formatCompactMZN(p.revisedBudget)}
+                      <span className="text-[10px] text-slate-400 block uppercase">Término Previsto</span>
+                      <span className="font-semibold text-slate-800">
+                        {formatDatePt(p.expectedEndDate)}
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-slate-400 block uppercase">Exec. Financeira</span>
-                      <span className="font-mono font-bold text-[#c26508]">
-                        {formatPercent(finExec)}
+                      <span className="text-[10px] text-slate-400 block uppercase">Fase da Obra</span>
+                      <span className="font-semibold text-[#c26508] truncate max-w-[130px] inline-block">
+                        {p.phase || 'Obras Civis'}
                       </span>
                     </div>
                   </div>
@@ -380,15 +377,14 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                   <th className="py-3 px-3 hidden md:table-cell">Localização</th>
                   <th className="py-3 px-3 hidden lg:table-cell">Gestor</th>
                   <th className="py-3 px-3 text-center whitespace-nowrap">Exec. Física</th>
-                  <th className="py-3 px-3 text-center hidden sm:table-cell whitespace-nowrap">Exec. Financeira</th>
-                  <th className="py-3 px-3 text-right hidden sm:table-cell whitespace-nowrap">Orçamento</th>
+                  <th className="py-3 px-3 text-center hidden sm:table-cell whitespace-nowrap">Término Previsto</th>
+                  <th className="py-3 px-3 text-left hidden sm:table-cell whitespace-nowrap">Fase da Obra</th>
                   <th className="py-3 px-3 text-center whitespace-nowrap">Estado</th>
                   <th className="py-3 px-4 text-right whitespace-nowrap">Acções</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {filteredProjects.map(p => {
-                  const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
                   return (
                     <tr
                       key={p.id}
@@ -404,11 +400,13 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       <td className="py-3 px-3 text-center font-mono font-bold text-[#F7942D] whitespace-nowrap">
                         {p.physicalProgress}%
                       </td>
-                      <td className="py-3 px-3 text-center font-mono font-bold text-[#c26508] hidden sm:table-cell whitespace-nowrap">
-                        {formatPercent(finExec)}
+                      <td className="py-3 px-3 text-center text-slate-700 hidden sm:table-cell whitespace-nowrap">
+                        {formatDatePt(p.expectedEndDate)}
                       </td>
-                      <td className="py-3 px-3 text-right font-mono font-bold text-slate-900 hidden sm:table-cell whitespace-nowrap">
-                        {formatCompactMZN(p.revisedBudget)}
+                      <td className="py-3 px-3 text-left hidden sm:table-cell whitespace-nowrap">
+                        <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-orange-50 text-[#c26508] border border-orange-200/60">
+                          {p.phase || 'Obras Civis'}
+                        </span>
                       </td>
                       <td className="py-3 px-3 text-center whitespace-nowrap">{getStatusBadge(p.status)}</td>
                       <td className="py-3 px-4 text-right whitespace-nowrap">

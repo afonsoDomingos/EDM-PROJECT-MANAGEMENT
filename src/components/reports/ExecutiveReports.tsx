@@ -13,11 +13,8 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import {
-  formatCurrency,
-  formatCompactMZN,
   formatDatePt,
   formatPercent,
-  calculateFinancialExecution,
   exportToCsv,
 } from '../../utils/formatters';
 
@@ -25,7 +22,7 @@ type ReportType =
   | 'resumo_executivo'
   | 'estado_projectos'
   | 'execucao_fisica'
-  | 'execucao_financeira'
+  | 'marcos_obras'
   | 'atrasos'
   | 'riscos'
   | 'regional'
@@ -95,13 +92,12 @@ export const ExecutiveReports: React.FC = () => {
         'Região',
         'Província',
         'Gestor',
+        'Fase Actual',
         'Data Início',
         'Conclusão Prevista',
         'Estado',
         'Exec. Física (%)',
-        'Orçamento Revisto (MZN)',
-        'Despesas Acumuladas (MZN)',
-        'Exec. Financeira (%)',
+        'Financiador',
       ];
       const rows = filteredProjects.map(p => [
         p.code,
@@ -110,13 +106,12 @@ export const ExecutiveReports: React.FC = () => {
         p.region,
         p.province,
         p.manager,
+        p.phase || 'Obras Civis',
         p.startDate,
         p.expectedEndDate,
         p.status,
         p.physicalProgress,
-        p.revisedBudget,
-        p.spentBudget,
-        calculateFinancialExecution(p.spentBudget, p.revisedBudget).toFixed(1),
+        p.fundingSource,
       ]);
       exportToCsv(`relatorio_${activeReport}_edm`, headers, rows);
     }
@@ -164,7 +159,7 @@ export const ExecutiveReports: React.FC = () => {
           { id: 'resumo_executivo', label: 'Resumo Executivo' },
           { id: 'estado_projectos', label: 'Estado dos Projectos' },
           { id: 'execucao_fisica', label: 'Execução Física' },
-          { id: 'execucao_financeira', label: 'Execução Financeira' },
+          { id: 'marcos_obras', label: 'Marcos & Fases de Obra' },
           { id: 'atrasos', label: 'Atrasos & Desvios' },
           { id: 'riscos', label: 'Matriz de Riscos' },
           { id: 'regional', label: 'Distribuição Regional' },
@@ -274,14 +269,14 @@ export const ExecutiveReports: React.FC = () => {
             {activeReport === 'resumo_executivo' && 'Relatório de Resumo Executivo da Carteira de Projectos'}
             {activeReport === 'estado_projectos' && 'Relatório Detalhado de Estado dos Projectos'}
             {activeReport === 'execucao_fisica' && 'Relatório de Acompanhamento da Execução Física'}
-            {activeReport === 'execucao_financeira' && 'Relatório de Execução Orçamental e Financeira'}
+            {activeReport === 'marcos_obras' && 'Relatório de Marcos, Fases de Obra e Cronograma Contratual'}
             {activeReport === 'atrasos' && 'Relatório de Projectos Atrasados e Desvios de Cronograma'}
             {activeReport === 'riscos' && 'Relatório do Registo Consolidado de Riscos e Contingências'}
             {activeReport === 'regional' && 'Relatório de Distribuição de Infra-estruturas por Região'}
             {activeReport === 'actividades_pendentes' && 'Relatório de Tarefas e Actividades Operacionais'}
           </h3>
           <p className="text-xs text-slate-500 mt-0.5">
-            Abrangência: {filteredProjects.length} empreendimentos avaliados • Moeda: Meticais (MZN)
+            Abrangência: {filteredProjects.length} empreendimentos avaliados • Foco: Execução Físico-Temporal
           </p>
         </div>
 
@@ -354,14 +349,13 @@ export const ExecutiveReports: React.FC = () => {
                   <th className="p-2.5 border">Localização</th>
                   <th className="p-2.5 border text-center">Estado</th>
                   <th className="p-2.5 border text-center">Exec. Física</th>
-                  <th className="p-2.5 border text-right">Orçamento Revisto</th>
-                  <th className="p-2.5 border text-right">Despesas</th>
-                  <th className="p-2.5 border text-center">Exec. Fin.</th>
+                  <th className="p-2.5 border text-center">Início</th>
+                  <th className="p-2.5 border text-center">Conclusão Prevista</th>
+                  <th className="p-2.5 border text-left">Fase da Obra</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {filteredProjects.map(p => {
-                  const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
                   return (
                     <tr key={p.id}>
                       <td className="p-2.5 font-mono font-bold text-slate-900">{p.code}</td>
@@ -369,9 +363,9 @@ export const ExecutiveReports: React.FC = () => {
                       <td className="p-2.5 text-slate-600">{p.province} ({p.region})</td>
                       <td className="p-2.5 text-center font-semibold">{p.status}</td>
                       <td className="p-2.5 text-center font-mono font-bold text-[#F7942D]">{p.physicalProgress}%</td>
-                      <td className="p-2.5 text-right font-mono font-bold">{formatCurrency(p.revisedBudget)}</td>
-                      <td className="p-2.5 text-right font-mono text-[#c26508] font-bold">{formatCurrency(p.spentBudget)}</td>
-                      <td className="p-2.5 text-center font-mono font-bold">{formatPercent(finExec)}</td>
+                      <td className="p-2.5 text-center text-slate-600">{formatDatePt(p.startDate)}</td>
+                      <td className="p-2.5 text-center font-medium text-slate-900">{formatDatePt(p.expectedEndDate)}</td>
+                      <td className="p-2.5 text-left font-medium text-[#c26508]">{p.phase || 'Obras Civis'}</td>
                     </tr>
                   );
                 })}

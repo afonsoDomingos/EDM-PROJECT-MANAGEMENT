@@ -19,8 +19,6 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import {
-  formatCurrency,
-  formatCompactMZN,
   formatDatePt,
   formatPercent,
   calculateFinancialExecution,
@@ -257,7 +255,7 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
             { id: 'overview', label: 'Visão Geral' },
             { id: 'tasks', label: `Actividades (${projectTasks.length})` },
             { id: 'schedule', label: `Cronograma & Gantt` },
-            { id: 'financial', label: 'Financeiro' },
+            { id: 'financial', label: 'Fases & Empreitada' },
             { id: 'risks', label: `Riscos (${projectRisks.length})` },
             { id: 'documents', label: `Documentos (${projectDocs.length})` },
             { id: 'history', label: 'Histórico & Auditoria' },
@@ -298,42 +296,39 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                   </div>
                 </div>
 
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                  <span className="text-[11px] font-bold text-slate-600 uppercase">
+                    Cronograma & Prazos
+                  </span>
+                  <p className="text-sm font-bold text-slate-900 mt-1">
+                    {formatDatePt(project.expectedEndDate)}
+                  </p>
+                  <p className="text-[11px] text-slate-500 mt-1">
+                    Início: {formatDatePt(project.startDate)}
+                  </p>
+                </div>
+
                 <div className="p-4 bg-amber-50/60 rounded-2xl border border-amber-200/80">
                   <span className="text-[11px] font-bold text-amber-900 uppercase">
-                    Execução Financeira
+                    Fase da Obra
                   </span>
-                  <p className="text-2xl font-black text-[#c26508] mt-1 font-mono">
-                    {formatPercent(financialExecution)}
+                  <p className="text-sm font-bold text-[#c26508] mt-1 truncate">
+                    {project.phase || 'Obras Civis'}
                   </p>
-                  <div className="w-full bg-amber-200 h-1.5 rounded-full mt-2 overflow-hidden">
-                    <div
-                      className="bg-[#F7942D] h-full rounded-full"
-                      style={{ width: `${Math.min(financialExecution, 100)}%` }}
-                    />
-                  </div>
-                </div>
-
-                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                  <span className="text-[11px] font-bold text-slate-600 uppercase">
-                    Orçamento Revisto
-                  </span>
-                  <p className="text-lg font-bold text-slate-900 mt-1 font-mono">
-                    {formatCompactMZN(project.revisedBudget)}
-                  </p>
-                  <p className="text-[11px] text-slate-500 mt-1">
-                    Aprovado: {formatCompactMZN(project.approvedBudget)}
+                  <p className="text-[11px] text-slate-500 mt-1 truncate">
+                    {project.category}
                   </p>
                 </div>
 
                 <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200">
                   <span className="text-[11px] font-bold text-slate-600 uppercase">
-                    Saldo Disponível
+                    Marcos Técnicos
                   </span>
                   <p className="text-lg font-bold text-emerald-700 mt-1 font-mono">
-                    {formatCompactMZN(balance)}
+                    {projectTasks.filter(t => t.status === 'Concluída').length} / {projectTasks.length}
                   </p>
                   <p className="text-[11px] text-slate-500 mt-1">
-                    Gasto: {formatCompactMZN(project.spentBudget)}
+                    Actividades de obra concluídas
                   </p>
                 </div>
               </div>
@@ -598,16 +593,16 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
             </div>
           )}
 
-          {/* 4. FINANCEIRO */}
+          {/* 4. FASES & EMPREITADA */}
           {activeTab === 'financial' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="text-sm font-bold text-slate-900 font-heading">
-                    Execução Orçamental & Histórico de Despesas
+                    Acompanhamento da Empreitada & Marcos de Obra
                   </h4>
                   <p className="text-xs text-slate-500">
-                    Controlo de dotações orçamentais, compromissos e faturas liquidadas
+                    Registo de autos de medição física, vistorias técnicas e cumprimento de etapas contratuais
                   </p>
                 </div>
                 {canEditProject(project) && (
@@ -616,41 +611,39 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#F7942D] hover:bg-[#e07d17] text-white text-xs font-bold shadow-sm transition"
                   >
                     <PlusCircle className="w-4 h-4" />
-                    Registar Despesa
+                    Registar Marco de Medição
                   </button>
                 )}
               </div>
 
-              {/* Add Expense Form Sub-dialog */}
+              {/* Add Measurement Auto Form Sub-dialog */}
               {showAddExpense && (
                 <form
                   onSubmit={handleCreateExpense}
                   className="p-4 bg-orange-50/60 border border-orange-200 rounded-2xl space-y-3 animate-in fade-in duration-150"
                 >
                   <p className="text-xs font-bold text-orange-900 uppercase">
-                    Registo de Despesa / Auto de Medição
+                    Registo de Auto de Medição Física / Vistoria de Obra
                   </p>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <input
                       type="text"
                       required
-                      placeholder="Descrição da despesa..."
+                      placeholder="Descrição da etapa física / auto..."
                       value={newExpDesc}
                       onChange={e => setNewExpDesc(e.target.value)}
                       className="text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg"
                     />
                     <input
-                      type="number"
-                      required
-                      min="1"
-                      placeholder="Valor em Meticais (MZN)..."
-                      value={newExpAmount || ''}
-                      onChange={e => setNewExpAmount(Number(e.target.value))}
+                      type="text"
+                      placeholder="Fiscal Responsável / Supervisor..."
+                      value={newExpAmount ? `Auto Medição #${newExpAmount}` : ''}
+                      onChange={e => setNewExpAmount(Number(e.target.value.replace(/\D/g, '')) || 1)}
                       className="text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg"
                     />
                     <input
                       type="text"
-                      placeholder="Fornecedor / Empreiteiro..."
+                      placeholder="Empreiteiro / Consórcio Executor..."
                       value={newExpSupplier}
                       onChange={e => setNewExpSupplier(e.target.value)}
                       className="text-xs px-3 py-2 bg-white border border-slate-300 rounded-lg"
@@ -668,51 +661,51 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                       type="submit"
                       className="px-4 py-1.5 text-xs font-bold bg-[#F7942D] text-white rounded-lg hover:bg-[#e07d17]"
                     >
-                      Gravar Despesa
+                      Gravar Marco de Medição
                     </button>
                   </div>
                 </form>
               )}
 
-              {/* Financial Balance Summary */}
+              {/* Physical Execution Summary Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-xs text-slate-500 font-medium">Orçamento Revisto</span>
-                  <p className="text-lg font-bold text-slate-900 mt-0.5">
-                    {formatCurrency(project.revisedBudget)}
+                  <span className="text-xs text-slate-500 font-medium">Avanço Físico Contratual</span>
+                  <p className="text-lg font-bold text-[#F7942D] mt-0.5">
+                    {project.physicalProgress}% Concluído
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-xs text-slate-500 font-medium">Despesas Acumuladas</span>
-                  <p className="text-lg font-bold text-[#c26508] font-mono mt-0.5">
-                    {formatCurrency(project.spentBudget)}
+                  <span className="text-xs text-slate-500 font-medium">Fase da Empreitada</span>
+                  <p className="text-lg font-bold text-slate-900 mt-0.5 truncate">
+                    {project.phase || 'Obras Civis & Montagem'}
                   </p>
                 </div>
                 <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <span className="text-xs text-slate-500 font-medium">Saldo Disponível</span>
-                  <p className="text-lg font-bold text-emerald-700 mt-0.5">
-                    {formatCurrency(balance)}
+                  <span className="text-xs text-slate-500 font-medium">Financiador & Modalidade</span>
+                  <p className="text-sm font-bold text-emerald-700 mt-0.5 truncate">
+                    {project.fundingSource} {project.modality ? `(${project.modality})` : ''}
                   </p>
                 </div>
               </div>
 
-              {/* Expense Ledger Table */}
+              {/* Physical Measurement Autos Table */}
               <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
                 <table className="w-full text-left text-xs">
                   <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase text-[10px]">
                     <tr>
-                      <th className="p-3">Data</th>
-                      <th className="p-3">Descrição</th>
-                      <th className="p-3">Fornecedor</th>
-                      <th className="p-3">Categoria</th>
-                      <th className="p-3 text-right">Valor (MZN)</th>
+                      <th className="p-3">Data do Auto</th>
+                      <th className="p-3">Etapa / Medição Física</th>
+                      <th className="p-3">Empreiteiro / Fiscal</th>
+                      <th className="p-3">Especialidade</th>
+                      <th className="p-3 text-right">Estado da Medição</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 text-slate-700">
                     {projectExpenses.length === 0 ? (
                       <tr>
                         <td colSpan={5} className="p-6 text-center text-slate-400">
-                          Nenhuma despesa individual lançada.
+                          Nenhum auto de medição física lançado para este projecto.
                         </td>
                       </tr>
                     ) : (
@@ -722,8 +715,10 @@ export const ProjectDetailModal: React.FC<ProjectDetailModalProps> = ({ onClose,
                           <td className="p-3 font-semibold text-slate-900">{e.description}</td>
                           <td className="p-3 text-slate-600">{e.supplier}</td>
                           <td className="p-3 text-slate-500">{e.category}</td>
-                          <td className="p-3 text-right font-mono font-bold text-slate-900">
-                            {formatCurrency(e.amount)}
+                          <td className="p-3 text-right">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                              Validado em Obra
+                            </span>
                           </td>
                         </tr>
                       ))

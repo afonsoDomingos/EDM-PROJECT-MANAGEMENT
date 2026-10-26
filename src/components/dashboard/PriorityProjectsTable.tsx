@@ -14,12 +14,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Project, ProjectStatus } from '../../types';
-import {
-  formatCompactMZN,
-  formatDatePt,
-  formatPercent,
-  calculateFinancialExecution,
-} from '../../utils/formatters';
+import { formatDatePt } from '../../utils/formatters';
 
 interface PriorityProjectsTableProps {
   onOpenCreateModal: () => void;
@@ -300,17 +295,17 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                   <ArrowUpDown className="w-3 h-3 text-slate-400" />
                 </div>
               </th>
-              <th className="py-3 px-3 text-center hidden sm:table-cell whitespace-nowrap">
-                Exec. Financeira
-              </th>
               <th
-                onClick={() => toggleSort('revisedBudget')}
-                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-right hidden sm:table-cell whitespace-nowrap"
+                onClick={() => toggleSort('expectedEndDate')}
+                className="py-3 px-3 cursor-pointer hover:bg-slate-100 transition text-center hidden sm:table-cell whitespace-nowrap"
               >
-                <div className="flex items-center justify-end gap-1">
-                  Orçamento
+                <div className="flex items-center justify-center gap-1">
+                  Término Previsto
                   <ArrowUpDown className="w-3 h-3 text-slate-400" />
                 </div>
+              </th>
+              <th className="py-3 px-3 text-left hidden sm:table-cell whitespace-nowrap">
+                Fase da Obra
               </th>
               <th
                 onClick={() => toggleSort('status')}
@@ -330,8 +325,6 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
               </tr>
             ) : (
               sortedProjects.map(p => {
-                const finExec = calculateFinancialExecution(p.spentBudget, p.revisedBudget);
-                const hasVariance = Math.abs(finExec - p.physicalProgress) > 15;
                 return (
                   <tr
                     key={p.id}
@@ -385,28 +378,22 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
                       </div>
                     </td>
 
-                    {/* Financial Progress */}
+                    {/* Planned End Date */}
                     <td className="py-3.5 px-3 text-center hidden sm:table-cell">
-                      <div
-                        className={`font-bold font-mono ${
-                          hasVariance ? 'text-amber-600' : 'text-slate-800'
-                        }`}
-                      >
-                        {formatPercent(finExec)}
+                      <div className="font-semibold text-xs text-slate-800 flex items-center justify-center gap-1">
+                        <Calendar className="w-3 h-3 text-slate-400" />
+                        {formatDatePt(p.expectedEndDate)}
                       </div>
-                      <div className="text-[10px] text-slate-400">
-                        Gasto: {formatCompactMZN(p.spentBudget)}
+                      <div className="text-[10px] text-slate-400 mt-0.5">
+                        Início: {formatDatePt(p.startDate)}
                       </div>
                     </td>
 
-                    {/* Budget */}
-                    <td className="py-3.5 px-3 text-right hidden sm:table-cell">
-                      <div className="font-bold text-slate-900 font-mono">
-                        {formatCompactMZN(p.revisedBudget)}
-                      </div>
-                      <div className="text-[10px] text-slate-400">
-                        Revisto
-                      </div>
+                    {/* Work Phase */}
+                    <td className="py-3.5 px-3 text-left hidden sm:table-cell">
+                      <span className="inline-block px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-orange-50 text-[#c26508] border border-orange-200/60 truncate max-w-[180px]">
+                        {p.phase || 'Obras Civis & Montagem'}
+                      </span>
                     </td>
 
                     {/* Status */}

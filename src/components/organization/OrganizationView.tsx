@@ -70,7 +70,6 @@ export const OrganizationView: React.FC = () => {
     'Centros de Negócio',
     'Área de Serviço ao Cliente',
     'Divisões',
-    'PCA\'s Cessantes',
     'Delegações de Competência',
     'Todas',
   ];
@@ -87,7 +86,7 @@ export const OrganizationView: React.FC = () => {
 
   // Filter units
   const filteredUnits = INITIAL_ORGANIZATIONAL_UNITS.filter(u => {
-    if (activeCategory !== 'Todas' && activeCategory !== 'Delegações de Competência' && activeCategory !== 'Conselho de Administração' && activeCategory !== 'PCA\'s Cessantes') {
+    if (activeCategory !== 'Todas' && activeCategory !== 'Delegações de Competência' && activeCategory !== 'Conselho de Administração') {
       if (u.category !== activeCategory) return false;
     }
     if (searchQuery) {
@@ -194,8 +193,6 @@ export const OrganizationView: React.FC = () => {
         return 'Área de Serviço ao Cliente';
       case 'Divisões':
         return 'Divisões';
-      case 'PCA\'s Cessantes':
-        return 'PCA\'s Cessantes';
       case 'Delegações de Competência':
         return 'Delegações de Competência';
       default:
@@ -336,11 +333,6 @@ export const OrganizationView: React.FC = () => {
                 {cat === 'Delegações de Competência' && (
                   <span className="ml-1.5 px-1.5 py-0.2 rounded-full bg-amber-500 text-white text-[10px]">
                     {delegations.filter(d => d.status === 'Activa').length}
-                  </span>
-                )}
-                {cat === 'PCA\'s Cessantes' && (
-                  <span className="ml-1.5 px-1.5 py-0.2 rounded-full bg-slate-300 text-slate-800 text-[10px]">
-                    {EDM_PAST_PRESIDENTS.length}
                   </span>
                 )}
               </button>
@@ -596,7 +588,7 @@ export const OrganizationView: React.FC = () => {
                         </div>
                         <div className="flex items-center justify-between pt-1 text-[10px] text-slate-600 border-t border-slate-200/60">
                           <span>Equipa: <strong>{unit.teamCount} técnicos</strong></span>
-                          <span>Alçada: <strong>{formatCompactMZN(unit.approvalThresholdMZN)}</strong></span>
+                          <span>Âmbito: <strong>Atendimento & Redes</strong></span>
                         </div>
                       </div>
                     </div>
@@ -679,7 +671,7 @@ export const OrganizationView: React.FC = () => {
                           {unit.location}
                         </span>
                         <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full">
-                          Alçada: {formatCompactMZN(unit.approvalThresholdMZN)}
+                          Operação & Manutenção de Redes
                         </span>
                       </div>
                     </div>
@@ -700,73 +692,7 @@ export const OrganizationView: React.FC = () => {
         </div>
       )}
 
-      {/* ========================================================================= */}
-      {/* 4. VIEW: PCA'S CESSANTES (Historical Gallery) */}
-      {/* ========================================================================= */}
-      {activeCategory === 'PCA\'s Cessantes' && (
-        <div className="space-y-6 animate-in fade-in duration-300">
-          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-2 text-center max-w-2xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-bold uppercase tracking-wider">
-              <History className="w-3.5 h-3.5 text-[#F7942D]" />
-              Legado & Governação Histórica
-            </div>
-            <h2 className="text-2xl font-extrabold text-slate-900 font-heading">
-              Galeria dos Presidentes do Conselho de Administração (PCA's Cessantes)
-            </h2>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Homenagem aos antigos Presidentes que lideraram a Electricidade de Moçambique, E.P., ao longo das últimas décadas, impulsionando a eletrificação de Moçambique e a integração com o SAPP.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredPastPresidents.map((pastP, index) => {
-              const initials = pastP.name
-                .split(' ')
-                .filter(n => n.length > 2)
-                .map(n => n[0])
-                .slice(0, 2)
-                .join('');
-
-              return (
-                <div
-                  key={pastP.id}
-                  className="bg-white rounded-3xl border border-slate-200 hover:border-[#F7942D]/50 hover:shadow-lg transition-all p-6 shadow-xs flex flex-col justify-between space-y-4 group"
-                >
-                  <div className="space-y-4 text-center">
-                    <div className="relative inline-block mx-auto">
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-950 text-amber-400 flex items-center justify-center font-black text-2xl mx-auto shadow-md border-2 border-slate-200 group-hover:scale-105 transition-transform">
-                        {initials}
-                      </div>
-                      <span className="absolute -bottom-2 -right-2 px-2 py-0.5 rounded-full bg-slate-900 text-amber-400 text-[10px] font-bold border border-slate-700">
-                        PCA #{index + 1}
-                      </span>
-                    </div>
-
-                    <div>
-                      <h4 className="text-base font-bold text-slate-900 font-heading">
-                        {pastP.name}
-                      </h4>
-                      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 text-[#c26508] border border-orange-200 text-xs font-bold mt-1.5">
-                        <Calendar className="w-3.5 h-3.5" />
-                        Mandato: {pastP.mandateYears}
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-600 bg-slate-50 p-3.5 rounded-2xl border border-slate-100 text-left leading-relaxed">
-                      {pastP.notableAchievements}
-                    </p>
-                  </div>
-
-                  <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
-                    <span>Electricidade de Moçambique, E.P.</span>
-                    <span className="font-semibold text-slate-700">Quadro de Honra</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* ========================================================================= */}
       {/* 5. VIEW: CENTROS DE NEGÓCIO & CENTROS DE SUPORTE & TODAS */}
@@ -832,11 +758,9 @@ export const OrganizationView: React.FC = () => {
                     </div>
 
                     <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-600">
-                      <span>Alçada de Despacho:</span>
-                      <strong className="text-slate-900 font-mono">
-                        {unit.approvalThresholdMZN === 0
-                          ? 'Sem limite (PCA)'
-                          : formatCompactMZN(unit.approvalThresholdMZN)}
+                      <span>Âmbito Operacional:</span>
+                      <strong className="text-slate-900 font-medium">
+                        Direcção & Fiscalização Técnica
                       </strong>
                     </div>
                   </div>
@@ -979,19 +903,6 @@ export const OrganizationView: React.FC = () => {
               {cat}
             </button>
           ))}
-        </div>
-
-        {/* Prominent Link: PCA's Cessantes */}
-        <div className="pt-2">
-          <button
-            onClick={() => {
-              setActiveCategory('PCA\'s Cessantes');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="text-white font-extrabold text-sm md:text-base underline hover:text-amber-200 transition cursor-pointer tracking-wide drop-shadow-xs"
-          >
-            PCA's Cessantes
-          </button>
         </div>
       </div>
 
