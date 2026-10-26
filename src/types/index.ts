@@ -231,11 +231,31 @@ export interface ApprovalRequest {
 
 export type OrganizationalCategory =
   | 'Conselho de Administração'
-  | 'Centro de Suporte'
-  | 'Área de Negócio Cliente'
-  | 'Direcção Operacional'
-  | 'Direcção Regional'
-  | 'Divisão & Gabinete';
+  | 'Centros de Suporte'
+  | 'Centros de Negócio'
+  | 'Área de Serviço ao Cliente'
+  | 'Divisões'
+  | 'PCA\'s Cessantes'
+  | 'Delegações de Competência';
+
+export interface BoardMember {
+  id: string;
+  name: string;
+  role: 'PCA' | 'Administrador Executivo';
+  pelouro: string;
+  description?: string;
+  supervisedUnits: string[];
+  email: string;
+  photoUrl?: string;
+}
+
+export interface PastPresident {
+  id: string;
+  name: string;
+  mandateYears: string;
+  notableAchievements?: string;
+  photoUrl?: string;
+}
 
 export interface OrganizationalUnit {
   id: string;
@@ -243,6 +263,7 @@ export interface OrganizationalUnit {
   name: string;
   category: OrganizationalCategory;
   parentId?: string;
+  pelouro?: string;
   directorName: string;
   directorTitle: string;
   directorEmail: string;
@@ -252,6 +273,7 @@ export interface OrganizationalUnit {
   teamCount: number;
   contactEmail: string;
   phone?: string;
+  photoUrl?: string;
 }
 
 export interface Position {
