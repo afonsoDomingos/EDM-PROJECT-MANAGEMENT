@@ -9,12 +9,13 @@ import {
   DollarSign,
   PieChart,
   Zap,
+  ArrowUpRight,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { formatCompactMZN, formatCurrency, formatPercent, calculateFinancialExecution } from '../../utils/formatters';
 
 export const ExecutiveKpiCards: React.FC = () => {
-  const { projects, generationPlants, setActiveTab } = useApp();
+  const { projects, generationPlants, setActiveTab, setFilterStatus, clearFilters } = useApp();
 
   const totalProjects = projects.length;
   const inExecution = projects.filter(p => p.status === 'Em Execução').length;
@@ -41,6 +42,11 @@ export const ExecutiveKpiCards: React.FC = () => {
       icon: FolderKanban,
       color: 'bg-orange-50 text-[#c26508] border-orange-200/80',
       iconBg: 'bg-[#F7942D] text-white',
+      actionLabel: 'Ver todos os projectos',
+      onClick: () => {
+        clearFilters();
+        setActiveTab('projects');
+      },
     },
     {
       title: 'Em Execução',
@@ -49,6 +55,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       icon: Activity,
       color: 'bg-amber-50 text-amber-700 border-amber-200',
       iconBg: 'bg-amber-500 text-white',
+      actionLabel: 'Filtrar em execução',
+      onClick: () => {
+        clearFilters();
+        setFilterStatus('Em Execução');
+        setActiveTab('projects');
+      },
     },
     {
       title: 'Concluídos',
@@ -57,6 +69,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       icon: CheckCircle,
       color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
       iconBg: 'bg-emerald-500 text-white',
+      actionLabel: 'Filtrar concluídos',
+      onClick: () => {
+        clearFilters();
+        setFilterStatus('Concluído');
+        setActiveTab('projects');
+      },
     },
     {
       title: 'Projectos Atrasados',
@@ -65,6 +83,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       icon: Clock,
       color: 'bg-orange-50 text-orange-700 border-orange-200',
       iconBg: 'bg-orange-500 text-white',
+      actionLabel: 'Filtrar atrasados',
+      onClick: () => {
+        clearFilters();
+        setFilterStatus('Atrasado');
+        setActiveTab('projects');
+      },
     },
     {
       title: 'Projectos em Risco',
@@ -73,6 +97,10 @@ export const ExecutiveKpiCards: React.FC = () => {
       icon: AlertOctagon,
       color: 'bg-rose-50 text-rose-700 border-rose-200',
       iconBg: 'bg-rose-600 text-white',
+      actionLabel: 'Abrir matriz de riscos',
+      onClick: () => {
+        setActiveTab('risks');
+      },
     },
     {
       title: 'Média de Execução Física',
@@ -82,6 +110,10 @@ export const ExecutiveKpiCards: React.FC = () => {
       color: 'bg-slate-50 text-slate-800 border-slate-200',
       iconBg: 'bg-slate-800 text-white',
       progress: avgPhysical,
+      actionLabel: 'Ver cronogramas & prazos',
+      onClick: () => {
+        setActiveTab('schedule');
+      },
     },
     {
       title: 'Orçamento Aprovado',
@@ -91,6 +123,10 @@ export const ExecutiveKpiCards: React.FC = () => {
       color: 'bg-slate-50 text-slate-800 border-slate-200',
       iconBg: 'bg-slate-800 text-white',
       tooltip: formatCurrency(totalApprovedBudget),
+      actionLabel: 'Abrir gestão financeira',
+      onClick: () => {
+        setActiveTab('financial');
+      },
     },
     {
       title: 'Execução Financeira Global',
@@ -101,6 +137,10 @@ export const ExecutiveKpiCards: React.FC = () => {
       iconBg: 'bg-teal-600 text-white',
       progress: globalFinancialExec,
       tooltip: `Desembolsado: ${formatCurrency(totalSpentBudget)}`,
+      actionLabel: 'Ver análise de despesas',
+      onClick: () => {
+        setActiveTab('financial');
+      },
     },
   ];
 
@@ -111,20 +151,32 @@ export const ExecutiveKpiCards: React.FC = () => {
         return (
           <div
             key={index}
-            className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-md transition duration-200 relative overflow-hidden group"
-            title={kpi.tooltip}
+            onClick={kpi.onClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={e => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                kpi.onClick();
+              }
+            }}
+            className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-lg hover:border-[#F7942D]/60 hover:-translate-y-1 active:scale-[0.98] transition-all duration-200 relative overflow-hidden group cursor-pointer text-left select-none"
+            title={`${kpi.tooltip || kpi.title} • Clique para ${kpi.actionLabel.toLowerCase()}`}
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-xs font-semibold text-slate-500 tracking-wide uppercase">
-                  {kpi.title}
-                </p>
-                <h3 className="text-2xl font-bold text-slate-900 mt-1 tracking-tight font-heading">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-xs font-semibold text-slate-500 tracking-wide uppercase group-hover:text-slate-800 transition-colors">
+                    {kpi.title}
+                  </p>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-[#F7942D] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 mt-1 tracking-tight font-heading group-hover:text-[#F7942D] transition-colors">
                   {kpi.value}
                 </h3>
               </div>
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${kpi.iconBg}`}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200 ${kpi.iconBg}`}
               >
                 <Icon className="w-5 h-5" />
               </div>
@@ -141,7 +193,10 @@ export const ExecutiveKpiCards: React.FC = () => {
             )}
 
             <div className="mt-2.5 flex items-center justify-between text-xs text-slate-500">
-              <span>{kpi.subtitle}</span>
+              <span className="truncate">{kpi.subtitle}</span>
+              <span className="text-[10px] font-bold text-[#F7942D] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1">
+                {kpi.actionLabel} →
+              </span>
             </div>
           </div>
         );

@@ -11,6 +11,8 @@ import {
   AppNotification,
   UserRole,
   GenerationPlant,
+  ApprovalRequest,
+  ApprovalStatus,
 } from '../types';
 import {
   INITIAL_PROJECTS,
@@ -22,12 +24,15 @@ import {
   INITIAL_AUDIT_LOGS,
   INITIAL_NOTIFICATIONS,
   INITIAL_USERS,
+  INITIAL_APPROVALS,
 } from '../data/initialData';
 import { INITIAL_GENERATION_PLANTS } from '../data/generationData';
 
 interface AppContextType {
   projects: Project[];
   generationPlants: GenerationPlant[];
+  approvalRequests: ApprovalRequest[];
+  decideApprovalRequest: (id: string, decision: ApprovalStatus, notes?: string) => void;
   updateGenerationPlant: (plant: GenerationPlant) => void;
   tasks: Task[];
   risks: Risk[];
@@ -169,6 +174,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } catch {}
     setIsAuthenticated(false);
   };
+
+  const APPROVALS_STORAGE_KEY = 'edm_approvals_v1';
+
+  const [approvalRequests, setApprovalRequests] = useState<ApprovalRequest[]>(() => {
+    try {
+      const saved = localStorage.getItem(APPROVALS_STORAGE_KEY);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return INITIAL_APPROVALS;
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(APPROVALS_STORAGE_KEY, JSON.stringify(approvalRequests));
+    } catch {}
+  }, [approvalRequests]);
 
   const [generationPlants, setGenerationPlants] = useState<GenerationPlant[]>(INITIAL_GENERATION_PLANTS);
 
@@ -577,6 +598,58 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setSelectedProjectId(null);
   };
 
+  const decideApprovalRequest = (id: string, decision: ApprovalStatus, notes?: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    let matched: ApprovalRequest | undefined;
+
+    setApprovalRequests(prev =>
+      prev.map(r => {
+        if (r.id === id) {
+          matched = {
+            ...r,
+            status: decision,
+            directorNotes: notes,
+            decidedAt: today,
+          };
+          return matched;
+        }
+        return r;
+      })
+    );
+
+    if (matched) {
+      logAudit(
+        'Edição',
+        'Projecto',
+        matched.projectId,
+        matched.projectName,
+        `Despacho Executivo [${decision.toUpperCase()}]: ${matched.title}. Parecer do Director: ${notes || 'Sem observações adicionais.'}`
+      );
+
+      // Reflect in project metrics
+      if (decision === 'Aprovado') {
+        if (matched.physicalProgressClaimed !== undefined) {
+          setProjects(prev =>
+            prev.map(p =>
+              p.id === matched!.projectId
+                ? { ...p, physicalProgress: matched!.physicalProgressClaimed!, lastUpdated: today }
+                : p
+            )
+          );
+        }
+        if (matched.amount !== undefined && matched.type === 'Despesa Orçamental') {
+          setProjects(prev =>
+            prev.map(p =>
+              p.id === matched!.projectId
+                ? { ...p, spentBudget: p.spentBudget + matched!.amount!, lastUpdated: today }
+                : p
+            )
+          );
+        }
+      }
+    }
+  };
+
   const clearFilters = () => {
     setSearchQuery('');
     setFilterRegion('Todas');
@@ -590,6 +663,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       projects,
       generationPlants,
       updateGenerationPlant,
+      approvalRequests,
+      decideApprovalRequest,
       tasks,
       risks,
       expenses,
@@ -645,6 +720,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }),
     [
       projects,
+      approvalRequests,
       tasks,
       risks,
       expenses,

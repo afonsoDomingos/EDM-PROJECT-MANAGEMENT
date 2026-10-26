@@ -15,6 +15,7 @@ import {
   Zap,
   ArrowRight,
   LogOut,
+  FileCheck2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
@@ -46,7 +47,10 @@ export const Header: React.FC<HeaderProps> = ({
     isMongoConnected,
     projects,
     generationPlants,
+    approvalRequests,
   } = useApp();
+
+  const pendingApprovalsCount = approvalRequests.filter(r => r.status === 'Pendente').length;
 
   const [showNotifMenu, setShowNotifMenu] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -409,6 +413,18 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <Search className="w-5 h-5" />
           </button>
+
+          {/* Director Executive Approvals Button */}
+          {pendingApprovalsCount > 0 && (
+            <button
+              onClick={() => setActiveTab('approvals')}
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold transition shadow-xs cursor-pointer"
+              title="Existem despachos aguardando decisão do Director"
+            >
+              <FileCheck2 className="w-3.5 h-3.5 text-amber-600" />
+              <span>Despachos ({pendingApprovalsCount})</span>
+            </button>
+          )}
 
           {/* Notifications */}
           <div className="relative">

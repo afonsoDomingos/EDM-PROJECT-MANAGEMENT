@@ -202,3 +202,31 @@ export interface GenerationPlant {
   notes?: string;
 }
 
+export type ApprovalType =
+  | 'Auto de Medição Física'
+  | 'Despesa Orçamental'
+  | 'Revisão de Prazos'
+  | 'Libertação de Fundos'
+  | 'Alteração de Escopo';
+
+export type ApprovalStatus = 'Pendente' | 'Aprovado' | 'Rejeitado';
+
+export interface ApprovalRequest {
+  id: string;
+  projectId: string;
+  projectCode: string;
+  projectName: string;
+  type: ApprovalType;
+  title: string;
+  description: string;
+  requestedBy: string;
+  requestedDate: string;
+  amount?: number;
+  physicalProgressClaimed?: number;
+  status: ApprovalStatus;
+  directorNotes?: string;
+  decidedAt?: string;
+  priority: PriorityLevel;
+}
+
+

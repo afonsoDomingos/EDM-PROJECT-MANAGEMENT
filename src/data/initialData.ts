@@ -1,4 +1,4 @@
-import { Project, Task, Risk, ExpenseRecord, Milestone, ProjectDocument, AuditLog, User, AppNotification } from '../types/index.js';
+import { Project, Task, Risk, ExpenseRecord, Milestone, ProjectDocument, AuditLog, User, AppNotification, ApprovalRequest } from '../types/index.js';
 
 export const INITIAL_USERS: User[] = [
   {
@@ -826,5 +826,52 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     title: 'Novo projecto registado – Hidrogénio Verde',
     message: 'Estudo de Mercado de Hidrogénio Verde (KfW) registado no sistema.',
     projectId: 'PRJ-029', timestamp: '2024-10-01T08:00:00Z', read: true, category: 'Auditoria',
+  },
+];
+
+export const INITIAL_APPROVALS: ApprovalRequest[] = [
+  {
+    id: 'APR-001',
+    projectId: 'PRJ-001',
+    projectCode: 'EDM-2024-001',
+    projectName: 'Electrificação Rural de Vilanculos Fase 2',
+    type: 'Auto de Medição Física',
+    title: 'Auto de Medição nº 8 — Conclusão de 42 km de Média Tensão',
+    description: 'Fiscalização concluiu vistoria de 42 km de linhas de média tensão concluídas e 1.200 ligações domiciliares energizadas. Requer despacho do Director para liquidação de factura do empreiteiro.',
+    requestedBy: 'Dra. Teresa Cossa',
+    requestedDate: '2026-10-24',
+    amount: 15400000,
+    physicalProgressClaimed: 94,
+    status: 'Pendente',
+    priority: 'Alta',
+  },
+  {
+    id: 'APR-002',
+    projectId: 'PRJ-002',
+    projectCode: 'EDM-2024-002',
+    projectName: 'Melhoramento da Qualidade de Energia nas Cidades de Maputo e Matola',
+    type: 'Revisão de Prazos',
+    title: 'Prorrogação de Prazo para Parecer de Consultoria Técnica',
+    description: 'Atraso na recepção das notas de inclusão do consórcio EXIM Bank India. Solicita-se extensão de prazo de avaliação em 45 dias úteis sem impacto orçamental.',
+    requestedBy: 'Eng. Armindo Macaringue',
+    requestedDate: '2026-10-25',
+    status: 'Pendente',
+    priority: 'Crítica',
+  },
+  {
+    id: 'APR-003',
+    projectId: 'PRJ-003',
+    projectCode: 'EDM-2024-003',
+    projectName: 'Programa Energia para Todos (Proenergia)',
+    type: 'Libertação de Fundos',
+    title: 'Desembolso do Lote 3 – Subestações Móveis Sofala',
+    description: 'Solicitação de libertação do segundo tramo do donativo ASDI para desembaraço alfandegário de transformadores retidos no Porto da Beira.',
+    requestedBy: 'Dra. Teresa Cossa',
+    requestedDate: '2026-10-22',
+    amount: 28500000,
+    status: 'Aprovado',
+    directorNotes: 'Autorizado o desembolso com carácter de urgência máxima para evitar sobreestadias portuárias.',
+    decidedAt: '2026-10-23',
+    priority: 'Crítica',
   },
 ];

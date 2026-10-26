@@ -14,6 +14,8 @@ import { ExecutiveReports } from './components/reports/ExecutiveReports';
 import { AuditLogView } from './components/audit/AuditLogView';
 import { SettingsAndUsersView } from './components/settings/SettingsAndUsersView';
 import { GenerationPipelineView } from './components/generation/GenerationPipelineView';
+import { ExecutivePredictiveInsights } from './components/dashboard/ExecutivePredictiveInsights';
+import { ExecutiveApprovalsView } from './components/approvals/ExecutiveApprovalsView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
 import { LoginPage } from './components/auth/LoginPage';
@@ -63,6 +65,7 @@ const MainLayout: React.FC = () => {
           {activeTab === 'dashboard' && (
             <div className="space-y-6">
               <ExecutiveKpiCards />
+              <ExecutivePredictiveInsights />
               <ExecutiveCharts />
               <PriorityProjectsTable
                 onOpenCreateModal={() => {
@@ -72,6 +75,8 @@ const MainLayout: React.FC = () => {
               />
             </div>
           )}
+
+          {activeTab === 'approvals' && <ExecutiveApprovalsView />}
 
           {activeTab === 'projects' && (
             <ProjectsView
