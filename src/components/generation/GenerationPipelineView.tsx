@@ -316,7 +316,7 @@ export const GenerationPipelineView: React.FC = () => {
       {/* Visual Analytics Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Bar Chart: MW by Province */}
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200 p-6 shadow-sm chart-scanline-loop chart-bar-loop">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-bold text-slate-900 font-heading">
@@ -326,14 +326,30 @@ export const GenerationPipelineView: React.FC = () => {
                 Capacidade acumulada em cada província considerando todas as centrais
               </p>
             </div>
-            <span className="text-[11px] font-bold text-[#c26508] bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200">
-              {mwByProvinceData.length} Províncias
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-bold text-[#c26508] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#F7942D] animate-ping" />
+                Loop Activo
+              </span>
+              <span className="text-[11px] font-bold text-[#c26508] bg-orange-50 px-2.5 py-1 rounded-full border border-orange-200">
+                {mwByProvinceData.length} Províncias
+              </span>
+            </div>
           </div>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={mwByProvinceData} margin={{ top: 10, right: 15, left: 15, bottom: 20 }}>
+                <defs>
+                  <linearGradient id="barGenOrange" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#F7942D">
+                      <animate attributeName="stop-color" values="#F7942D;#ffb56b;#F7942D" dur="3.5s" repeatCount="indefinite" />
+                    </stop>
+                    <stop offset="100%" stopColor="#c26508">
+                      <animate attributeName="stop-color" values="#c26508;#d97706;#c26508" dur="3.5s" repeatCount="indefinite" />
+                    </stop>
+                  </linearGradient>
+                </defs>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E2E8F0" />
                 <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748B' }} angle={-25} textAnchor="end" />
                 <YAxis tick={{ fontSize: 11, fill: '#64748B' }} tickFormatter={v => `${v} MW`} />
@@ -341,14 +357,14 @@ export const GenerationPipelineView: React.FC = () => {
                   formatter={(value: any) => [`${Number(value).toLocaleString('pt-PT')} MW`, 'Capacidade']}
                   contentStyle={{ borderRadius: '12px', border: '1px solid #E2E8F0', fontSize: '12px' }}
                 />
-                <Bar dataKey="mw" fill="#F7942D" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="mw" fill="url(#barGenOrange)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Donut Chart: MW by Maturity Status */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between chart-scanline-loop chart-donut-loop">
           <div>
             <h3 className="text-sm font-bold text-slate-900 font-heading mb-1">
               Maturidade dos Projectos (MW)

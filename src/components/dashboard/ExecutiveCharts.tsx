@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   PieChart,
   Pie,
@@ -28,6 +28,10 @@ const CATEGORY_COLORS = ['#F7942D', '#ea580c', '#10b981', '#d97706', '#0f172a'];
 export const ExecutiveCharts: React.FC = () => {
   const { projects } = useApp();
 
+  // Active indices for continuous loop rotation
+  const [activeStatusIndex, setActiveStatusIndex] = useState(0);
+  const [activeCatIndex, setActiveCatIndex] = useState(0);
+
   // 1. Projects by Status
   const statusCounts: Record<string, number> = {};
   projects.forEach(p => {
@@ -39,7 +43,7 @@ export const ExecutiveCharts: React.FC = () => {
     color: STATUS_COLORS[name] || '#64748b',
   }));
 
-  // 2. Physical vs Financial Execution Comparison (top 7 active projects)
+  // 2. Physical vs Financial Execution Comparison (top active projects)
   const comparisonData = projects
     .filter(p => p.status !== 'Por Iniciar')
     .slice(0, 8)
@@ -96,6 +100,23 @@ export const ExecutiveCharts: React.FC = () => {
     });
   }
 
+  // Continuous animation loops for Pie/Donut charts
+  useEffect(() => {
+    if (statusData.length === 0) return;
+    const timer = setInterval(() => {
+      setActiveStatusIndex(prev => (prev + 1) % statusData.length);
+    }, 2800);
+    return () => clearInterval(timer);
+  }, [statusData.length]);
+
+  useEffect(() => {
+    if (categoryData.length === 0) return;
+    const timer = setInterval(() => {
+      setActiveCatIndex(prev => (prev + 1) % categoryData.length);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, [categoryData.length]);
+
   // Custom tooltips
   const CustomBarTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -131,37 +152,82 @@ export const ExecutiveCharts: React.FC = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 my-6">
       {/* Chart 1: Physical vs Financial Execution Comparison */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
+      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-bar-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
             Execução Física vs Financeira
           </h4>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F7942D]"></span>
+            </span>
+            <span>Loop Dinâmico</span>
+          </div>
         </div>
 
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={comparisonData} margin={{ top: 10, right: 10, left: -15, bottom: 20 }}>
+              <defs>
+                <linearGradient id="barLoopOrange1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#F7942D">
+                    <animate attributeName="stop-color" values="#F7942D;#ffb76b;#F7942D" dur="3s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="100%" stopColor="#c26508">
+                    <animate attributeName="stop-color" values="#c26508;#d97706;#c26508" dur="3s" repeatCount="indefinite" />
+                  </stop>
+                </linearGradient>
+                <linearGradient id="barLoopOrange2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#ea580c">
+                    <animate attributeName="stop-color" values="#ea580c;#fb923c;#ea580c" dur="3s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="100%" stopColor="#9a3412">
+                    <animate attributeName="stop-color" values="#9a3412;#c2410c;#9a3412" dur="3s" repeatCount="indefinite" />
+                  </stop>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} interval={0} angle={-25} textAnchor="end" />
               <YAxis unit="%" domain={[0, 100]} tick={{ fontSize: 11, fill: '#64748b' }} />
               <Tooltip content={<CustomBarTooltip />} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
-              <Bar dataKey="Execução Física (%)" fill="#F7942D" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Execução Financeira (%)" fill="#c26508" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Execução Física (%)" fill="url(#barLoopOrange1)" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Execução Financeira (%)" fill="url(#barLoopOrange2)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Chart 2: Project Distribution by Status */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
+      {/* Chart 2: Project Distribution by Status (with continuous rotation/pulse loop) */}
+      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-donut-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
             Projectos por Estado
           </h4>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F7942D]"></span>
+            </span>
+            <span>Rotação Contínua</span>
+          </div>
         </div>
 
-        <div className="h-72 w-full flex items-center justify-center">
+        <div className="h-72 w-full flex items-center justify-center relative">
+          {/* Centered Dynamic Loop Counter */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 transition-all duration-500">
+            <span className="text-2xl font-black text-slate-900 transition-all duration-300">
+              {statusData[activeStatusIndex]?.value || 0}
+            </span>
+            <span
+              className="text-[10px] font-bold uppercase tracking-wider transition-all duration-300 px-2 py-0.5 rounded-full bg-slate-50 border border-slate-200/60"
+              style={{ color: statusData[activeStatusIndex]?.color || '#F7942D' }}
+            >
+              {statusData[activeStatusIndex]?.name}
+            </span>
+          </div>
+
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -171,10 +237,25 @@ export const ExecutiveCharts: React.FC = () => {
                 paddingAngle={4}
                 dataKey="value"
                 nameKey="name"
+                animationDuration={600}
               >
-                {statusData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
+                {statusData.map((entry, index) => {
+                  const isActive = index === activeStatusIndex;
+                  return (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={entry.color}
+                      stroke={isActive ? '#ffffff' : 'none'}
+                      strokeWidth={isActive ? 3 : 0}
+                      style={{
+                        filter: isActive ? 'drop-shadow(0 6px 14px rgba(247, 148, 45, 0.55))' : 'none',
+                        transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                        transformOrigin: 'center',
+                        transition: 'all 0.4s ease-out',
+                      }}
+                    />
+                  );
+                })}
               </Pie>
               <Tooltip
                 formatter={(value: any, name: any) => [`${value} projecto(s)`, name]}
@@ -192,17 +273,34 @@ export const ExecutiveCharts: React.FC = () => {
         </div>
       </div>
 
-      {/* Chart 3: Distribution by Region */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
+      {/* Chart 3: Distribution by Region (with animated bar gradient and loop scanline) */}
+      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-bar-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
             Projectos por Região
           </h4>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F7942D]"></span>
+            </span>
+            <span>Loop Dinâmico</span>
+          </div>
         </div>
 
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={regionData} margin={{ top: 10, right: 10, left: -20, bottom: 5 }}>
+              <defs>
+                <linearGradient id="barLoopRegion1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#F7942D">
+                    <animate attributeName="stop-color" values="#F7942D;#ffb56b;#F7942D" dur="3.5s" repeatCount="indefinite" />
+                  </stop>
+                  <stop offset="100%" stopColor="#c26508">
+                    <animate attributeName="stop-color" values="#c26508;#d97706;#c26508" dur="3.5s" repeatCount="indefinite" />
+                  </stop>
+                </linearGradient>
+              </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
               <XAxis dataKey="region" tick={{ fontSize: 11, fill: '#64748b' }} />
               <YAxis yAxisId="left" tick={{ fontSize: 11, fill: '#64748b' }} />
@@ -219,21 +317,38 @@ export const ExecutiveCharts: React.FC = () => {
                 }}
               />
               <Legend wrapperStyle={{ fontSize: '11px' }} />
-              <Bar yAxisId="left" dataKey="projectos" name="Qtd. Projectos" fill="#F7942D" radius={[4, 4, 0, 0]} />
+              <Bar yAxisId="left" dataKey="projectos" name="Qtd. Projectos" fill="url(#barLoopRegion1)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      {/* Chart 4: Budget Distribution by Category */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col">
+      {/* Chart 4: Budget Distribution by Category (with continuous category loop) */}
+      <div className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs flex flex-col chart-scanline-loop chart-donut-loop">
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-sm font-bold text-slate-900 font-heading">
             Orçamento por Categoria
           </h4>
+          <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/70 text-[10px] font-bold text-[#c26508]">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#F7942D]"></span>
+            </span>
+            <span>Rotação Contínua</span>
+          </div>
         </div>
 
-        <div className="h-64 w-full flex items-center justify-center">
+        <div className="h-64 w-full flex items-center justify-center relative">
+          {/* Centered Dynamic Loop Counter */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10 transition-all duration-500">
+            <span className="text-sm font-black text-slate-900 transition-all duration-300">
+              {categoryData[activeCatIndex]?.formatted || '0 MZN'}
+            </span>
+            <span className="text-[10px] font-bold text-[#c26508] transition-all duration-300 px-2 py-0.5 rounded-full bg-orange-50 border border-orange-200/60 mt-0.5">
+              {categoryData[activeCatIndex]?.percent}% • {categoryData[activeCatIndex]?.name.split(' ')[0]}
+            </span>
+          </div>
+
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -243,10 +358,25 @@ export const ExecutiveCharts: React.FC = () => {
                 paddingAngle={3}
                 dataKey="value"
                 nameKey="name"
+                animationDuration={600}
               >
-                {categoryData.map((entry, index) => (
-                  <Cell key={`cat-cell-${index}`} fill={entry.color} />
-                ))}
+                {categoryData.map((entry, index) => {
+                  const isActive = index === activeCatIndex;
+                  return (
+                    <Cell
+                      key={`cat-cell-${index}`}
+                      fill={entry.color}
+                      stroke={isActive ? '#ffffff' : 'none'}
+                      strokeWidth={isActive ? 3 : 0}
+                      style={{
+                        filter: isActive ? 'drop-shadow(0 6px 14px rgba(247, 148, 45, 0.55))' : 'none',
+                        transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                        transformOrigin: 'center',
+                        transition: 'all 0.4s ease-out',
+                      }}
+                    />
+                  );
+                })}
               </Pie>
               <Tooltip content={<CustomCategoryTooltip />} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '6px' }} />

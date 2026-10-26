@@ -64,3 +64,81 @@
 .edm-card-shadow {
   box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
 }
+
+/* Continuous Charts Loop Animation Effects */
+@keyframes chartScanSweep {
+  0% {
+    transform: translateX(-150%) skewX(-20deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.18;
+  }
+  65% {
+    opacity: 0.18;
+  }
+  100% {
+    transform: translateX(250%) skewX(-20deg);
+    opacity: 0;
+  }
+}
+
+.chart-scanline-loop {
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-scanline-loop::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(247, 148, 45, 0.28) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+  animation: chartScanSweep 4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes chartBarPulse {
+  0%, 100% {
+    filter: drop-shadow(0 2px 4px rgba(247, 148, 45, 0.15));
+    opacity: 0.95;
+  }
+  50% {
+    filter: drop-shadow(0 6px 14px rgba(247, 148, 45, 0.45));
+    opacity: 1;
+  }
+}
+
+.chart-bar-loop .recharts-bar-rectangles {
+  animation: chartBarPulse 3.2s ease-in-out infinite;
+}
+
+@keyframes chartDonutBreathe {
+  0%, 100% {
+    filter: drop-shadow(0 2px 6px rgba(15, 23, 42, 0.06));
+    transform: scale(1);
+    transform-origin: center;
+  }
+  50% {
+    filter: drop-shadow(0 8px 18px rgba(247, 148, 45, 0.35));
+    transform: scale(1.018);
+    transform-origin: center;
+  }
+}
+
+.chart-donut-loop .recharts-pie {
+  animation: chartDonutBreathe 3.6s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.recharts-pie-sector {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
