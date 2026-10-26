@@ -383,10 +383,20 @@ export const OrganizationView: React.FC = () => {
 
                 {/* PCA Avatar / Badge */}
                 <div className="relative inline-block mx-auto">
-                  <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white flex flex-col items-center justify-center shadow-lg border-4 border-amber-100 group-hover:scale-105 transition-transform mx-auto">
-                    <span className="text-3xl font-black font-heading text-amber-400">MGA</span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 mt-1">EDM • PCA</span>
-                  </div>
+                  {pcaMember.photoUrl ? (
+                    <div className="w-28 h-28 rounded-2xl overflow-hidden shadow-xl border-4 border-amber-300 group-hover:scale-105 transition-transform mx-auto bg-slate-900">
+                      <img
+                        src={pcaMember.photoUrl}
+                        alt={pcaMember.name}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-28 h-28 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white flex flex-col items-center justify-center shadow-lg border-4 border-amber-100 group-hover:scale-105 transition-transform mx-auto">
+                      <span className="text-3xl font-black font-heading text-amber-400">MGA</span>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-slate-300 mt-1">EDM • PCA</span>
+                    </div>
+                  )}
                   <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-[#F7942D] text-white flex items-center justify-center shadow-md">
                     <Award className="w-4 h-4" />
                   </div>
@@ -459,10 +469,20 @@ export const OrganizationView: React.FC = () => {
                   >
                     <div className="space-y-4 text-center">
                       {/* Avatar Portrait Styled Badge */}
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col items-center justify-center shadow-md mx-auto group-hover:scale-105 transition-transform border-2 border-orange-100">
-                        <span className="text-xl font-black font-heading text-amber-300">{initials}</span>
-                        <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">EDM ADM</span>
-                      </div>
+                      {admin.photoUrl ? (
+                        <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-md mx-auto group-hover:scale-105 transition-transform border-2 border-orange-200 bg-slate-900">
+                          <img
+                            src={admin.photoUrl}
+                            alt={admin.name}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-slate-800 to-slate-900 text-white flex flex-col items-center justify-center shadow-md mx-auto group-hover:scale-105 transition-transform border-2 border-orange-100">
+                          <span className="text-xl font-black font-heading text-amber-300">{initials}</span>
+                          <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider">EDM ADM</span>
+                        </div>
+                      )}
 
                       {/* Name & Pelouro */}
                       <div>
@@ -623,11 +643,21 @@ export const OrganizationView: React.FC = () => {
                     className="bg-white rounded-3xl border border-slate-200 hover:border-emerald-400 hover:shadow-lg transition-all p-6 shadow-xs flex flex-col justify-between space-y-4 group text-center"
                   >
                     <div className="space-y-3">
-                      {/* Avatar Monogram Styled (Matches Celso Clinketh Coelho in Screenshot 3) */}
-                      <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-900 to-slate-900 text-emerald-300 flex flex-col items-center justify-center font-black text-xl mx-auto shadow-md border-2 border-emerald-100 group-hover:scale-105 transition-transform">
-                        <span>{initials}</span>
-                        <span className="text-[9px] uppercase font-bold text-emerald-200 mt-0.5 tracking-wider">{unit.code}</span>
-                      </div>
+                      {/* Avatar Photo or Monogram Styled (Matches Celso Clinketh Coelho in Screenshot 3) */}
+                      {unit.photoUrl ? (
+                        <div className="w-24 h-24 rounded-2xl overflow-hidden shadow-md mx-auto group-hover:scale-105 transition-transform border-2 border-emerald-300 bg-slate-900">
+                          <img
+                            src={unit.photoUrl}
+                            alt={unit.directorName}
+                            className="w-full h-full object-cover object-top"
+                          />
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-900 to-slate-900 text-emerald-300 flex flex-col items-center justify-center font-black text-xl mx-auto shadow-md border-2 border-emerald-100 group-hover:scale-105 transition-transform">
+                          <span>{initials}</span>
+                          <span className="text-[9px] uppercase font-bold text-emerald-200 mt-0.5 tracking-wider">{unit.code}</span>
+                        </div>
+                      )}
 
                       <div>
                         <h4 className="text-base font-bold text-slate-900 font-heading">

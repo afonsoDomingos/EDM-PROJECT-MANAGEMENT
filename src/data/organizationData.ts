@@ -14,6 +14,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Presidente do Conselho de Administração da Electricidade de Moçambique, E.P., responsável pela liderança executiva global da empresa perante o Governo, accionistas e parceiros internacionais.',
     supervisedUnits: ['Gabinete do PCA', 'Gabinete de Auditoria Interna e Riscos', 'Comunicação e Relações Institucionais'],
     email: 'pca.gabinete@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019218/edm_pca_marcelino.png',
   },
   {
     id: 'BM-FIN',
@@ -23,6 +24,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Gestão da estratégia económico-financeira, tesouraria, mobilização de capitais junto de instituições multilaterais (BM, BAD, KfW, ASDI) e controlo orçamental consolidado da EDM.',
     supervisedUnits: ['Direcção Financeira', 'Direcção de Contabilidade', 'Aprovisionamento e Logística'],
     email: 'anastacio.inacio@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019219/edm_adm_financas.png',
   },
   {
     id: 'BM-DEV',
@@ -32,6 +34,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Identificação e estruturação de novos projectos energéticos, parcerias público-privadas (PPP), transição energética e comercialização no mercado regional SAPP.',
     supervisedUnits: ['Direcção de Desenvolvimento de Negócios', 'Direcção de Estudos e Planeamento'],
     email: 'luis.ganje@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019221/edm_adm_novosnegocios.png',
   },
   {
     id: 'BM-PROD-TRANS',
@@ -41,6 +44,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Supervisão técnica das centrais eléctricas de geração (hídricas, térmicas e renováveis) e da rede troncal de transporte de muito alta tensão (110kV a 400kV).',
     supervisedUnits: ['Direcção de Produção de Energia (DPR)', 'Direcção de Transporte de Energia (DTR)', 'Divisões Regionais de Transporte'],
     email: 'alberto.banze@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019222/edm_adm_producao_transporte.png',
   },
   {
     id: 'BM-ELEC',
@@ -50,6 +54,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Liderança executiva do Programa Nacional de Acesso Universal à Energia (ProEnergia), expansão de redes rurais e extensão da cobertura eléctrica a todas as sedes de postos administrativos.',
     supervisedUnits: ['Direcção de Electrificação Rural (DER)', 'Unidades de Gestão de Projectos (UGP)'],
     email: 'antonio.mungwambe@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019223/edm_adm_electrificacao.png',
   },
   {
     id: 'BM-RH',
@@ -59,6 +64,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Gestão estratégica de pessoas, desenvolvimento de lideranças, saúde e segurança no trabalho (HSE), relações laborais e formação técnica através da Academia EDM.',
     supervisedUnits: ['Direcção de Recursos Humanos', 'Academia EDM', 'Gabinete de Saúde e Segurança'],
     email: 'iolanda.cintura@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019224/edm_adm_recursoshumanos.png',
   },
   {
     id: 'BM-COM-DIST',
@@ -68,6 +74,7 @@ export const EDM_BOARD_MEMBERS: BoardMember[] = [
     description: 'Gestão da rede de distribuição de média e baixa tensão, atendimento ao cliente, cobrança e pré-pagamento Credelec, combate a perdas e infraestrutura tecnológica de suporte.',
     supervisedUnits: ['Direcção de Distribuição (DDI)', 'Área de Negócio Cliente (ANC)', 'Direcção de Tecnologias de Informação e Telecomunicações (DTIT)'],
     email: 'francisco.inroga@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019227/edm_adm_comercial_distribuicao.png',
   },
 ];
 
@@ -441,6 +448,7 @@ export const INITIAL_ORGANIZATIONAL_UNITS: OrganizationalUnit[] = [
     approvalThresholdMZN: 20000000,
     teamCount: 52,
     contactEmail: 'transporte.centro.norte@edm.co.mz',
+    photoUrl: 'https://res.cloudinary.com/dnvnftvky/image/upload/v1793019229/edm_div_celso_coelho.png',
   },
   {
     id: 'UNIT-DIV-TRANS-SUL',
