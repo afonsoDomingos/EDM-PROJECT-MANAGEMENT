@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   Clock,
   PlusCircle,
+  Landmark,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Project, ProjectStatus } from '../../types';
@@ -150,15 +151,26 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-base font-bold text-slate-900 font-heading">
-                Projectos Prioritários da EDM
+                Projectos Operacionais da EDM
               </h3>
               <span className="text-xs px-2.5 py-0.5 rounded-full bg-orange-100 text-[#c26508] font-bold">
                 {filteredProjects.length} de {projects.length}
+              </span>
+              <span className="text-[11px] font-semibold text-slate-500 hidden md:inline-block">
+                (+ 5 sob Tutela Governamental • 40 no Total)
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={() => setActiveTab('governmental')}
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#002D62] text-xs font-bold border border-blue-200 transition"
+              title="Abrir checklist de projectos governamentais"
+            >
+              <Landmark className="w-3.5 h-3.5 text-[#F7942D]" />
+              5 Projectos Governamentais (PR)
+            </button>
             {canEditProject() && (
               <button
                 onClick={onOpenCreateModal}

@@ -10,6 +10,8 @@ import {
   ArrowUpRight,
   CheckSquare,
   CalendarDays,
+  Landmark,
+  ArrowRight,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { formatPercent } from '../../utils/formatters';
@@ -38,11 +40,12 @@ export const ExecutiveKpiCards: React.FC = () => {
   const kpis = [
     {
       title: 'Total de Projectos',
-      value: totalProjects,
-      subtitle: `${inExecution} em curso activo`,
+      value: totalProjects + 5,
+      subtitle: `${totalProjects} EDM + 5 Governamentais`,
       icon: FolderKanban,
       color: 'bg-orange-50 text-[#c26508] border-orange-200/80',
       iconBg: 'bg-[#F7942D] text-white',
+      tooltip: 'Portfólio Consolidado: 35 Operacionais EDM + 5 Estratégicos Governamentais',
       actionLabel: 'Ver todos os projectos',
       onClick: () => {
         clearFilters();
@@ -147,7 +150,43 @@ export const ExecutiveKpiCards: React.FC = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="space-y-4">
+      {/* Featured Strategic Banner: Presidência da República */}
+      <div className="bg-gradient-to-r from-[#002D62] via-[#083b77] to-[#0a4b99] rounded-2xl p-4 sm:p-5 text-white shadow-sm border border-blue-900/40 flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
+        <div className="flex items-center gap-3.5 relative z-10">
+          <div className="w-11 h-11 rounded-xl bg-[#F7942D] text-white flex items-center justify-center shrink-0 shadow-md">
+            <Landmark className="w-6 h-6" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-blue-100">
+                Presidência da República
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#F7942D] text-white">
+                5 Projectos Estratégicos
+              </span>
+            </div>
+            <h4 className="text-sm sm:text-base font-black text-white">
+              Painel Integrado: 40 Projectos Totais (35 Operacionais EDM + 5 Sob Tutela Governamental)
+            </h4>
+            <p className="text-xs text-blue-100/80 mt-0.5">
+              Capacidade em estruturação: 235 MW + FSRU GNL • Acompanhamento linha a linha com caixas de selecção das 47 actividades.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 relative z-10 shrink-0">
+          <button
+            onClick={() => setActiveTab('governmental')}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-blue-50 text-[#002D62] text-xs font-bold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+          >
+            Abrir Projectos Governamentais (Checklist)
+            <ArrowRight className="w-4 h-4 text-[#F7942D]" />
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {kpis.map((kpi, index) => {
         const Icon = kpi.icon;
         return (
@@ -231,6 +270,7 @@ export const ExecutiveKpiCards: React.FC = () => {
           Explorar Matriz MW →
         </button>
       </div>
+    </div>
     </div>
   );
 };
