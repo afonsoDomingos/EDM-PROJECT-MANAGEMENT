@@ -260,8 +260,8 @@ export const ExecutiveReports: React.FC = () => {
           </div>
 
           <div className="text-left sm:text-right text-xs text-slate-500">
-            <span className="font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 inline-block mb-1">
-              PROTÓTIPO DE DEMONSTRAÇÃO
+            <span className="font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200 inline-block mb-1">
+              DOCUMENTO INSTITUCIONAL OFICIAL
             </span>
             <p>Data de Emissão: {new Date().toLocaleDateString('pt-PT')}</p>
             <p>Classificação: Confidencial / Interno</p>

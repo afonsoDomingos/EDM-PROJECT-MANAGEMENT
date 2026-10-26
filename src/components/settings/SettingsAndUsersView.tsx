@@ -83,14 +83,14 @@ export const SettingsAndUsersView: React.FC = () => {
 
         <button
           onClick={() => {
-            if (window.confirm('Tem a certeza de que deseja repor todos os dados para o estado inicial fictício?')) {
+            if (window.confirm('Tem a certeza de que deseja repor todos os dados para o estado inicial do sistema?')) {
               resetToInitialData();
             }
           }}
           className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-bold border border-amber-300 transition"
         >
           <RotateCcw className="w-4 h-4 text-amber-700" />
-          Repor Dados Fictícios de Fábrica
+          Repor Dados Originais do Sistema
         </button>
       </div>
 

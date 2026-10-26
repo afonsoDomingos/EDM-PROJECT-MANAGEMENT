@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
           <span className="w-2 h-2 rounded-full bg-slate-900/60 shrink-0" />
           <span className="font-black text-[11px] sm:text-xs tracking-tight uppercase truncate text-slate-950">
-            PROTÓTIPO EDM — DADOS FICTÍCIOS
+            PORTAL CORPORATIVO EDM — GESTÃO DE PROJECTOS
           </span>
           <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/15 text-slate-950 border border-black/10 shrink-0">
             <span className={`w-1.5 h-1.5 rounded-full ${isMongoConnected ? 'bg-emerald-600' : 'bg-amber-700'}`} />
@@ -68,7 +68,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={() => {
-              if (window.confirm('Repor os dados de demonstração originais?')) {
+              if (window.confirm('Repor os dados iniciais do sistema?')) {
                 resetToInitialData();
               }
             }}
