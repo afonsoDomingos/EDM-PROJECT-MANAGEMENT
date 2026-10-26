@@ -17,6 +17,7 @@ import { GenerationPipelineView } from './components/generation/GenerationPipeli
 import { ExecutivePredictiveInsights } from './components/dashboard/ExecutivePredictiveInsights';
 import { ExecutiveApprovalsView } from './components/approvals/ExecutiveApprovalsView';
 import { OrganizationView } from './components/organization/OrganizationView';
+import { GovernmentalProjectsView } from './components/governmental/GovernmentalProjectsView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
 import { LoginPage } from './components/auth/LoginPage';
@@ -76,6 +77,8 @@ const MainLayout: React.FC = () => {
               />
             </div>
           )}
+
+          {activeTab === 'governmental' && <GovernmentalProjectsView />}
 
           {activeTab === 'approvals' && <ExecutiveApprovalsView />}
 

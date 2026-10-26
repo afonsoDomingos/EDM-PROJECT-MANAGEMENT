@@ -16,6 +16,7 @@ import {
   LogOut,
   FileCheck2,
   Building2,
+  Landmark,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -62,6 +63,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const navItems = [
     { id: 'dashboard',   label: 'Dashboard Executivo',     icon: LayoutDashboard, badge: null },
+    { id: 'governmental',label: 'Projectos Governamentais',icon: Landmark,        badge: '5', badgeColor: 'bg-[#F7942D] text-white' },
     { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
     { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
     { id: 'organization',label: 'Estrutura Orgânica',      icon: Building2,       badge: '15' },
