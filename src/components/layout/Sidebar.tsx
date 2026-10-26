@@ -15,7 +15,6 @@ import {
   X,
   LogOut,
   FileCheck2,
-  Building2,
   Landmark,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -82,7 +81,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'Apoio Corporativo',
       items: [
-        { id: 'organization',label: 'Estrutura Orgânica',      icon: Building2,       badge: '15' },
         { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
         { id: 'risks',       label: 'Riscos & Problemas',      icon: AlertTriangle,   badge: criticalRisksCount > 0 ? criticalRisksCount : null, badgeColor: 'bg-red-100 text-red-700' },
         { id: 'reports',     label: 'Relatórios & Exportação', icon: FileSpreadsheet, badge: null },
