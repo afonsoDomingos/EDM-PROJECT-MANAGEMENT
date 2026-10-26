@@ -61,20 +61,34 @@ export const Sidebar: React.FC<SidebarProps> = ({
     r => r.status === 'Pendente'
   ).length;
 
-  const navItems = [
-    { id: 'dashboard',   label: 'Dashboard Executivo',     icon: LayoutDashboard, badge: null },
-    { id: 'governmental',label: 'Projectos Governamentais',icon: Landmark,        badge: '5', badgeColor: 'bg-[#F7942D] text-white' },
-    { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
-    { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
-    { id: 'organization',label: 'Estrutura Orgânica',      icon: Building2,       badge: '15' },
-    { id: 'generation',  label: 'Centrais & Geração (MW)', icon: Zap,             badge: '27' },
-    { id: 'schedule',    label: 'Cronogramas & Prazos',    icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
-    { id: 'activities',  label: 'Actividades & Tarefas',   icon: CheckSquare,     badge: pendingTasksCount > 0 ? pendingTasksCount : null },
-    { id: 'financial',   label: 'Acompanhamento de Obras', icon: Activity,        badge: null },
-    { id: 'risks',       label: 'Riscos & Problemas',      icon: AlertTriangle,   badge: criticalRisksCount > 0 ? criticalRisksCount : null, badgeColor: 'bg-red-100 text-red-700' },
-    { id: 'reports',     label: 'Relatórios & Exportação', icon: FileSpreadsheet, badge: null },
-    { id: 'audit',       label: 'Auditoria',               icon: History,         badge: null },
-    { id: 'settings',    label: 'Configurações',           icon: ShieldCheck,     badge: null },
+  const navSections = [
+    {
+      title: 'Estratégia & Governo',
+      items: [
+        { id: 'dashboard',   label: 'Dashboard Executivo',     icon: LayoutDashboard, badge: null },
+        { id: 'governmental',label: 'Projectos Governamentais',icon: Landmark,        badge: '5', badgeColor: 'bg-[#F7942D] text-white' },
+        { id: 'generation',  label: 'Centrais & Geração (MW)', icon: Zap,             badge: '27' },
+      ],
+    },
+    {
+      title: 'Execução de Obras',
+      items: [
+        { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
+        { id: 'schedule',    label: 'Cronogramas & Prazos',    icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
+        { id: 'activities',  label: 'Actividades & Tarefas',   icon: CheckSquare,     badge: pendingTasksCount > 0 ? pendingTasksCount : null },
+        { id: 'financial',   label: 'Acompanhamento de Obras', icon: Activity,        badge: null },
+      ],
+    },
+    {
+      title: 'Apoio Corporativo',
+      items: [
+        { id: 'organization',label: 'Estrutura Orgânica',      icon: Building2,       badge: '15' },
+        { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
+        { id: 'risks',       label: 'Riscos & Problemas',      icon: AlertTriangle,   badge: criticalRisksCount > 0 ? criticalRisksCount : null, badgeColor: 'bg-red-100 text-red-700' },
+        { id: 'reports',     label: 'Relatórios & Exportação', icon: FileSpreadsheet, badge: null },
+        { id: 'settings',    label: 'Configurações',           icon: ShieldCheck,     badge: null },
+      ],
+    },
   ];
 
   return (
@@ -144,70 +158,82 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-          {navItems.map(item => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
+        <nav className="flex-1 px-3 py-3 space-y-4 overflow-y-auto">
+          {navSections.map((section, sIdx) => (
+            <div key={sIdx} className="space-y-1">
+              {!isCollapsed && (
+                <p className="px-3 pt-1 pb-1 text-[10px] font-black uppercase tracking-wider text-slate-400">
+                  {section.title}
+                </p>
+              )}
+              {isCollapsed && sIdx > 0 && (
+                <div className="w-8 mx-auto my-2 border-t border-slate-200" />
+              )}
+              {section.items.map(item => {
+                const Icon = item.icon;
+                const isActive = activeTab === item.id;
 
-            return (
-              <div key={item.id} className="relative group">
-                <button
-                  onClick={() => {
-                    setActiveTab(item.id);
-                    setSelectedProjectId(null);
-                    onClose();
-                  }}
-                  className={`w-full flex items-center ${
-                    isCollapsed ? 'lg:justify-center px-2 py-3' : 'justify-between px-3 py-2.5'
-                  } rounded-xl text-xs font-semibold transition ${
-                    isActive
-                      ? 'bg-[#F7942D] text-white shadow-sm shadow-orange-500/25'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
-                  }`}
-                  title={isCollapsed ? item.label : undefined}
-                >
-                  <div className={`flex items-center ${isCollapsed ? 'lg:justify-center' : 'gap-3'}`}>
-                    <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'}`} />
-                    {!isCollapsed && <span className="truncate">{item.label}</span>}
-                  </div>
+                return (
+                  <div key={item.id} className="relative group">
+                    <button
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        setSelectedProjectId(null);
+                        onClose();
+                      }}
+                      className={`w-full flex items-center ${
+                        isCollapsed ? 'lg:justify-center px-2 py-3' : 'justify-between px-3 py-2'
+                      } rounded-xl text-xs font-semibold transition ${
+                        isActive
+                          ? 'bg-[#F7942D] text-white shadow-xs'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                      }`}
+                      title={isCollapsed ? item.label : undefined}
+                    >
+                      <div className={`flex items-center ${isCollapsed ? 'lg:justify-center' : 'gap-3'}`}>
+                        <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'}`} />
+                        {!isCollapsed && <span className="truncate">{item.label}</span>}
+                      </div>
 
-                  {!isCollapsed && (
-                    <div className="flex items-center gap-1.5">
-                      {item.badge !== null && item.badge !== undefined && (
-                        <span
-                          className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
-                            isActive
-                              ? 'bg-white/25 text-white'
-                              : (item as any).badgeColor || 'bg-slate-100 text-slate-600'
-                          }`}
-                        >
-                          {item.badge}
-                        </span>
+                      {!isCollapsed && (
+                        <div className="flex items-center gap-1.5">
+                          {item.badge !== null && item.badge !== undefined && (
+                            <span
+                              className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+                                isActive
+                                  ? 'bg-white/25 text-white'
+                                  : (item as any).badgeColor || 'bg-slate-100 text-slate-600'
+                              }`}
+                            >
+                              {item.badge}
+                            </span>
+                          )}
+                          {isActive && <ChevronRight className="w-3.5 h-3.5 text-white/80" />}
+                        </div>
                       )}
-                      {isActive && <ChevronRight className="w-3.5 h-3.5 text-white/80" />}
-                    </div>
-                  )}
 
-                  {/* Dot indicator when collapsed */}
-                  {isCollapsed && item.badge !== null && item.badge !== undefined && (
-                    <span className="hidden lg:block absolute top-2 right-2 w-2 h-2 rounded-full bg-[#F7942D] ring-2 ring-white" />
-                  )}
-                </button>
+                      {/* Dot indicator when collapsed */}
+                      {isCollapsed && item.badge !== null && item.badge !== undefined && (
+                        <span className="hidden lg:block absolute top-2 right-2 w-2 h-2 rounded-full bg-[#F7942D] ring-2 ring-white" />
+                      )}
+                    </button>
 
-                {/* Floating Tooltip when Collapsed */}
-                {isCollapsed && (
-                  <div className="hidden lg:group-hover:flex absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl whitespace-nowrap z-50 pointer-events-none items-center gap-2 animate-in fade-in zoom-in-95 duration-150">
-                    <span>{item.label}</span>
-                    {item.badge !== null && item.badge !== undefined && (
-                      <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-orange-500 text-white font-mono">
-                        {item.badge}
-                      </span>
+                    {/* Floating Tooltip when Collapsed */}
+                    {isCollapsed && (
+                      <div className="hidden lg:group-hover:flex absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl whitespace-nowrap z-50 pointer-events-none items-center gap-2 animate-in fade-in zoom-in-95 duration-150">
+                        <span>{item.label}</span>
+                        {item.badge !== null && item.badge !== undefined && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-orange-500 text-white font-mono">
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
         {/* Footer */}
