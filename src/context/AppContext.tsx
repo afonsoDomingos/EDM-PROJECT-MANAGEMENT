@@ -39,6 +39,9 @@ interface AppContextType {
   users: User[];
   currentUser: User;
   setCurrentUser: (user: User) => void;
+  isAuthenticated: boolean;
+  login: (email: string, password?: string) => Promise<{ success: boolean; message?: string }>;
+  logout: () => void;
   isMongoConnected: boolean;
 
   activeTab: string;
@@ -94,6 +97,7 @@ interface AppContextType {
 }
 
 const STORAGE_KEY = 'edm_project_management_v1';
+const AUTH_STORAGE_KEY = 'edm_auth_session';
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
@@ -110,7 +114,62 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [auditLogs, setAuditLogs] = useState<AuditLog[]>(INITIAL_AUDIT_LOGS);
   const [notifications, setNotifications] = useState<AppNotification[]>(INITIAL_NOTIFICATIONS);
   const [users, setUsers] = useState<User[]>(INITIAL_USERS);
-  const [currentUser, setCurrentUser] = useState<User>(INITIAL_USERS[0]); // default Director
+
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    try {
+      const savedAuth = localStorage.getItem(AUTH_STORAGE_KEY);
+      return !!savedAuth;
+    } catch {
+      return false;
+    }
+  });
+
+  const [currentUser, setCurrentUserState] = useState<User>(() => {
+    try {
+      const savedAuth = localStorage.getItem(AUTH_STORAGE_KEY);
+      if (savedAuth) {
+        const parsed = JSON.parse(savedAuth);
+        if (parsed && parsed.id) return parsed;
+      }
+    } catch {}
+    return INITIAL_USERS[0]; // Eng. António Nhassego (Director)
+  });
+
+  const setCurrentUser = (user: User) => {
+    setCurrentUserState(user);
+    try {
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
+    } catch {}
+  };
+
+  const login = async (email: string, _password?: string): Promise<{ success: boolean; message?: string }> => {
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail) {
+      return { success: false, message: 'Por favor, introduza o correio institucional do Director.' };
+    }
+
+    // Access strictly restricted to Director
+    const directorUser = users.find(u => u.role === 'Director') || INITIAL_USERS[0];
+    if (cleanEmail === directorUser.email.toLowerCase() || cleanEmail === 'antonio.nhassego@edm.co.mz') {
+      setCurrentUser(directorUser);
+      setIsAuthenticated(true);
+      return { success: true };
+    }
+
+    return {
+      success: false,
+      message: 'De momento, o acesso ao portal está restrito exclusivamente ao perfil do Director (Eng. António Nhassego - antonio.nhassego@edm.co.mz).',
+    };
+  };
+
+  const logout = () => {
+    try {
+      localStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch {}
+    setIsAuthenticated(false);
+  };
+
   const [generationPlants, setGenerationPlants] = useState<GenerationPlant[]>(INITIAL_GENERATION_PLANTS);
 
   const updateGenerationPlant = (updated: GenerationPlant) => {
@@ -541,6 +600,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       users,
       currentUser,
       setCurrentUser,
+      isAuthenticated,
+      login,
+      logout,
       isMongoConnected,
       activeTab,
       setActiveTab,
@@ -592,6 +654,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       notifications,
       users,
       currentUser,
+      isAuthenticated,
       isMongoConnected,
       activeTab,
       selectedProjectId,

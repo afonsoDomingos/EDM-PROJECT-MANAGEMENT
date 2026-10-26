@@ -13,6 +13,7 @@ import {
   ChevronRight,
   ChevronLeft,
   X,
+  LogOut,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -36,6 +37,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     tasks,
     risks,
     setSelectedProjectId,
+    currentUser,
+    logout,
   } = useApp();
 
   const delayedCount = projects.filter(
@@ -197,17 +200,52 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </nav>
 
         {/* Footer */}
-        <div className={`p-4 border-t border-slate-100 ${isCollapsed ? 'lg:p-2 lg:text-center' : ''}`}>
+        <div className={`p-3 border-t border-slate-100 ${isCollapsed ? 'lg:p-2' : ''}`}>
           {!isCollapsed ? (
-            <div className="text-center">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                Electricidade de Moçambique
-              </span>
-              <span className="text-[9px] text-slate-400">© 2026 Portal de Projectos</span>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between p-2 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-full bg-[#F7942D] text-white flex items-center justify-center font-bold text-xs shrink-0">
+                    {currentUser.name
+                      .split(' ')
+                      .map(n => n[0])
+                      .slice(0, 2)
+                      .join('')}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-slate-800 truncate leading-tight">
+                      {currentUser.name.split(' ').slice(0, 2).join(' ')}
+                    </p>
+                    <p className="text-[10px] text-slate-400 truncate">{currentUser.role}</p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={logout}
+                  title="Terminar Sessão"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition shrink-0"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="text-center">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Electricidade de Moçambique
+                </span>
+                <span className="text-[9px] text-slate-400">© 2026 Portal de Projectos</span>
+              </div>
             </div>
           ) : (
-            <div className="w-full flex justify-center" title="EDM Portal 2026">
-              <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <div className="flex flex-col items-center gap-2">
+              <button
+                onClick={logout}
+                title="Terminar Sessão"
+                className="p-2 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 transition"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+              <span className="w-2 h-2 rounded-full bg-emerald-500" title="Sessão Activa" />
             </div>
           )}
         </div>

@@ -16,6 +16,7 @@ import { SettingsAndUsersView } from './components/settings/SettingsAndUsersView
 import { GenerationPipelineView } from './components/generation/GenerationPipelineView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
+import { LoginPage } from './components/auth/LoginPage';
 import { Project } from './types';
 
 const MainLayout: React.FC = () => {
@@ -121,10 +122,20 @@ const MainLayout: React.FC = () => {
   );
 };
 
+const AppContent: React.FC = () => {
+  const { isAuthenticated } = useApp();
+
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
+
+  return <MainLayout />;
+};
+
 export default function App() {
   return (
     <AppProvider>
-      <MainLayout />
+      <AppContent />
     </AppProvider>
   );
 }

@@ -14,6 +14,7 @@ import {
   FolderKanban,
   Zap,
   ArrowRight,
+  LogOut,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { UserRole } from '../../types';
@@ -32,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
   const {
     currentUser,
     setCurrentUser,
+    logout,
     users,
     notifications,
     markNotificationAsRead,
@@ -538,8 +540,21 @@ export const Header: React.FC<HeaderProps> = ({
                   <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
                     <span className="text-slate-500">Nível de Acesso</span>
                     <span className="font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                      Acesso Total (Director)
+                      {currentUser.role}
                     </span>
+                  </div>
+
+                  <div className="pt-2 border-t border-slate-100">
+                    <button
+                      onClick={() => {
+                        setShowUserMenu(false);
+                        logout();
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs transition border border-red-200"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      Terminar Sessão
+                    </button>
                   </div>
                 </div>
               </div>
