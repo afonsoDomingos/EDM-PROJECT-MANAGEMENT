@@ -12,6 +12,8 @@ import {
   FolderGit2,
   BarChart3,
   Lightbulb,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { formatPercent } from '../../utils/formatters';
@@ -34,6 +36,7 @@ interface AnomalyItem {
 export const ExecutivePredictiveInsights: React.FC = () => {
   const { projects, setSelectedProjectId, setActiveTab } = useApp();
   const [selectedSeverity, setSelectedSeverity] = useState<string>('Todas');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   const analysis = useMemo(() => {
     const anomalies: AnomalyItem[] = [];
@@ -108,8 +111,36 @@ export const ExecutivePredictiveInsights: React.FC = () => {
   const criticalCount = analysis.filter(a => a.severity === 'Crítica').length;
   const highCount = analysis.filter(a => a.severity === 'Alta').length;
 
+  if (!isExpanded) {
+    return (
+      <div
+        onClick={() => setIsExpanded(true)}
+        className="bg-slate-900/90 hover:bg-slate-900 border border-slate-800 rounded-2xl px-5 py-3.5 text-white shadow-xs flex items-center justify-between cursor-pointer transition duration-200 group"
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-8 h-8 rounded-xl bg-orange-500/20 text-[#F7942D] flex items-center justify-center shrink-0">
+            <Sparkles className="w-4 h-4" />
+          </div>
+          <div className="truncate">
+            <span className="text-xs font-bold text-slate-200">
+              Diagnóstico Preditivo Executivo:{' '}
+            </span>
+            <span className="text-xs text-amber-400 font-medium">
+              {criticalCount} caminhos críticos e {highCount} alertas de prazo identificados
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 group-hover:text-white transition shrink-0 ml-3">
+          <span>Ver Recomendações</span>
+          <ChevronDown className="w-4 h-4 text-[#F7942D] group-hover:translate-y-0.5 transition-transform" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 rounded-3xl p-6 text-white border border-slate-800 shadow-xl space-y-6">
+    <div className="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 rounded-3xl p-6 text-white border border-slate-800 shadow-xl space-y-6 animate-fade-in">
       {/* Top Banner */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-5">
         <div className="flex items-start gap-3.5">
@@ -126,7 +157,7 @@ export const ExecutivePredictiveInsights: React.FC = () => {
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-1">
-              Detecção automática de anomalias entre progresso físico de obras e desembolsos financeiros com recomendações estratégicas.
+              Detecção automática de anomalias entre progresso físico de obras e prazos de execução.
             </p>
           </div>
         </div>
@@ -139,10 +170,11 @@ export const ExecutivePredictiveInsights: React.FC = () => {
             </span>
           )}
           <button
-            onClick={() => setActiveTab('reports')}
-            className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 border border-white/10 transition"
+            onClick={() => setIsExpanded(false)}
+            className="text-xs font-bold px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/15 text-slate-200 border border-white/10 transition inline-flex items-center gap-1.5"
           >
-            Exportar Auditoria EVM →
+            <span>Recolher</span>
+            <ChevronUp className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

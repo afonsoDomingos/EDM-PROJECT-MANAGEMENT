@@ -53,12 +53,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       },
     },
     {
-      title: 'Em Execução',
+      title: 'Em Execução Activa',
       value: inExecution,
-      subtitle: `${((inExecution / totalProjects) * 100 || 0).toFixed(0)}% do portfólio`,
+      subtitle: `${((inExecution / totalProjects) * 100 || 0).toFixed(0)}% do portfólio • ${completed} concluído`,
       icon: Activity,
-      color: 'bg-amber-50 text-amber-700 border-amber-200',
-      iconBg: 'bg-amber-500 text-white',
+      color: 'bg-blue-50 text-blue-700 border-blue-200',
+      iconBg: 'bg-[#002D62] text-white',
       actionLabel: 'Filtrar em execução',
       onClick: () => {
         clearFilters();
@@ -67,52 +67,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       },
     },
     {
-      title: 'Concluídos',
-      value: completed,
-      subtitle: 'Entregues à exploração',
-      icon: CheckCircle,
-      color: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-      iconBg: 'bg-emerald-500 text-white',
-      actionLabel: 'Filtrar concluídos',
-      onClick: () => {
-        clearFilters();
-        setFilterStatus('Concluído');
-        setActiveTab('projects');
-      },
-    },
-    {
-      title: 'Projectos Atrasados',
-      value: delayed,
-      subtitle: 'Requerem revisão de prazo',
-      icon: Clock,
-      color: 'bg-orange-50 text-orange-700 border-orange-200',
-      iconBg: 'bg-orange-500 text-white',
-      actionLabel: 'Filtrar atrasados',
-      onClick: () => {
-        clearFilters();
-        setFilterStatus('Atrasado');
-        setActiveTab('projects');
-      },
-    },
-    {
-      title: 'Projectos em Risco',
-      value: atRisk,
-      subtitle: 'Atenção executiva crítica',
-      icon: AlertOctagon,
-      color: 'bg-rose-50 text-rose-700 border-rose-200',
-      iconBg: 'bg-rose-600 text-white',
-      actionLabel: 'Abrir matriz de riscos',
-      onClick: () => {
-        setActiveTab('risks');
-      },
-    },
-    {
       title: 'Média de Execução Física',
       value: formatPercent(avgPhysical),
       subtitle: 'Avanço ponderado de obras',
       icon: TrendingUp,
-      color: 'bg-slate-50 text-slate-800 border-slate-200',
-      iconBg: 'bg-slate-800 text-white',
+      color: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+      iconBg: 'bg-emerald-600 text-white',
       progress: avgPhysical,
       actionLabel: 'Ver cronogramas & prazos',
       onClick: () => {
@@ -120,31 +80,15 @@ export const ExecutiveKpiCards: React.FC = () => {
       },
     },
     {
-      title: 'Marcos & Entregas Físicas',
-      value: `${completedTasks} / ${totalTasks}`,
-      subtitle: `${taskCompletionRate.toFixed(0)}% das entregas técnicas concluídas`,
-      icon: CheckSquare,
-      color: 'bg-slate-50 text-slate-800 border-slate-200',
-      iconBg: 'bg-slate-800 text-white',
-      progress: taskCompletionRate,
-      tooltip: `${completedTasks} tarefas e marcos de engenharia validados`,
-      actionLabel: 'Ver actividades & tarefas',
+      title: 'Desvios & Riscos',
+      value: `${delayed + atRisk} Projectos`,
+      subtitle: `${delayed} com atraso • ${atRisk} em risco crítico`,
+      icon: AlertOctagon,
+      color: 'bg-rose-50 text-rose-700 border-rose-200',
+      iconBg: 'bg-rose-600 text-white',
+      actionLabel: 'Abrir matriz de riscos',
       onClick: () => {
-        setActiveTab('activities');
-      },
-    },
-    {
-      title: 'Aderência ao Cronograma',
-      value: `${scheduleAdherencePercent.toFixed(0)}%`,
-      subtitle: `${onScheduleProjects} de ${totalProjects} no prazo planeado`,
-      icon: CalendarDays,
-      color: 'bg-teal-50 text-teal-800 border-teal-200',
-      iconBg: 'bg-teal-600 text-white',
-      progress: scheduleAdherencePercent,
-      tooltip: `${delayed} com desvio temporal • ${atRisk} em risco`,
-      actionLabel: 'Ver cronogramas & prazos',
-      onClick: () => {
-        setActiveTab('schedule');
+        setActiveTab('risks');
       },
     },
   ];

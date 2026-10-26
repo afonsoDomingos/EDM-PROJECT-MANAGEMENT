@@ -183,88 +183,51 @@ export const PriorityProjectsTable: React.FC<PriorityProjectsTableProps> = ({
           </div>
         </div>
 
-        {/* Filter Controls Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 pt-2">
-          {/* Region filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Região:
-            </label>
-            <select
-              value={filterRegion}
-              onChange={e => setFilterRegion(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#F7942D]"
-            >
-              {regions.map(r => (
-                <option key={r} value={r}>
-                  {r}
-                </option>
-              ))}
-            </select>
+        {/* Clean & Sleek Controls Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
+          {/* Quick Search */}
+          <div className="relative flex-1 min-w-[240px]">
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Pesquisar por projecto, código, província ou gestor..."
+              className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D62] transition"
+            />
           </div>
 
-          {/* Status filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Estado:
-            </label>
-            <select
-              value={filterStatus}
-              onChange={e => setFilterStatus(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#F7942D]"
-            >
-              {statuses.map(s => (
-                <option key={s} value={s}>
-                  {s}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* Status Quick Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+            {[
+              { id: 'Todos', label: 'Todos' },
+              { id: 'Em Execução', label: 'Em Execução' },
+              { id: 'Concluído', label: 'Concluídos' },
+              { id: 'Atrasado', label: 'Atrasados' },
+              { id: 'Em Risco', label: 'Em Risco' },
+            ].map(st => (
+              <button
+                key={st.id}
+                onClick={() => setFilterStatus(st.id)}
+                className={`px-3 py-1 text-xs font-semibold rounded-lg transition whitespace-nowrap cursor-pointer ${
+                  filterStatus === st.id
+                    ? 'bg-[#002D62] text-white shadow-2xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                {st.label}
+              </button>
+            ))}
 
-          {/* Category filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Categoria:
-            </label>
-            <select
-              value={filterCategory}
-              onChange={e => setFilterCategory(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#F7942D] truncate"
-            >
-              {categories.map(c => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Manager filter */}
-          <div>
-            <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">
-              Gestor Responsável:
-            </label>
-            <select
-              value={filterManager}
-              onChange={e => setFilterManager(e.target.value)}
-              className="w-full text-xs px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-[#F7942D] truncate"
-            >
-              {managers.map(m => (
-                <option key={m} value={m}>
-                  {m}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Clear Filters Button */}
-          <div className="flex items-end">
-            <button
-              onClick={clearFilters}
-              className="w-full text-xs py-1.5 px-3 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 font-semibold transition"
-            >
-              Limpar Filtros
-            </button>
+            {(searchQuery || filterStatus !== 'Todos' || filterRegion !== 'Todas' || filterCategory !== 'Todas') && (
+              <button
+                onClick={clearFilters}
+                className="text-xs text-slate-400 hover:text-slate-600 px-2 py-1 transition"
+                title="Limpar todos os filtros"
+              >
+                Limpar
+              </button>
+            )}
           </div>
         </div>
       </div>
