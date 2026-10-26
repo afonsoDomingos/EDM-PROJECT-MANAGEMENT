@@ -6,8 +6,7 @@ import { ExecutiveKpiCards } from './components/dashboard/ExecutiveKpiCards';
 import { ExecutiveCharts } from './components/dashboard/ExecutiveCharts';
 import { PriorityProjectsTable } from './components/dashboard/PriorityProjectsTable';
 import { ProjectsView } from './components/projects/ProjectsView';
-import { ScheduleGanttView } from './components/schedule/ScheduleGanttView';
-import { ActivitiesKanban } from './components/activities/ActivitiesKanban';
+import { ScheduleAndTasksUnifiedView } from './components/schedule/ScheduleAndTasksUnifiedView';
 import { FinancialOverview } from './components/financial/FinancialOverview';
 import { RiskMatrix } from './components/risks/RiskMatrix';
 import { ExecutiveReports } from './components/reports/ExecutiveReports';
@@ -93,9 +92,9 @@ const MainLayout: React.FC = () => {
 
           {activeTab === 'generation' && <GenerationPipelineView />}
 
-          {activeTab === 'schedule' && <ScheduleGanttView />}
-
-          {activeTab === 'activities' && <ActivitiesKanban />}
+          {(activeTab === 'schedule' || activeTab === 'activities') && (
+            <ScheduleAndTasksUnifiedView />
+          )}
 
           {activeTab === 'financial' && <FinancialOverview />}
 

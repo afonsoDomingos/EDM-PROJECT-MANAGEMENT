@@ -73,16 +73,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
       title: 'Execução de Obras',
       items: [
         { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
-        { id: 'schedule',    label: 'Cronogramas & Prazos',    icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
-        { id: 'activities',  label: 'Actividades & Tarefas',   icon: CheckSquare,     badge: pendingTasksCount > 0 ? pendingTasksCount : null },
-        { id: 'financial',   label: 'Acompanhamento de Obras', icon: Activity,        badge: null },
+        { id: 'schedule',    label: 'Cronogramas & Tarefas',   icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
       ],
     },
     {
       title: 'Apoio Corporativo',
       items: [
         { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
-        { id: 'risks',       label: 'Riscos & Problemas',      icon: AlertTriangle,   badge: criticalRisksCount > 0 ? criticalRisksCount : null, badgeColor: 'bg-red-100 text-red-700' },
         { id: 'reports',     label: 'Relatórios & Exportação', icon: FileSpreadsheet, badge: null },
         { id: 'settings',    label: 'Configurações',           icon: ShieldCheck,     badge: null },
       ],
