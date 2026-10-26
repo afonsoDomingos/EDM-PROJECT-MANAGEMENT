@@ -16,6 +16,7 @@ import { SettingsAndUsersView } from './components/settings/SettingsAndUsersView
 import { GenerationPipelineView } from './components/generation/GenerationPipelineView';
 import { ExecutivePredictiveInsights } from './components/dashboard/ExecutivePredictiveInsights';
 import { ExecutiveApprovalsView } from './components/approvals/ExecutiveApprovalsView';
+import { OrganizationView } from './components/organization/OrganizationView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
 import { LoginPage } from './components/auth/LoginPage';
@@ -87,6 +88,8 @@ const MainLayout: React.FC = () => {
               onOpenEditModal={handleOpenEdit}
             />
           )}
+
+          {activeTab === 'organization' && <OrganizationView />}
 
           {activeTab === 'generation' && <GenerationPipelineView />}
 

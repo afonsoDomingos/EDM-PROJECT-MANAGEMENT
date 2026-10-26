@@ -15,6 +15,7 @@ import {
   X,
   LogOut,
   FileCheck2,
+  Building2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
@@ -63,6 +64,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'dashboard',   label: 'Dashboard Executivo',     icon: LayoutDashboard, badge: null },
     { id: 'approvals',   label: 'Despachos & Decisões',    icon: FileCheck2,      badge: pendingApprovalsCount > 0 ? pendingApprovalsCount : null, badgeColor: 'bg-amber-500 text-white' },
     { id: 'projects',    label: 'Gestão de Projectos',     icon: FolderGit2,      badge: projects.length },
+    { id: 'organization',label: 'Estrutura Orgânica',      icon: Building2,       badge: '15' },
     { id: 'generation',  label: 'Centrais & Geração (MW)', icon: Zap,             badge: '27' },
     { id: 'schedule',    label: 'Cronogramas & Prazos',    icon: CalendarDays,    badge: delayedCount > 0 ? delayedCount : null, badgeColor: 'bg-amber-100 text-amber-700' },
     { id: 'activities',  label: 'Actividades & Tarefas',   icon: CheckSquare,     badge: pendingTasksCount > 0 ? pendingTasksCount : null },

@@ -229,4 +229,55 @@ export interface ApprovalRequest {
   priority: PriorityLevel;
 }
 
+export type OrganizationalCategory =
+  | 'Conselho de Administração'
+  | 'Centro de Suporte'
+  | 'Área de Negócio Cliente'
+  | 'Direcção Operacional'
+  | 'Direcção Regional'
+  | 'Divisão & Gabinete';
+
+export interface OrganizationalUnit {
+  id: string;
+  code: string;
+  name: string;
+  category: OrganizationalCategory;
+  parentId?: string;
+  directorName: string;
+  directorTitle: string;
+  directorEmail: string;
+  location: string;
+  description: string;
+  approvalThresholdMZN: number; // 0 = Sem limite (Conselho de Administração / PCA)
+  teamCount: number;
+  contactEmail: string;
+  phone?: string;
+}
+
+export interface Position {
+  id: string;
+  unitId: string;
+  title: string;
+  holderName: string;
+  holderEmail: string;
+  approvalLimitMZN: number;
+  status: 'Efectivo' | 'Interino' | 'Cessante';
+  canApproveTechnical: boolean;
+  appointedDate: string;
+}
+
+export interface ApprovalDelegation {
+  id: string;
+  titularName: string;
+  titularTitle: string;
+  substituteName: string;
+  substituteTitle: string;
+  startDate: string;
+  endDate: string;
+  reason: string;
+  status: 'Activa' | 'Concluída' | 'Revogada';
+  authorizedScopes: string[];
+}
+
+
 
