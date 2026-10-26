@@ -122,40 +122,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-xs">
-      {/* Vibrant EDM Orange Banner */}
-      <div className="bg-[#F7942D] px-4 sm:px-6 py-1.5 flex items-center justify-between text-slate-950 font-semibold text-xs shadow-inner">
-        <div className="flex items-center gap-2 sm:gap-3 overflow-hidden">
-          <span className="w-2 h-2 rounded-full bg-slate-900/60 shrink-0" />
-          <span className="font-black text-[11px] sm:text-xs tracking-tight uppercase truncate text-slate-950">
-            PORTAL CORPORATIVO EDM — GESTÃO DE PROJECTOS
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-black/15 text-slate-950 border border-black/10 shrink-0">
-            <span className={`w-1.5 h-1.5 rounded-full ${isMongoConnected ? 'bg-emerald-600' : 'bg-amber-700'}`} />
-            {isMongoConnected ? 'MongoDB Conectado' : 'Conectando ao MongoDB...'}
-          </span>
-        </div>
-
-        <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-          <div className="hidden sm:flex items-center gap-1.5 text-[11px] font-black text-slate-950">
-            <PhoneCall className="w-3.5 h-3.5" />
-            <span>Piquete 24h: <strong>1455</strong></span>
-          </div>
-
-          <button
-            onClick={() => {
-              if (window.confirm('Repor os dados iniciais do sistema?')) {
-                resetToInitialData();
-              }
-            }}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/10 hover:bg-black/20 text-slate-950 text-[10px] font-bold transition border border-black/15 shadow-2xs"
-            title="Repor dados originais"
-          >
-            <RotateCcw className="w-3 h-3" />
-            Repor Dados
-          </button>
-        </div>
-      </div>
+    <header className="sticky top-0 z-30 bg-white border-b border-slate-200 shadow-2xs">
 
       {/* Main Header Bar */}
       <div className="w-full px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">

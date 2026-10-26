@@ -2,16 +2,8 @@ import React from 'react';
 import {
   FolderKanban,
   Activity,
-  CheckCircle,
   AlertOctagon,
-  Clock,
   TrendingUp,
-  Zap,
-  ArrowUpRight,
-  CheckSquare,
-  CalendarDays,
-  Landmark,
-  ArrowRight,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { formatPercent } from '../../utils/formatters';
@@ -55,7 +47,7 @@ export const ExecutiveKpiCards: React.FC = () => {
     {
       title: 'Em Execução Activa',
       value: inExecution,
-      subtitle: `${((inExecution / totalProjects) * 100 || 0).toFixed(0)}% do portfólio • ${completed} concluído`,
+      subtitle: `${inExecution} em curso • ${completed} concluído`,
       icon: Activity,
       color: 'bg-blue-50 text-blue-700 border-blue-200',
       iconBg: 'bg-[#002D62] text-white',
@@ -82,7 +74,7 @@ export const ExecutiveKpiCards: React.FC = () => {
     {
       title: 'Desvios & Riscos',
       value: `${delayed + atRisk} Projectos`,
-      subtitle: `${delayed} com atraso • ${atRisk} em risco crítico`,
+      subtitle: `${delayed} com atraso • ${atRisk} em risco`,
       icon: AlertOctagon,
       color: 'bg-rose-50 text-rose-700 border-rose-200',
       iconBg: 'bg-rose-600 text-white',
@@ -94,43 +86,7 @@ export const ExecutiveKpiCards: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-4">
-      {/* Featured Strategic Banner: Presidência da República */}
-      <div className="bg-gradient-to-r from-[#002D62] via-[#083b77] to-[#0a4b99] rounded-2xl p-4 sm:p-5 text-white shadow-sm border border-blue-900/40 flex flex-col md:flex-row md:items-center justify-between gap-4 relative overflow-hidden">
-        <div className="flex items-center gap-3.5 relative z-10">
-          <div className="w-11 h-11 rounded-xl bg-[#F7942D] text-white flex items-center justify-center shrink-0 shadow-md">
-            <Landmark className="w-6 h-6" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/20 text-blue-100">
-                Presidência da República
-              </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#F7942D] text-white">
-                5 Projectos Estratégicos
-              </span>
-            </div>
-            <h4 className="text-sm sm:text-base font-black text-white">
-              Painel Integrado: 40 Projectos Totais (35 Operacionais EDM + 5 Sob Tutela Governamental)
-            </h4>
-            <p className="text-xs text-blue-100/80 mt-0.5">
-              Capacidade em estruturação: 235 MW + FSRU GNL • Acompanhamento linha a linha com caixas de selecção das 47 actividades.
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 relative z-10 shrink-0">
-          <button
-            onClick={() => setActiveTab('governmental')}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-blue-50 text-[#002D62] text-xs font-bold shadow-md transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
-          >
-            Abrir Projectos Governamentais (Checklist)
-            <ArrowRight className="w-4 h-4 text-[#F7942D]" />
-          </button>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {kpis.map((kpi, index) => {
         const Icon = kpi.icon;
         return (
@@ -145,23 +101,20 @@ export const ExecutiveKpiCards: React.FC = () => {
                 kpi.onClick();
               }
             }}
-            className="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs hover:shadow-lg hover:border-[#F7942D]/60 hover:-translate-y-1 active:scale-[0.98] transition-all duration-200 relative overflow-hidden group cursor-pointer text-left select-none"
+            className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-[#F7942D]/50 transition-all duration-200 cursor-pointer text-left select-none group"
             title={`${kpi.tooltip || kpi.title} • Clique para ${kpi.actionLabel.toLowerCase()}`}
           >
             <div className="flex items-start justify-between">
               <div>
-                <div className="flex items-center gap-1.5">
-                  <p className="text-xs font-semibold text-slate-500 tracking-wide uppercase group-hover:text-slate-800 transition-colors">
-                    {kpi.title}
-                  </p>
-                  <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 opacity-0 group-hover:opacity-100 group-hover:text-[#F7942D] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </div>
-                <h3 className="text-2xl font-bold text-slate-900 mt-1 tracking-tight font-heading group-hover:text-[#F7942D] transition-colors">
+                <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
+                  {kpi.title}
+                </p>
+                <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 tracking-tight">
                   {kpi.value}
                 </h3>
               </div>
               <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm group-hover:scale-110 group-hover:shadow-md transition-all duration-200 ${kpi.iconBg}`}
+                className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform ${kpi.iconBg}`}
               >
                 <Icon className="w-5 h-5" />
               </div>
@@ -171,14 +124,14 @@ export const ExecutiveKpiCards: React.FC = () => {
             {kpi.progress !== undefined && (
               <div className="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                 <div
-                  className="bg-[#F7942D] h-full rounded-full transition-all duration-500"
+                  className="bg-emerald-500 h-full rounded-full transition-all duration-500"
                   style={{ width: `${Math.min(kpi.progress, 100)}%` }}
                 />
               </div>
             )}
 
             <div className="mt-2.5 flex items-center justify-between text-xs text-slate-500">
-              <span className="truncate">{kpi.subtitle}</span>
+              <span className="font-medium text-slate-500">{kpi.subtitle}</span>
               <span className="text-[10px] font-bold text-[#F7942D] opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-1">
                 {kpi.actionLabel} →
               </span>
@@ -186,35 +139,6 @@ export const ExecutiveKpiCards: React.FC = () => {
           </div>
         );
       })}
-
-      {/* Quick link banner to Generation Pipeline */}
-      <div
-        onClick={() => setActiveTab('generation')}
-        className="col-span-1 sm:col-span-2 lg:col-span-4 p-4 rounded-2xl bg-gradient-to-r from-orange-500/10 via-amber-500/10 to-orange-500/5 border border-orange-200/90 hover:border-orange-400 hover:shadow-sm cursor-pointer transition flex items-center justify-between"
-      >
-        <div className="flex items-center gap-3.5">
-          <div className="w-10 h-10 rounded-xl bg-[#F7942D] text-white flex items-center justify-center shadow-xs shrink-0">
-            <Zap className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-900">
-                Pipeline Estratégico de Centrais Eléctricas (2026)
-              </span>
-              <span className="text-[10px] font-bold text-orange-700 bg-orange-100 px-2 py-0.5 rounded-full">
-                27 Centrais • {generationPlants.reduce((acc, p) => acc + p.capacityMW, 0).toLocaleString('pt-PT')} MW
-              </span>
-            </div>
-            <span className="text-[11px] text-slate-500 mt-0.5 block">
-              Monitorização da capacidade energética nacional: centrais térmicas a gás, hídricas, dual fuel e offshore em operação e desenvolvimento.
-            </span>
-          </div>
-        </div>
-        <button className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-[#c26508] bg-white px-3.5 py-2 rounded-xl border border-orange-200 shadow-2xs hover:bg-orange-50 transition shrink-0">
-          Explorar Matriz MW →
-        </button>
-      </div>
-    </div>
     </div>
   );
 };

@@ -101,7 +101,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar Container */}
       <aside
-        className={`fixed lg:sticky top-0 lg:top-[86px] h-screen lg:h-[calc(100vh-86px)] shrink-0 z-40 lg:z-20 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out shadow-xs ${
+        className={`fixed lg:sticky top-0 lg:top-[57px] h-screen lg:h-[calc(100vh-57px)] shrink-0 z-40 lg:z-20 bg-white border-r border-slate-200 flex flex-col transition-all duration-300 ease-in-out shadow-xs ${
           isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         } ${isCollapsed ? 'lg:w-20' : 'lg:w-64'} w-64`}
       >
