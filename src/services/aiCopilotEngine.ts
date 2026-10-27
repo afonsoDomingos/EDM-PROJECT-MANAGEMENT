@@ -119,7 +119,7 @@ export function auditFinancialDiscrepancies(projects: Project[]): DiscrepancySum
 }
 
 /**
- * Generate full Executive Report for Board / PCA in formal Portuguese
+ * Generate full Executive Report for Board / PCA in clean formal Portuguese without raw markdown asterisks
  */
 export function generateExecutiveBriefing(
   projects: Project[],
@@ -146,71 +146,71 @@ export function generateExecutiveBriefing(
   const dateStr = now.toLocaleDateString('pt-MZ', { day: '2-digit', month: 'long', year: 'numeric' });
 
   return `
-# 🇲🇿 RELATÓRIO EXECUTIVO DE AUDITORIA & GESTÃO ESTRATÉGICA
-**Electricidade de Moçambique, E.P. (EDM)**  
-*Emitido por: EDM AI Copilot • ${dateStr}*  
-*Destinatário: Conselho de Administração / Direcção Executiva (PCA)*
+# RELATÓRIO EXECUTIVO DE AUDITORIA & GESTÃO ESTRATÉGICA
+Electricidade de Moçambique, E.P. (EDM)
+Emitido por: EDM AI Copilot • ${dateStr}
+Destinatário: Conselho de Administração / Direcção Executiva (PCA)
 
 ---
 
-### 1. SUMÁRIO EXECUTIVO & INDICADORES GLOBAIS
-* **Avanço Físico Médio da Carteira:** **${avgPhysical}%**
-* **Orçamento Global Aprovado:** **${formatCurrency(totalApproved)}**
-* **Execução Financeira Total:** **${formatCurrency(totalSpent)}** (${Math.round((totalSpent / (totalApproved || 1)) * 100)}%)
-* **Compromissos Contratuais Firmados:** **${formatCurrency(totalCommitments)}**
-* **Capacidade Estratégica Governamental em Pipeline:** **${totalMWGov} MW**
-* **Capacidade Actual em Operação Registada:** **${operationalMW} MW**
+1. SUMÁRIO EXECUTIVO & INDICADORES GLOBAIS
+• Avanço Físico Médio da Carteira: ${avgPhysical}%
+• Orçamento Global Aprovado: ${formatCurrency(totalApproved)}
+• Execução Financeira Total: ${formatCurrency(totalSpent)} (${Math.round((totalSpent / (totalApproved || 1)) * 100)}%)
+• Compromissos Contratuais Firmados: ${formatCurrency(totalCommitments)}
+• Capacidade Estratégica Governamental em Pipeline: ${totalMWGov} MW
+• Capacidade Actual em Operação Registada: ${operationalMW} MW
 
 ---
 
-### 2. AUDITORIA PREVENTIVA DE CRONOGRAMAS (CONFLITOS COD)
+2. AUDITORIA PREVENTIVA DE CRONOGRAMAS (CONFLITOS COD)
 ${
   scheduleConflicts.length === 0
-    ? '✅ **Nenhum conflito de prazo detectado.** Todas as actividades planeadas estão em harmonia com as datas de conclusão dos projectos (COD).'
-    : `⚠️ **Foram identificadas inconsistências críticas em ${scheduleConflicts.length} projecto(s) governamental(ais):**\n\n` +
+    ? 'Nenhum conflito de prazo detectado. Todas as actividades planeadas estão em harmonia com as datas de conclusão dos projectos (COD).'
+    : `Foram identificadas inconsistências críticas em ${scheduleConflicts.length} projecto(s) governamental(ais):\n\n` +
       scheduleConflicts
         .map(
           c =>
-            `* **${c.projectCode} - ${c.projectName} (COD: ${c.projectCod}):** Possui **${c.conflictCount} actividade(s)** cujos prazos extrapolam o limite do projecto. Exemplo: *"${c.conflictingMilestones[0]?.description}"* programada para *${c.conflictingMilestones[0]?.targetDate}*.\n  *Recomendação:* Reprogramar o prazo do projecto ou ajustar a frente de trabalho.`
+            `• ${c.projectCode} - ${c.projectName} (COD: ${c.projectCod}): Possui ${c.conflictCount} actividade(s) cujos prazos extrapolam o limite do projecto. Exemplo: "${c.conflictingMilestones[0]?.description}" programada para ${c.conflictingMilestones[0]?.targetDate}.\n  Recomendação: Reprogramar o prazo do projecto ou ajustar a frente de trabalho.`
         )
         .join('\n')
 }
 
 ---
 
-### 3. PROJECTOS EM ESTADO DE ATENÇÃO OU ATRASO (${delayedProjects.length})
+3. PROJECTOS EM ESTADO DE ATENÇÃO OU ATRASO (${delayedProjects.length})
 ${
   delayedProjects.length === 0
-    ? '✅ Todos os projectos monitorizados apresentam cronograma dentro da normalidade.'
+    ? 'Todos os projectos monitorizados apresentam cronograma dentro da normalidade.'
     : delayedProjects
         .map(
           p =>
-            `* **${p.code} - ${p.name}:** Estado: **${p.status}** | Avanço: **${p.physicalProgress}%** | Conclusão Prevista: **${p.expectedEndDate}**\n  *Gestor:* ${p.manager} | *Constrangimentos:* ${p.constraints || 'Sob monitorização técnica'}.`
+            `• ${p.code} - ${p.name}: Estado: ${p.status} | Avanço: ${p.physicalProgress}% | Conclusão Prevista: ${p.expectedEndDate}\n  Gestor: ${p.manager} | Constrangimentos: ${p.constraints || 'Sob monitorização técnica'}.`
         )
         .join('\n')
 }
 
 ---
 
-### 4. MATRIZ DE RISCOS CRÍTICOS & MITIGAÇÃO (${criticalRisks.length})
+4. MATRIZ DE RISCOS CRÍTICOS & MITIGAÇÃO (${criticalRisks.length})
 ${
   criticalRisks.length === 0
-    ? '✅ Não há riscos classificados como Críticos/Altos no momento.'
+    ? 'Não há riscos classificados como Críticos/Altos no momento.'
     : criticalRisks
         .slice(0, 4)
         .map(
           r =>
-            `* **${r.title}** (Nível: **${r.level}** - ${r.category})\n  *Plano de Mitigação:* ${r.mitigationPlan} (Prazo: ${r.resolutionDeadline})`
+            `• ${r.title} (Nível: ${r.level} - ${r.category})\n  Plano de Mitigação: ${r.mitigationPlan} (Prazo: ${r.resolutionDeadline})`
         )
         .join('\n')
 }
 
 ---
 
-### 5. DIRECTRIZES & ACÇÕES PRIORITÁRIAS RECOMENDADAS
-1. **Regularização Contratual dos Prazos:** Notificar as comissões mistas dos projectos em conflito de datas para formalizar prorrogação ou aceleração.
-2. **Priorização de Despachos Pendentes:** Acelerar deliberações de Autos de Medição para manter liquidez dos empreiteiros no terreno.
-3. **Reforço de Fiscalização em Sofala e Inhambane:** Garantir cumprimento das janelas climatéricas antes do início da época chuvosa.
+5. DIRECTRIZES & ACÇÕES PRIORITÁRIAS RECOMENDADAS
+1. Regularização Contratual dos Prazos: Notificar as comissões mistas dos projectos em conflito de datas para formalizar prorrogação ou aceleração.
+2. Priorização de Despachos Pendentes: Acelerar deliberações de Autos de Medição para manter liquidez dos empreiteiros no terreno.
+3. Reforço de Fiscalização em Sofala e Inhambane: Garantir cumprimento das janelas climatéricas antes do início da época chuvosa.
   `.trim();
 }
 
@@ -245,9 +245,9 @@ export function processAiQuery(
       const conflictList = conflicts
         .map(
           c =>
-            `• **${c.projectCode} (${c.projectName})**: COD previsto em **${c.projectCod}**, mas tem **${c.conflictCount} actividade(s)** posterior(es):\n` +
+            `• ${c.projectCode} (${c.projectName}): COD previsto em ${c.projectCod}, com ${c.conflictCount} actividade(s) posterior(es):\n` +
             c.conflictingMilestones
-              .map(m => `  - *"${m.description}"* com data limite em **${m.targetDate}**`)
+              .map(m => `  - "${m.description}" com prazo em ${m.targetDate}`)
               .join('\n')
         )
         .join('\n\n');
@@ -258,7 +258,7 @@ export function processAiQuery(
         timestamp,
         category: 'audit',
         badge: 'Auditoria de Prazos',
-        text: `⚡ **Diagnóstico de Cronogramas e Inconsistências de Prazo:**\n\nIdentifiquei **${conflicts.length} projecto(s)** onde as actividades ultrapassam a data de finalização prevista do projecto (COD):\n\n${conflictList}\n\n💡 **Sugestão da IA:** O sistema já disponibiliza o botão inteligente **[⚡ Prolongar Projecto]** na Matriz de Projectos Governamentais para atualizar a data oficial com 1 clique e manter a integridade dos relatórios executivos.`,
+        text: `⚡ Diagnóstico de Cronogramas e Inconsistências de Prazo:\n\nIdentifiquei ${conflicts.length} projecto(s) onde as actividades ultrapassam a data de finalização prevista do projecto (COD):\n\n${conflictList}\n\n💡 Sugestão da IA: Pode utilizar o botão inteligente [⚡ Prolongar Projecto] na Matriz de Projectos Governamentais para atualizar a data com 1 clique e manter a integridade dos relatórios executivos.`,
         suggestions: [
           'Ver Projectos Governamentais',
           'Gerar Relatório Executivo',
@@ -279,7 +279,7 @@ export function processAiQuery(
         timestamp,
         category: 'audit',
         badge: 'Cronogramas OK',
-        text: `✅ **Auditoria Concluída com Sucesso!**\n\nTodos os marcos e actividades dos projectos governamentais estão em **perfeita conformidade** com os respectivos prazos finais de conclusão (COD). Não há conflitos temporais pendentes.`,
+        text: `✅ Auditoria Concluída com Sucesso!\n\nTodos os marcos e actividades dos projectos governamentais estão em perfeita conformidade com os prazos finais de conclusão (COD). Não há conflitos temporais pendentes.`,
         suggestions: ['Gerar Relatório Executivo', 'Analisar Riscos Críticos', 'Ver Centrais de Geração'],
       };
     }
@@ -334,21 +334,21 @@ export function processAiQuery(
     const delayed = context.projects.filter(p => p.status === 'Atrasado' || p.status === 'Em Risco');
     const criticalRisks = context.risks.filter(r => r.level === 'Crítico');
 
-    let text = `🚨 **Análise de Projectos Críticos e em Atraso:**\n\n`;
+    let text = `🚨 Análise de Projectos Críticos e em Atraso:\n\n`;
 
     if (delayed.length > 0) {
-      text += `Existem **${delayed.length} projectos** a requerer intervenção imediata:\n\n`;
+      text += `Existem ${delayed.length} projectos a requerer intervenção imediata:\n\n`;
       delayed.forEach(p => {
-        text += `• **${p.code} - ${p.name}**\n  - Estado: **${p.status}** (Avanço Físico: ${p.physicalProgress}%)\n  - Conclusão Prevista: ${p.expectedEndDate} | Gestor: ${p.manager}\n  - Constrangimento: *${p.constraints || 'Logística / Fornecedores'}*\n\n`;
+        text += `• ${p.code} - ${p.name}\n  - Estado: ${p.status} (Avanço Físico: ${p.physicalProgress}%)\n  - Conclusão Prevista: ${p.expectedEndDate} | Gestor: ${p.manager}\n  - Constrangimento: ${p.constraints || 'Logística / Fornecedores'}\n\n`;
       });
     } else {
       text += `✅ Nenhum projecto da carteira principal está registado com atraso crítico.\n\n`;
     }
 
     if (criticalRisks.length > 0) {
-      text += `⚠️ **Riscos de Nível Crítico Activos (${criticalRisks.length}):**\n`;
+      text += `⚠️ Riscos de Nível Crítico Activos (${criticalRisks.length}):\n`;
       criticalRisks.forEach(r => {
-        text += `• **${r.title}**: ${r.mitigationPlan} (Prazo: ${r.resolutionDeadline})\n`;
+        text += `• ${r.title}: ${r.mitigationPlan} (Prazo: ${r.resolutionDeadline})\n`;
       });
     }
 
@@ -391,11 +391,11 @@ export function processAiQuery(
   ) {
     const discrepancies = auditFinancialDiscrepancies(context.projects);
 
-    let text = `💰 **Análise de Descompasso Físico-Financeiro:**\n\n`;
+    let text = `💰 Análise de Descompasso Físico-Financeiro:\n\n`;
     if (discrepancies.length > 0) {
-      text += `Identifiquei **${discrepancies.length} projecto(s)** onde a execução financeira está desproporcionalmente adiantada em relação ao avanço físico da obra:\n\n`;
+      text += `Identifiquei ${discrepancies.length} projecto(s) onde a execução financeira está adiantada em relação ao avanço físico:\n\n`;
       discrepancies.forEach(d => {
-        text += `• **${d.projectCode} - ${d.projectName}**\n  - Execução Financeira: **${d.financialExecution}%** (${formatCurrency(d.spent)})\n  - Avanço Físico: **${d.physicalProgress}%** (Desvio de **+${d.gap}%** financeiro)\n  - Gestor: ${d.manager}\n  - *Recomendação:* Solicitar auto de medição recente antes de novas autorizações.\n\n`;
+        text += `• ${d.projectCode} - ${d.projectName}\n  - Execução Financeira: ${d.financialExecution}% (${formatCurrency(d.spent)})\n  - Avanço Físico: ${d.physicalProgress}% (Desvio de +${d.gap}% financeiro)\n  - Gestor: ${d.manager}\n  - Recomendação: Solicitar auto de medição recente antes de novas autorizações.\n\n`;
       });
     } else {
       text += `✅ Não foram detectados desvios anormais entre gastos financeiros e avanço físico das obras. Os pagamentos acompanham o progresso civil e electromecânico.`;
@@ -445,18 +445,18 @@ export function processAiQuery(
       timestamp,
       category: 'general',
       badge: foundGov.code,
-      text: `📋 **Ficha Técnica & Diagnóstico IA: ${foundGov.name}**\n\n` +
-        `• **Código:** ${foundGov.code} | **Capacidade:** ${foundGov.capacity}\n` +
-        `• **Tecnologia:** ${foundGov.technology} | **Localização:** ${foundGov.location}\n` +
-        `• **Data Prevista de Entrada em Operação (COD):** **${foundGov.commercialOperationDate}**\n` +
-        `• **Estado Actual:** ${foundGov.status}\n` +
-        `• **Parceiros:** ${foundGov.partnerEntities.join(', ')}\n` +
-        `• **Progresso de Marcos:** **${completedCount}/${totalCount} concluídos (${progress}%)**\n` +
+      text: `📋 Ficha Técnica & Diagnóstico IA: ${foundGov.name}\n\n` +
+        `• Código: ${foundGov.code} | Capacidade: ${foundGov.capacity}\n` +
+        `• Tecnologia: ${foundGov.technology} | Localização: ${foundGov.location}\n` +
+        `• Data Prevista de Entrada em Operação (COD): ${foundGov.commercialOperationDate}\n` +
+        `• Estado Actual: ${foundGov.status}\n` +
+        `• Parceiros: ${foundGov.partnerEntities.join(', ')}\n` +
+        `• Progresso de Marcos: ${completedCount}/${totalCount} concluídos (${progress}%)\n` +
         (conflicts.hasConflicts
-          ? `\n⚠️ **Alerta de Inconsistência:** Existem ${conflicts.conflictCount} actividade(s) programada(s) para além de ${foundGov.commercialOperationDate}!\n`
-          : `\n✅ **Cronograma:** Sem conflitos de data detectados.\n`) +
-        `\n**Situação Actual:** ${foundGov.currentSituationSummary}\n` +
-        `**Prioridade Imediata:** ${foundGov.priorityActionSummary || foundGov.priorityActions[0]}`,
+          ? `\n⚠️ Alerta de Inconsistência: Existem ${conflicts.conflictCount} actividade(s) programada(s) para além de ${foundGov.commercialOperationDate}!\n`
+          : `\n✅ Cronograma: Sem conflitos de data detectados.\n`) +
+        `\nSituação Actual: ${foundGov.currentSituationSummary}\n` +
+        `Prioridade Imediata: ${foundGov.priorityActionSummary || foundGov.priorityActions[0]}`,
       suggestions: [
         'Auditar Prazos de Todos os Projectos',
         'Ver Matriz Governamental',
@@ -488,9 +488,9 @@ export function processAiQuery(
       govByTech[p.technology].mw += p.capacityMW || 0;
     });
 
-    let text = `⚡ **Distribuição da Matriz Energética Estratégica:**\n\n`;
+    let text = `⚡ Distribuição da Matriz Energética Estratégica:\n\n`;
     Object.entries(govByTech).forEach(([tech, data]) => {
-      text += `• **${tech}:** ${data.count} projecto(s) • Total de **${data.mw} MW** em desenvolvimento\n`;
+      text += `• ${tech}: ${data.count} projecto(s) • Total de ${data.mw} MW em desenvolvimento\n`;
     });
 
     return {
@@ -525,13 +525,13 @@ export function processAiQuery(
       timestamp,
       category: 'general',
       badge: 'Certificação Inteligente',
-      text: `🎯 **Fluxo de Auto-Conclusão & Certificação por Prazo:**\n\n` +
+      text: `🎯 Fluxo de Auto-Conclusão & Certificação por Prazo:\n\n` +
         `A inteligência do sistema funciona em 3 passos seguros:\n\n` +
-        `1. **Gatilho Temporal:** Quando uma actividade atinge a data limite planeada, o sistema marca-a temporariamente como **"Auto-Concluída"**.\n` +
-        `2. **Quarentena de Certificação:** Fica visível no painel do Gestor com o selo amarelo de validação pendente.\n` +
-        `3. **Despacho em 1 Clique:**\n` +
-        `   - **\`[✓ Certificar Conclusão]\`**: Torna a actividade 100% finalizada e grava o carimbo do Director.\n` +
-        `   - **\`[⏱ Prorrogar Prazo]\`**: Se a obra no terreno atrasou, adiciona dias sem penalizar o histórico.`,
+        `1. Gatilho Temporal: Quando uma actividade atinge a data limite planeada, o sistema marca-a temporariamente como Auto-Concluída.\n` +
+        `2. Quarentena de Certificação: Fica visível no painel do Gestor com o selo amarelo de validação pendente.\n` +
+        `3. Despacho em 1 Clique:\n` +
+        `   - [✓ Certificar Conclusão]: Torna a actividade 100% finalizada e grava o carimbo do Director.\n` +
+        `   - [⏱ Prorrogar Prazo]: Se a obra no terreno atrasou, adiciona dias sem penalizar o histórico.`,
       suggestions: [
         'Auditar Prazos dos Projectos',
         'Gerar Relatório Executivo',
@@ -547,13 +547,13 @@ export function processAiQuery(
     timestamp,
     category: 'general',
     badge: 'Assistente Executivo',
-    text: `Olá! Sou o **EDM AI Copilot**, o assistente inteligente de gestão estratégica da Electricidade de Moçambique.\n\n` +
-      `Estou conectado em tempo real a toda a base de dados do sistema (**${context.projects.length} projectos estruturantes**, **${context.governmentalProjects.length} projectos governamentais presidenciais**, **${context.generationPlants.length} centrais de geração** e **${context.risks.length} riscos cadastrados**).\n\n` +
-      `**Como posso apoiar a sua tomada de decisão agora?**\n` +
-      `• *Auditar conflitos entre prazos de actividades e COD do projecto*\n` +
-      `• *Emitir relatório executivo formal para o PCA e Directores*\n` +
-      `• *Detectar descompassos entre execução financeira e avanço físico das obras*\n` +
-      `• *Consultar o estado detalhado de projectos específicos (ex.: Temane, Metuchira, Dondo)*`,
+    text: `Olá! Sou o EDM AI Copilot, o assistente inteligente de gestão estratégica da Electricidade de Moçambique.\n\n` +
+      `Estou conectado em tempo real a toda a base de dados do sistema (${context.projects.length} projectos estruturantes, ${context.governmentalProjects.length} projectos governamentais presidenciais, ${context.generationPlants.length} centrais de geração e ${context.risks.length} riscos cadastrados).\n\n` +
+      `Como posso apoiar a sua tomada de decisão agora?\n` +
+      `• Auditar conflitos entre prazos de actividades e COD do projecto\n` +
+      `• Emitir relatório executivo formal para o PCA e Directores\n` +
+      `• Detectar descompassos entre execução financeira e avanço físico das obras\n` +
+      `• Consultar o estado detalhado de projectos específicos (ex.: Temane, Metuchira, Dondo)`,
     suggestions: [
       '⚡ Auditar Prazos & Inconsistências COD',
       '📊 Gerar Relatório Executivo para o PCA',
