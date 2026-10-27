@@ -109,9 +109,61 @@ export const GovernmentalProjectsView: React.FC = () => {
     setExpandedProjects(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Toggle milestone completion with automatic completion date recording
+  // Modal de Confirmação Visual de Alteração de Status
+  const [confirmStatusModal, setConfirmStatusModal] = useState<{
+    isOpen: boolean;
+    projectId: string;
+    projectName: string;
+    milestoneId: string;
+    milestoneDescription: string;
+    isCurrentlyCompleted: boolean;
+    targetDate?: string;
+    completionDateInput: string;
+  } | null>(null);
+
+  // Notificação Visual (Toast)
+  const [toast, setToast] = useState<{
+    id: string;
+    type: 'success' | 'info' | 'warning';
+    title: string;
+    message: string;
+  } | null>(null);
+
+  const showToast = (type: 'success' | 'info' | 'warning', title: string, message: string) => {
+    const id = `${Date.now()}`;
+    setToast({ id, type, title, message });
+    setTimeout(() => {
+      setToast(curr => (curr?.id === id ? null : curr));
+    }, 4500);
+  };
+
+  // Solicitar alteração de status da actividade (abre modal de confirmação visual)
   const handleToggleMilestone = (projectId: string, milestoneId: string) => {
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+    const milestone = project.milestones.find(m => m.id === milestoneId);
+    if (!milestone) return;
+
     const todayStr = new Date().toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+    setConfirmStatusModal({
+      isOpen: true,
+      projectId,
+      projectName: project.shortName || project.name,
+      milestoneId,
+      milestoneDescription: milestone.description,
+      isCurrentlyCompleted: milestone.completed,
+      targetDate: milestone.targetDate,
+      completionDateInput: milestone.completedDate || todayStr,
+    });
+  };
+
+  // Confirmar alteração de status pelo utilizador
+  const handleConfirmStatusChange = () => {
+    if (!confirmStatusModal) return;
+    const { projectId, milestoneId, milestoneDescription, isCurrentlyCompleted, completionDateInput } = confirmStatusModal;
+    const nextDone = !isCurrentlyCompleted;
+
     setProjects(prev =>
       prev.map(p => {
         if (p.id !== projectId) return p;
@@ -119,16 +171,32 @@ export const GovernmentalProjectsView: React.FC = () => {
           ...p,
           milestones: p.milestones.map(m => {
             if (m.id !== milestoneId) return m;
-            const nextDone = !m.completed;
             return {
               ...m,
               completed: nextDone,
-              completedDate: nextDone ? (m.completedDate || todayStr) : undefined,
+              completedDate: nextDone ? (completionDateInput.trim() || undefined) : undefined,
             };
           }),
         };
       })
     );
+
+    setConfirmStatusModal(null);
+
+    // Disparar notificação visual de sucesso
+    if (nextDone) {
+      showToast(
+        'success',
+        'Actividade Marcada como Concluída!',
+        `A etapa "${milestoneDescription.slice(0, 50)}..." foi confirmada com sucesso (${completionDateInput}).`
+      );
+    } else {
+      showToast(
+        'info',
+        'Actividade Reaberta',
+        `A etapa "${milestoneDescription.slice(0, 50)}..." voltou ao estado pendente.`
+      );
+    }
   };
 
   // Add milestone to project
@@ -1133,6 +1201,177 @@ export const GovernmentalProjectsView: React.FC = () => {
               </div>
             </form>
           </div>
+        </div>
+      )}
+      {/* MODAL DE CONFIRMAÇÃO VISUAL DE CONCLUSÃO / ALTERAÇÃO DE STATUS */}
+      {confirmStatusModal && confirmStatusModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/50 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden animate-scale-in">
+            {/* Modal Header */}
+            <div
+              className={`px-5 py-4 flex items-center justify-between border-b ${
+                !confirmStatusModal.isCurrentlyCompleted
+                  ? 'bg-emerald-50/70 border-emerald-200'
+                  : 'bg-amber-50/70 border-amber-200'
+              }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <div
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-xs ${
+                    !confirmStatusModal.isCurrentlyCompleted
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-amber-500 text-white'
+                  }`}
+                >
+                  {!confirmStatusModal.isCurrentlyCompleted ? (
+                    <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                  ) : (
+                    <Clock className="w-5 h-5 stroke-[2.5]" />
+                  )}
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 font-heading">
+                    {!confirmStatusModal.isCurrentlyCompleted
+                      ? 'Confirmar Conclusão da Actividade'
+                      : 'Reabrir Actividade (Mudar para Pendente)'}
+                  </h3>
+                  <span className="text-[11px] font-bold text-slate-500 block">
+                    Projecto: {confirmStatusModal.projectName}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setConfirmStatusModal(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white/60 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-5 space-y-4">
+              <div className="space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Actividade Seleccionada:
+                </span>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed">
+                  "{confirmStatusModal.milestoneDescription}"
+                </div>
+              </div>
+
+              {!confirmStatusModal.isCurrentlyCompleted ? (
+                <div className="space-y-3 pt-1">
+                  <div className="space-y-1">
+                    <label className="block text-xs font-bold text-slate-700 flex items-center justify-between">
+                      <span>Data de Conclusão Efectiva:</span>
+                      <span className="text-[10px] text-emerald-700 font-semibold bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">
+                        Registo Oficial
+                      </span>
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-slate-100 rounded-lg border border-slate-200 text-slate-600">
+                        <Calendar className="w-4 h-4 text-emerald-600" />
+                      </div>
+                      <input
+                        type="text"
+                        value={confirmStatusModal.completionDateInput}
+                        onChange={e =>
+                          setConfirmStatusModal({
+                            ...confirmStatusModal,
+                            completionDateInput: e.target.value,
+                          })
+                        }
+                        placeholder="DD/MM/AAAA (ex: 27/10/2026)"
+                        className="flex-1 px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 font-bold text-slate-800"
+                        autoFocus
+                      />
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-500 bg-emerald-50/50 p-2.5 rounded-lg border border-emerald-100 flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <span>
+                      Ao confirmar, esta etapa será marcada como <strong>Concluída</strong> e a barra de percentagem global do projecto subirá automaticamente.
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <div className="pt-1">
+                  <p className="text-xs text-slate-600 bg-amber-50 p-3 rounded-xl border border-amber-200 flex items-start gap-2">
+                    <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    <span>
+                      Tem a certeza que deseja <strong>reabrir</strong> esta etapa? O estado passará a <strong>Pendente</strong> e a percentagem global do projecto será recalculada.
+                    </span>
+                  </p>
+                </div>
+              )}
+
+              {/* Modal Buttons */}
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setConfirmStatusModal(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmStatusChange}
+                  className={`px-4 py-2 text-xs font-bold text-white rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer ${
+                    !confirmStatusModal.isCurrentlyCompleted
+                      ? 'bg-emerald-600 hover:bg-emerald-700'
+                      : 'bg-amber-600 hover:bg-amber-700'
+                  }`}
+                >
+                  {!confirmStatusModal.isCurrentlyCompleted ? (
+                    <>
+                      <Check className="w-4 h-4 stroke-[3]" />
+                      Sim, Confirmar Conclusão
+                    </>
+                  ) : (
+                    <>
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      Sim, Reabrir Actividade
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* NOTIFICAÇÃO VISUAL FLUTUANTE (TOAST) */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-sm w-full bg-slate-900 text-white p-4 rounded-2xl shadow-2xl border border-slate-800 flex items-start gap-3 animate-slide-up">
+          <div
+            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+              toast.type === 'success'
+                ? 'bg-emerald-500/20 text-emerald-400'
+                : 'bg-blue-500/20 text-blue-400'
+            }`}
+          >
+            {toast.type === 'success' ? (
+              <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+            ) : (
+              <Clock className="w-5 h-5 stroke-[2.5]" />
+            )}
+          </div>
+          <div className="min-w-0 flex-1">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-white">
+              {toast.title}
+            </h4>
+            <p className="text-xs text-slate-300 mt-0.5 leading-relaxed">
+              {toast.message}
+            </p>
+          </div>
+          <button
+            onClick={() => setToast(null)}
+            className="p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition cursor-pointer"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
         </div>
       )}
     </div>
