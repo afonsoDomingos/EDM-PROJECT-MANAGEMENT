@@ -21,16 +21,21 @@ import {
   RotateCcw,
   CheckCircle2,
   Clock,
+  Table,
 } from 'lucide-react';
 import {
   INITIAL_GOVERNMENTAL_PROJECTS,
   GovernmentalProject,
   GovernmentalMilestone,
 } from '../../data/governmentalProjectsData';
+import { GovernmentalProjectsTableView } from './GovernmentalProjectsTableView';
 
-const STORAGE_KEY = 'edm_governmental_projects_v1';
+const STORAGE_KEY = 'edm_governmental_projects_v2';
 
 export const GovernmentalProjectsView: React.FC = () => {
+  // View mode: 'table' (Official Presidential Matrix) vs 'cards' (Checklist Cards)
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+
   // Load saved projects from localStorage or default to initial
   const [projects, setProjects] = useState<GovernmentalProject[]>(() => {
     try {
@@ -46,11 +51,11 @@ export const GovernmentalProjectsView: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedProjects, setExpandedProjects] = useState<Record<string, boolean>>({
-    'gov-eni-75mw': true,
-    'gov-argelia-40mw': true,
-    'gov-metoro-40mwp': true,
-    'gov-namaacha-120mw': true,
-    'gov-sligm-fsru': true,
+    'gov-eni-75mw': false,
+    'gov-argelia-40mw': false,
+    'gov-metoro-40mwp': false,
+    'gov-namaacha-120mw': false,
+    'gov-sligm-fsru': false,
   });
 
   // Modal State for Add / Edit Project
@@ -65,6 +70,8 @@ export const GovernmentalProjectsView: React.FC = () => {
   const [formLocation, setFormLocation] = useState('');
   const [formCOD, setFormCOD] = useState('');
   const [formStatus, setFormStatus] = useState<GovernmentalProject['status']>('Em Negociação');
+  const [formSituation, setFormSituation] = useState('');
+  const [formPriorityAction, setFormPriorityAction] = useState('');
 
   // Inline Add Milestone State
   const [addingMilestoneTo, setAddingMilestoneTo] = useState<string | null>(null);
@@ -149,6 +156,8 @@ export const GovernmentalProjectsView: React.FC = () => {
     setFormLocation('');
     setFormCOD('');
     setFormStatus('Em Negociação');
+    setFormSituation('');
+    setFormPriorityAction('');
     setIsProjectModalOpen(true);
   };
 
@@ -163,6 +172,8 @@ export const GovernmentalProjectsView: React.FC = () => {
     setFormLocation(project.location);
     setFormCOD(project.commercialOperationDate);
     setFormStatus(project.status);
+    setFormSituation(project.currentSituationSummary || '');
+    setFormPriorityAction(project.priorityActionSummary || (project.priorityActions ? project.priorityActions.join(' ') : ''));
     setIsProjectModalOpen(true);
   };
 
@@ -185,6 +196,8 @@ export const GovernmentalProjectsView: React.FC = () => {
             location: formLocation.trim() || p.location,
             commercialOperationDate: formCOD.trim() || p.commercialOperationDate,
             status: formStatus,
+            currentSituationSummary: formSituation.trim() || p.currentSituationSummary,
+            priorityActionSummary: formPriorityAction.trim() || p.priorityActionSummary,
           };
         })
       );
@@ -203,7 +216,8 @@ export const GovernmentalProjectsView: React.FC = () => {
         province: formLocation.trim(),
         objective: 'Projecto prioritário de infra-estrutura energética nacional.',
         partnerEntities: ['EDM, E.P.'],
-        currentSituationSummary: 'Projecto estratégico inserido no portfólio governamental.',
+        currentSituationSummary: formSituation.trim() || 'Projecto estratégico inserido no portfólio governamental.',
+        priorityActionSummary: formPriorityAction.trim() || 'Definição e alinhamento interinstitucional prioritário.',
         commercialOperationDate: formCOD.trim() || 'A definir',
         status: formStatus,
         statusColor: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -215,7 +229,7 @@ export const GovernmentalProjectsView: React.FC = () => {
           },
         ],
         mainConstraints: [],
-        priorityActions: [],
+        priorityActions: formPriorityAction.trim() ? [formPriorityAction.trim()] : [],
       };
 
       setProjects(prev => [newProject, ...prev]);
@@ -369,8 +383,58 @@ export const GovernmentalProjectsView: React.FC = () => {
         )}
       </div>
 
-      {/* Projects List (Clean Cards with Checklist) */}
-      <div className="space-y-4">
+      {/* View Switcher: Tabela Executiva Oficial (Screenshot) vs Checklist */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl shrink-0">
+          <button
+            onClick={() => setViewMode('table')}
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              viewMode === 'table'
+                ? 'bg-[#f08519] text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Table className="w-3.5 h-3.5" />
+            Matriz Executiva Oficial (Tabela)
+          </button>
+          <button
+            onClick={() => setViewMode('cards')}
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+              viewMode === 'cards'
+                ? 'bg-[#002D62] text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <CheckSquare className="w-3.5 h-3.5" />
+            Checklist de Actividades
+          </button>
+        </div>
+
+        <span className="text-[11px] text-slate-500 font-medium px-2">
+          {filteredProjects.length} Projectos Governamentais Sob Tutela da Presidência
+        </span>
+      </div>
+
+      {viewMode === 'table' ? (
+        <GovernmentalProjectsTableView
+          projects={filteredProjects}
+          expandedProjects={expandedProjects}
+          toggleExpand={toggleExpand}
+          handleToggleMilestone={handleToggleMilestone}
+          handleOpenEdit={handleOpenEdit}
+          handleDeleteProject={handleDeleteProject}
+          handleAddMilestone={handleAddMilestone}
+          handleDeleteMilestone={handleDeleteMilestone}
+          addingMilestoneTo={addingMilestoneTo}
+          setAddingMilestoneTo={setAddingMilestoneTo}
+          newMilestoneText={newMilestoneText}
+          setNewMilestoneText={setNewMilestoneText}
+          newMilestoneDate={newMilestoneDate}
+          setNewMilestoneDate={setNewMilestoneDate}
+          getTechIcon={getTechIcon}
+        />
+      ) : (
+        <div className="space-y-4">
         {filteredProjects.length === 0 ? (
           <div className="p-12 text-center bg-white rounded-2xl border border-slate-200 text-slate-400 text-xs">
             Nenhum projecto encontrado.
@@ -615,6 +679,7 @@ export const GovernmentalProjectsView: React.FC = () => {
           })
         )}
       </div>
+    )}
 
       {/* MODAL: Adicionar / Editar Projecto (Limpo & Elegante) */}
       {isProjectModalOpen && (
@@ -734,6 +799,32 @@ export const GovernmentalProjectsView: React.FC = () => {
                     <option value="Constituição de SPV">Constituição de SPV</option>
                   </select>
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Situação Actual (Texto da Matriz)
+                </label>
+                <textarea
+                  rows={3}
+                  value={formSituation}
+                  onChange={e => setFormSituation(e.target.value)}
+                  placeholder="Descrição da situação actual do projecto..."
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Decisão ou Acção Prioritária (Texto da Matriz)
+                </label>
+                <textarea
+                  rows={2}
+                  value={formPriorityAction}
+                  onChange={e => setFormPriorityAction(e.target.value)}
+                  placeholder="Próximas decisões ou acções prioritárias..."
+                  className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                />
               </div>
 
               <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">

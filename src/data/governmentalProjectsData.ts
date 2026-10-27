@@ -22,6 +22,7 @@ export interface GovernmentalProject {
   milestones: GovernmentalMilestone[];
   mainConstraints: string[];
   priorityActions: string[];
+  priorityActionSummary?: string;
   commercialOperationDate: string;
   status: 'Em Negociação' | 'Aguardando Parecer' | 'Impasse Tarifário' | 'Concursos em Curso' | 'Constituição de SPV';
   statusColor: string;
@@ -40,7 +41,8 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     province: 'Inhambane',
     objective: 'Reforço da geração de energia em Temane com base em gás natural e motores de combustão interna.',
     partnerEntities: ['ENH', 'EDM, E.P.', 'ENI'],
-    currentSituationSummary: 'Foi assinado o NDA entre ENH, EDM e ENI. Temane foi aprovado como local da central e foi seleccionada tecnologia de motores de combustão. Escopo e especificações técnicas definidos. JDA em preparação.',
+    currentSituationSummary: 'Preparação do JDA e dos estudos de base; operação comercial prevista para Dezembro de 2028.',
+    priorityActionSummary: 'Definição da estrutura de implementação mais adequada, concluir o JDA e avançar com estudos e procurement.',
     commercialOperationDate: 'Dezembro de 2028',
     status: 'Em Negociação',
     statusColor: 'bg-orange-100 text-[#c26508] border-orange-200',
@@ -79,7 +81,8 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     province: 'Inhambane',
     objective: 'Reforçar com rapidez a capacidade de geração em Temane e mitigar o défice do Sistema Eléctrico Nacional decorrente da baixa disponibilidade hídrica.',
     partnerEntities: ['Governo da Argélia', 'Sonelgaz', 'MIREME', 'EDM, E.P.', 'MINEC', 'Ministério das Finanças / AT'],
-    currentSituationSummary: 'MoU EDM-Sonelgaz assinado em Outubro de 2025. Unidade de Implementação criada. Missões técnicas concluídas. Acordo Intergovernamental submetido e validado entre ministros da Energia. Parecer favorável do MINEC emitido.',
+    currentSituationSummary: 'Validações técnicas e institucionais avançadas; falta o parecer do Ministério das Finanças/Autoridade Tributária sobre as isenções de impostos e direitos aduaneiros na importação da central.',
+    priorityActionSummary: 'Concluir o pacote de pareceres e assinar o Acordo Intergovernamental com o governo argelino.',
     commercialOperationDate: '2º Semestre de 2027',
     status: 'Aguardando Parecer',
     statusColor: 'bg-amber-100 text-amber-800 border-amber-200',
@@ -110,7 +113,7 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     id: 'gov-metoro-40mwp',
     code: 'GOV-MET-03',
     name: 'Central Solar Fotovoltaica de Metoro 40 MWp',
-    shortName: 'Solar de Metoro',
+    shortName: 'Solar de Metoro 40 MWp',
     capacity: '40 MWp',
     capacityMW: 40,
     technology: 'Solar Fotovoltaica',
@@ -118,7 +121,8 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     province: 'Cabo Delgado',
     objective: 'Melhorar a disponibilidade, estabilidade e segurança do fornecimento de energia na região Norte e apoiar a continuidade do programa de acesso universal.',
     partnerEntities: ['TotalEnergies', 'EDM, E.P.', 'MIREME', 'AFD', 'PROPARCO'],
-    currentSituationSummary: 'A TotalEnergies adquiriu a participação da NEOEN. Custos adicionais estimados em USD 8,1 milhões após paralisação e vandalização de activos. Financiadores (AFD/PROPARCO) propuseram perdão de 70% da dívida.',
+    currentSituationSummary: 'TotalEnergies assumiu o projecto; reestruturação financeira e adendas em negociação já a mais de 2 anos pela insistência da TotalEnergies na revisão da tarifa do projecto antes da tomada da decisão de financiamento, de modo que os benefícios da saída dos Financiadores (perdão de 70% da dívida) não apoie a redução da tarifa da EDM.',
+    priorityActionSummary: 'Resolver o impasse tarifário e acordar a repartição dos benefícios decorrentes da saída dos financiadores. A TotalEnergies deve tomar uma decisão final sobre o seu interesse no projecto e nas condições que encontrou no acto da compra da participação da Neoen.',
     commercialOperationDate: '2027 (Sob Condição de Acordo)',
     status: 'Impasse Tarifário',
     statusColor: 'bg-rose-100 text-rose-800 border-rose-200',
@@ -148,7 +152,7 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     id: 'gov-namaacha-120mw',
     code: 'GOV-NAM-04',
     name: 'Central Eólica de Namaacha 120 MW',
-    shortName: 'Eólica de Namaacha',
+    shortName: 'Eólica de Namaacha 120 MW',
     capacity: '120 MW',
     capacityMW: 120,
     technology: 'Eólica',
@@ -156,7 +160,8 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     province: 'Província de Maputo',
     objective: 'Diversificar a matriz energética nacional, disponibilizar energia limpa prioritariamente ao mercado interno e exportar os excedentes para a região austral (SAPP).',
     partnerEntities: ['Central Eólica da Namaacha (CEN)', 'EDM, E.P.', 'Banco Africano de Desenvolvimento (BAD)', 'MIREME'],
-    currentSituationSummary: 'Negociação de adendas aos contratos PPA, SHA, COA e Contrato de Concessão. Transferência da linha de interligação (2x43 km a 66 kV) para a EDM com subvenção do BAD. Concurso da linha lançado pela EDM; concurso do BoP lançado pela CEN.',
+    currentSituationSummary: 'Adendas contratuais e concursos para a linha e a central em curso de modo a transferir a obrigação de construção da linha para a EDM, 2x43km a 66kV. Lançado o concurso público para a Empreitada da linha, escopo a ser desenvolvido pela EDM.',
+    priorityActionSummary: 'Concluir concursos, actualizar custos, concluir as adendas dos contratos e fechar o modelo financeiro e a tarifa.',
     commercialOperationDate: '1º Semestre de 2028',
     status: 'Concursos em Curso',
     statusColor: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -198,6 +203,7 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     objective: 'Converter GNL proveniente dos projectos da Bacia do Rovuma em gás natural para abastecer centrais existentes e futuras no Sul e Centro do País, face ao esgotamento das reservas de Pande e Temane.',
     partnerEntities: ['EDM, E.P.', 'ENH', 'CFM', 'HCB', 'MIREME'],
     currentSituationSummary: 'SHA e JDA assinados entre as 4 estatais (EDM, ENH, CFM, HCB). Comités de Gestão e Técnico em funcionamento activo. Unidade de Implementação constituída. Em curso a formalização da sociedade comercial SPV SLIGM.',
+    priorityActionSummary: 'Concluir a constituição da empresa SLIGM, obter a aprovação governamental da quota de gás doméstico e acelerar os estudos de detalhe da unidade FSRU.',
     commercialOperationDate: '2028 (Crítico para continuidade térmica)',
     status: 'Constituição de SPV',
     statusColor: 'bg-purple-100 text-purple-800 border-purple-200',
