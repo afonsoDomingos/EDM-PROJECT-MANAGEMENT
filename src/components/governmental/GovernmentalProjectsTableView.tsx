@@ -456,28 +456,29 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                                     {/* Controlo de Datas, Conclusão e Atrasos em Dias */}
                                     {isDone && milestone.completedDate ? (
                                       <span
-                                        className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200"
+                                        className="inline-flex items-center gap-1.5 text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200"
                                         title="Data efectiva de conclusão"
                                       >
-                                        <Calendar className="w-3 h-3 text-emerald-600" />
-                                        Concluído em: <strong className="font-bold">{milestone.completedDate}</strong>{' '}
-                                        <span className="text-[10px] text-emerald-600 font-normal">
-                                          ({formatDaysSinceCompletion(milestone.completedDate)})
+                                        <Calendar className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                        <span>Conclusão:</span>
+                                        <strong className="font-bold text-emerald-950">{milestone.completedDate}</strong>
+                                        <span className="text-[10px] text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded font-semibold">
+                                          {formatDaysSinceCompletion(milestone.completedDate)}
                                         </span>
                                       </span>
                                     ) : milestone.targetDate ? (
                                       <span
-                                        className={`inline-flex items-center gap-1 text-[11px] font-mono px-2.5 py-0.5 rounded-md border ${
+                                        className={`inline-flex items-center gap-1.5 text-[11px] font-mono px-2.5 py-1 rounded-lg border ${
                                           remaining?.isOverdue
-                                            ? 'bg-rose-100 text-rose-800 border-rose-300 font-bold'
+                                            ? 'bg-rose-50 text-rose-800 border-rose-300 font-bold'
                                             : remaining?.isToday
-                                            ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
-                                            : 'bg-slate-100 text-slate-700 border-slate-200 font-medium'
+                                            ? 'bg-amber-50 text-amber-900 border-amber-300 font-bold'
+                                            : 'bg-slate-50 text-slate-700 border-slate-200 font-medium'
                                         }`}
-                                        title={remaining?.label || 'Prazo da actividade'}
+                                        title={remaining?.label || 'Prazo previsto da actividade'}
                                       >
                                         <Calendar
-                                          className={`w-3 h-3 ${
+                                          className={`w-3.5 h-3.5 shrink-0 ${
                                             remaining?.isOverdue
                                               ? 'text-rose-600'
                                               : remaining?.isToday
@@ -485,12 +486,13 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                                               : 'text-slate-500'
                                           }`}
                                         />
-                                        Prazo: <strong className="font-bold">{milestone.targetDate}</strong>
+                                        <span className="text-slate-500 font-normal">Prazo Previsto:</span>
+                                        <strong className="font-bold text-slate-900">{milestone.targetDate}</strong>
                                         {remaining?.label && (
                                           <span
-                                            className={`ml-1 text-[10px] px-1.5 py-0.2 rounded font-bold ${
+                                            className={`ml-0.5 text-[10px] px-1.5 py-0.2 rounded font-bold ${
                                               remaining.isOverdue
-                                                ? 'bg-rose-200 text-rose-900'
+                                                ? 'bg-rose-200 text-rose-950'
                                                 : remaining.isToday
                                                 ? 'bg-amber-200 text-amber-950'
                                                 : 'bg-blue-100 text-[#002D62]'
@@ -500,7 +502,11 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                                           </span>
                                         )}
                                       </span>
-                                    ) : null}
+                                    ) : (
+                                      <span className="text-[10px] text-slate-400 font-mono italic">
+                                        Sem prazo
+                                      </span>
+                                    )}
 
                                     {/* Botão de Edição da Actividade */}
                                     <button
