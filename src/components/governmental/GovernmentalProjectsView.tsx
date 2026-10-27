@@ -22,6 +22,9 @@ import {
   CheckCircle2,
   Clock,
   Table,
+  AlertTriangle,
+  Pencil,
+  Save,
 } from 'lucide-react';
 import {
   INITIAL_GOVERNMENTAL_PROJECTS,
@@ -29,6 +32,11 @@ import {
   GovernmentalMilestone,
 } from '../../data/governmentalProjectsData';
 import { GovernmentalProjectsTableView } from './GovernmentalProjectsTableView';
+import {
+  calculateDaysRemaining,
+  formatDaysSinceCompletion,
+  getProjectDelayStatus,
+} from '../../utils/formatters';
 
 const STORAGE_KEY = 'edm_governmental_projects_v3';
 
@@ -77,6 +85,15 @@ export const GovernmentalProjectsView: React.FC = () => {
   const [addingMilestoneTo, setAddingMilestoneTo] = useState<string | null>(null);
   const [newMilestoneText, setNewMilestoneText] = useState('');
   const [newMilestoneDate, setNewMilestoneDate] = useState('');
+
+  // Inline Edit Milestone State
+  const [editingMilestoneId, setEditingMilestoneId] = useState<string | null>(null);
+  const [editingMilestoneText, setEditingMilestoneText] = useState('');
+  const [editingMilestoneDate, setEditingMilestoneDate] = useState('');
+
+  // Inline Edit Project COD State for Cards View
+  const [editingCODProjectId, setEditingCODProjectId] = useState<string | null>(null);
+  const [editingCODValue, setEditingCODValue] = useState('');
 
   // Persist to localStorage
   useEffect(() => {
@@ -148,6 +165,61 @@ export const GovernmentalProjectsView: React.FC = () => {
         return {
           ...p,
           milestones: p.milestones.filter(m => m.id !== milestoneId),
+        };
+      })
+    );
+  };
+
+  // Start editing a milestone inline
+  const handleStartEditMilestone = (milestone: GovernmentalMilestone, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditingMilestoneId(milestone.id);
+    setEditingMilestoneText(milestone.description);
+    setEditingMilestoneDate(milestone.completed ? (milestone.completedDate || '') : (milestone.targetDate || ''));
+  };
+
+  // Save edited milestone
+  const handleSaveEditMilestone = (projectId: string, milestoneId: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!editingMilestoneText.trim()) return;
+    setProjects(prev =>
+      prev.map(p => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          milestones: p.milestones.map(m => {
+            if (m.id !== milestoneId) return m;
+            return {
+              ...m,
+              description: editingMilestoneText.trim(),
+              targetDate: !m.completed ? (editingMilestoneDate.trim() || undefined) : m.targetDate,
+              completedDate: m.completed ? (editingMilestoneDate.trim() || m.completedDate) : m.completedDate,
+            };
+          }),
+        };
+      })
+    );
+    setEditingMilestoneId(null);
+    setEditingMilestoneText('');
+    setEditingMilestoneDate('');
+  };
+
+  // Cancel editing milestone
+  const handleCancelEditMilestone = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setEditingMilestoneId(null);
+    setEditingMilestoneText('');
+    setEditingMilestoneDate('');
+  };
+
+  // Directly update project COD (Completion Date)
+  const handleUpdateProjectCOD = (projectId: string, newCOD: string) => {
+    setProjects(prev =>
+      prev.map(p => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          commercialOperationDate: newCOD.trim(),
         };
       })
     );
@@ -432,6 +504,15 @@ export const GovernmentalProjectsView: React.FC = () => {
           handleDeleteProject={handleDeleteProject}
           handleAddMilestone={handleAddMilestone}
           handleDeleteMilestone={handleDeleteMilestone}
+          handleStartEditMilestone={handleStartEditMilestone}
+          handleSaveEditMilestone={handleSaveEditMilestone}
+          handleCancelEditMilestone={handleCancelEditMilestone}
+          editingMilestoneId={editingMilestoneId}
+          editingMilestoneText={editingMilestoneText}
+          setEditingMilestoneText={setEditingMilestoneText}
+          editingMilestoneDate={editingMilestoneDate}
+          setEditingMilestoneDate={setEditingMilestoneDate}
+          handleUpdateProjectCOD={handleUpdateProjectCOD}
           addingMilestoneTo={addingMilestoneTo}
           setAddingMilestoneTo={setAddingMilestoneTo}
           newMilestoneText={newMilestoneText}
@@ -452,6 +533,7 @@ export const GovernmentalProjectsView: React.FC = () => {
             const completed = project.milestones.filter(m => m.completed).length;
             const total = project.milestones.length;
             const percent = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const delayStatus = getProjectDelayStatus(project.milestones, project.commercialOperationDate);
 
             return (
               <div
@@ -489,17 +571,78 @@ export const GovernmentalProjectsView: React.FC = () => {
                             Por Iniciar
                           </span>
                         )}
+
+                        {/* Project Delay Alert Badge */}
+                        <span
+                          className={`inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full border ${delayStatus.badgeClass}`}
+                          title={delayStatus.statusText}
+                        >
+                          {delayStatus.isDelayed && (
+                            <AlertTriangle className="w-3 h-3 text-rose-600 animate-pulse" />
+                          )}
+                          {delayStatus.label}
+                        </span>
                       </div>
-                      <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">
+                      <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5 flex-wrap">
                         <span className="font-semibold text-slate-700">{project.capacity}</span>
                         {project.location && (
                           <span className="flex items-center gap-1 text-slate-400 truncate">
                             <MapPin className="w-3 h-3" /> {project.location}
                           </span>
                         )}
-                        {project.commercialOperationDate && (
-                          <span className="hidden sm:flex items-center gap-1 text-slate-400">
-                            <Calendar className="w-3 h-3" /> COD: {project.commercialOperationDate}
+
+                        {/* Data de Finalização (COD) - Editável */}
+                        {editingCODProjectId === project.id ? (
+                          <div
+                            onClick={e => e.stopPropagation()}
+                            className="flex items-center gap-1 bg-white p-0.5 rounded border border-orange-300 shadow-xs"
+                          >
+                            <input
+                              type="text"
+                              value={editingCODValue}
+                              onChange={e => setEditingCODValue(e.target.value)}
+                              placeholder="Ex: Dezembro 2028"
+                              className="text-[11px] px-1.5 py-0.5 bg-slate-50 border border-slate-200 rounded text-slate-800 font-bold w-28 focus:outline-none"
+                              autoFocus
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                  handleUpdateProjectCOD(project.id, editingCODValue);
+                                  setEditingCODProjectId(null);
+                                }
+                                if (e.key === 'Escape') setEditingCODProjectId(null);
+                              }}
+                            />
+                            <button
+                              onClick={() => {
+                                handleUpdateProjectCOD(project.id, editingCODValue);
+                                setEditingCODProjectId(null);
+                              }}
+                              className="p-0.5 text-emerald-600 hover:bg-emerald-50 rounded cursor-pointer"
+                              title="Guardar data"
+                            >
+                              <Save className="w-3 h-3" />
+                            </button>
+                            <button
+                              onClick={() => setEditingCODProjectId(null)}
+                              className="p-0.5 text-slate-400 hover:bg-slate-100 rounded cursor-pointer"
+                              title="Cancelar"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ) : (
+                          <span
+                            onClick={e => {
+                              e.stopPropagation();
+                              setEditingCODProjectId(project.id);
+                              setEditingCODValue(project.commercialOperationDate || '');
+                            }}
+                            className="group/cod inline-flex items-center gap-1 text-slate-500 hover:text-slate-800 hover:bg-slate-100 px-1 py-0.5 rounded cursor-pointer transition"
+                            title="Clique para editar a data prevista de finalização"
+                          >
+                            <Calendar className="w-3 h-3 text-[#f08519]" />
+                            Finalização: <strong className="font-bold text-[#002D62]">{project.commercialOperationDate || 'A definir'}</strong>
+                            <Pencil className="w-2.5 h-2.5 text-slate-400 opacity-0 group-hover/cod:opacity-100" />
                           </span>
                         )}
                       </div>
@@ -551,24 +694,107 @@ export const GovernmentalProjectsView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Checklist (Line-by-Line with Checkboxes) */}
+                {/* Checklist (Line-by-Line with Checkboxes and High-Visibility Progress Bar) */}
                 {isExpanded && (
-                  <div className="p-4 sm:p-5 space-y-2">
+                  <div className="p-4 sm:p-5 space-y-3">
+                    
+                    {/* BARRA BEM VISÍVEL DE PROGRESSÃO */}
+                    <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                          <span className={`w-2.5 h-2.5 rounded-full ${percent === 100 ? 'bg-emerald-500' : 'bg-emerald-500 animate-pulse'}`} />
+                          Barra de Progressão das Actividades:
+                        </span>
+                        <span className="font-black text-sm text-[#002D62]">
+                          {percent}%{' '}
+                          <span className="font-normal text-xs text-slate-500">
+                            ({completed} de {total} concluídas)
+                          </span>
+                        </span>
+                      </div>
+                      <div className="w-full bg-slate-200 h-3 rounded-full overflow-hidden p-0.5 border border-slate-300">
+                        <div
+                          className={`h-full rounded-full transition-all duration-500 ${
+                            percent === 100
+                              ? 'bg-gradient-to-r from-emerald-500 to-teal-500'
+                              : 'bg-gradient-to-r from-amber-500 via-emerald-500 to-teal-500'
+                          }`}
+                          style={{ width: `${percent}%` }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Lista de Actividades */}
                     <div className="divide-y divide-slate-100 border border-slate-200 rounded-xl overflow-hidden bg-white">
                       {project.milestones.map((milestone, idx) => {
                         const isDone = milestone.completed;
+                        const isEditingThis = editingMilestoneId === milestone.id;
+                        const remaining = !isDone && milestone.targetDate ? calculateDaysRemaining(milestone.targetDate) : null;
+
+                        if (isEditingThis) {
+                          return (
+                            <div
+                              key={milestone.id}
+                              className="p-3 bg-amber-50/70 border-l-4 border-l-amber-500 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 animate-fade-in"
+                            >
+                              <span className="text-xs font-bold text-amber-800 shrink-0">
+                                Actividade #{idx + 1}:
+                              </span>
+                              <input
+                                type="text"
+                                value={editingMilestoneText}
+                                onChange={e => setEditingMilestoneText(e.target.value)}
+                                placeholder="Descrição da actividade..."
+                                className="flex-1 px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                                autoFocus
+                                onKeyDown={e => {
+                                  if (e.key === 'Enter') handleSaveEditMilestone(project.id, milestone.id);
+                                  if (e.key === 'Escape') handleCancelEditMilestone();
+                                }}
+                              />
+                              <input
+                                type="text"
+                                value={editingMilestoneDate}
+                                onChange={e => setEditingMilestoneDate(e.target.value)}
+                                placeholder="Prazo (Ex: 15/12/2026 ou Nov 2026)"
+                                className="w-full sm:w-44 px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                              />
+                              <div className="flex items-center gap-1.5 justify-end shrink-0">
+                                <button
+                                  onClick={() => handleSaveEditMilestone(project.id, milestone.id)}
+                                  className="px-3 py-1.5 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg transition flex items-center gap-1 cursor-pointer"
+                                  title="Guardar alterações da actividade"
+                                >
+                                  <Check className="w-3.5 h-3.5" />
+                                  Guardar
+                                </button>
+                                <button
+                                  onClick={handleCancelEditMilestone}
+                                  className="px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded-lg transition cursor-pointer"
+                                  title="Cancelar"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        }
 
                         return (
                           <div
                             key={milestone.id}
-                            onClick={() => handleToggleMilestone(project.id, milestone.id)}
-                            className={`group p-2.5 sm:px-3.5 flex items-center justify-between gap-3 cursor-pointer transition select-none ${
+                            className={`group p-2.5 sm:px-3.5 flex items-center justify-between gap-3 transition select-none ${
                               isDone
                                 ? 'bg-emerald-50/70 hover:bg-emerald-50 border-l-4 border-l-emerald-500'
+                                : remaining?.isOverdue
+                                ? 'bg-rose-50/40 hover:bg-rose-50/70 border-l-4 border-l-rose-500'
                                 : 'bg-white hover:bg-slate-50 border-l-4 border-l-transparent'
                             }`}
                           >
-                            <div className="flex items-center gap-3 min-w-0 flex-1">
+                            <div
+                              onClick={() => handleToggleMilestone(project.id, milestone.id)}
+                              className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer"
+                            >
                               {/* Clean Checkbox */}
                               <div
                                 className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all ${
@@ -601,7 +827,7 @@ export const GovernmentalProjectsView: React.FC = () => {
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2.5 shrink-0">
+                            <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
                               {/* Explicit Status Badge */}
                               {isDone ? (
                                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
@@ -615,29 +841,68 @@ export const GovernmentalProjectsView: React.FC = () => {
                                 </span>
                               )}
 
-                              {/* Controlo de Datas */}
+                              {/* Controlo de Datas, Conclusão e Atrasos em Dias */}
                               {isDone && milestone.completedDate ? (
                                 <span
                                   className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200"
                                   title="Data em que a actividade foi concluída"
                                 >
                                   <Calendar className="w-3 h-3 text-emerald-600" />
-                                  Concluído em: <strong className="font-bold">{milestone.completedDate}</strong>
+                                  Concluído em: <strong className="font-bold">{milestone.completedDate}</strong>{' '}
+                                  <span className="text-[10px] text-emerald-600 font-normal">
+                                    ({formatDaysSinceCompletion(milestone.completedDate)})
+                                  </span>
                                 </span>
                               ) : milestone.targetDate ? (
                                 <span
-                                  className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200"
-                                  title="Prazo previsto para conclusão"
+                                  className={`inline-flex items-center gap-1 text-[11px] font-mono px-2.5 py-0.5 rounded-md border ${
+                                    remaining?.isOverdue
+                                      ? 'bg-rose-100 text-rose-800 border-rose-300 font-bold'
+                                      : remaining?.isToday
+                                      ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
+                                      : 'bg-slate-100 text-slate-700 border-slate-200 font-medium'
+                                  }`}
+                                  title={remaining?.label || 'Prazo da actividade'}
                                 >
-                                  <Calendar className="w-3 h-3 text-slate-500" />
+                                  <Calendar
+                                    className={`w-3 h-3 ${
+                                      remaining?.isOverdue
+                                        ? 'text-rose-600'
+                                        : remaining?.isToday
+                                        ? 'text-amber-600'
+                                        : 'text-slate-500'
+                                    }`}
+                                  />
                                   Prazo: <strong className="font-bold">{milestone.targetDate}</strong>
+                                  {remaining?.label && (
+                                    <span
+                                      className={`ml-1 text-[10px] px-1.5 py-0.2 rounded font-bold ${
+                                        remaining.isOverdue
+                                          ? 'bg-rose-200 text-rose-900'
+                                          : remaining.isToday
+                                          ? 'bg-amber-200 text-amber-950'
+                                          : 'bg-blue-100 text-[#002D62]'
+                                      }`}
+                                    >
+                                      {remaining.label}
+                                    </span>
+                                  )}
                                 </span>
                               ) : null}
+
+                              {/* Botão de Edição da Actividade */}
+                              <button
+                                onClick={e => handleStartEditMilestone(milestone, e)}
+                                className="p-1 text-slate-400 hover:text-blue-600 hover:bg-slate-100 rounded transition cursor-pointer"
+                                title="Editar texto ou prazo desta actividade"
+                              >
+                                <Edit2 className="w-3.5 h-3.5" />
+                              </button>
 
                               {/* Delete single milestone */}
                               <button
                                 onClick={e => handleDeleteMilestone(project.id, milestone.id, e)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-rose-500 rounded transition"
+                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-rose-500 rounded transition cursor-pointer"
                                 title="Remover esta actividade"
                               >
                                 <X className="w-3.5 h-3.5" />
@@ -792,16 +1057,20 @@ export const GovernmentalProjectsView: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">
-                    Previsão de Conclusão (COD)
+                  <label className="block text-xs font-bold text-slate-700 mb-1 flex items-center justify-between">
+                    <span>Data de Finalização (COD)</span>
+                    <span className="text-[10px] text-amber-700 font-semibold bg-amber-50 px-1.5 py-0.2 rounded border border-amber-200">Editável</span>
                   </label>
                   <input
                     type="text"
                     value={formCOD}
                     onChange={e => setFormCOD(e.target.value)}
-                    placeholder="Ex: Dezembro 2028"
-                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                    placeholder="Ex: Dezembro 2028 ou 31/12/2028"
+                    className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62] font-semibold text-slate-800"
                   />
+                  <p className="text-[10px] text-slate-400 mt-1">
+                    Actualize esta data sempre que houver ajustes no cronograma oficial.
+                  </p>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
