@@ -167,6 +167,19 @@ export const Header: React.FC<HeaderProps> = ({
               </p>
             </div>
           </div>
+
+          {/* Powered by MUV Logo */}
+          <div className="hidden lg:flex items-center gap-2 pl-3 border-l border-slate-200 select-none">
+            <span className="text-[10px] font-black tracking-wider text-slate-400 uppercase">
+              Powered by
+            </span>
+            <img
+              src="/muv logo.png"
+              alt="MUV Educação & Engenharia"
+              className="h-7 w-auto object-contain hover:scale-105 transition"
+              title="Powered by MUV Educação & Engenharia"
+            />
+          </div>
         </div>
 
         {/* Center: Search with Live Interactive Results Popover */}

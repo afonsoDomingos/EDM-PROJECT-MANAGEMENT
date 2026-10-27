@@ -284,9 +284,21 @@ export const LoginPage: React.FC = () => {
             </button>
           </div>
 
-          {/* Footer Note */}
-          <div className="text-center text-[11px] text-slate-500 pt-1">
-            EDM • Direcção de Tecnologias de Informação (DTIT)
+          {/* Footer Note with Powered by MUV */}
+          <div className="text-center pt-2 space-y-2">
+            <div className="inline-flex items-center gap-2 bg-slate-900/90 px-3.5 py-1 rounded-full border border-slate-800 shadow-xs select-none">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                Powered by
+              </span>
+              <img
+                src="/muv logo.png"
+                alt="MUV Educação & Engenharia"
+                className="h-5 w-auto object-contain bg-white/95 px-1.5 py-0.5 rounded"
+              />
+            </div>
+            <p className="text-[11px] text-slate-500">
+              EDM • Direcção de Tecnologias de Informação (DTIT)
+            </p>
           </div>
         </div>
       </div>

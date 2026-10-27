@@ -261,11 +261,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
               </div>
 
-              <div className="text-center">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Electricidade de Moçambique
-                </span>
-                <span className="text-[9px] text-slate-400">© 2026 Portal de Projectos</span>
+              <div className="text-center pt-2 border-t border-slate-100 flex flex-col items-center justify-center gap-1.5">
+                <div className="inline-flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-full border border-slate-200 shadow-2xs hover:border-emerald-300 transition select-none">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                    Powered by
+                  </span>
+                  <img
+                    src="/muv logo.png"
+                    alt="MUV Educação & Engenharia"
+                    className="h-4.5 w-auto object-contain"
+                  />
+                </div>
+                <div>
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
+                    Electricidade de Moçambique
+                  </span>
+                  <span className="text-[9px] text-slate-400">© 2026 Portal de Projectos</span>
+                </div>
               </div>
             </div>
           ) : (
@@ -277,7 +289,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <LogOut className="w-4 h-4" />
               </button>
-              <span className="w-2 h-2 rounded-full bg-emerald-500" title="Sessão Activa" />
+              <img
+                src="/muv logo.png"
+                alt="MUV"
+                title="Powered by MUV"
+                className="w-5 h-5 object-contain opacity-80 hover:opacity-100 transition"
+              />
             </div>
           )}
         </div>

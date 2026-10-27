@@ -108,6 +108,26 @@ const MainLayout: React.FC = () => {
         </main>
       </div>
 
+      {/* Global Executive Footer */}
+      <footer className="w-full bg-white border-t border-slate-200 py-3 px-4 sm:px-8 mt-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 z-10 select-none">
+        <div className="flex items-center gap-2">
+          <img src="/logo-edm.webp" alt="EDM" className="h-4.5 w-auto object-contain opacity-85" />
+          <span className="font-bold text-slate-800">Electricidade de Moçambique, E.P.</span>
+          <span className="hidden md:inline text-slate-400">• Portal Integrado de Gestão e Monitorização de Projectos</span>
+        </div>
+        <div className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200 shadow-2xs transition">
+          <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+            Powered by
+          </span>
+          <img
+            src="/muv logo.png"
+            alt="MUV Educação & Engenharia"
+            className="h-5 w-auto object-contain"
+            title="MUV Educação & Engenharia"
+          />
+        </div>
+      </footer>
+
       {/* Project Detail Modal */}
       {selectedProjectId && (
         <ProjectDetailModal
