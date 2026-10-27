@@ -19,6 +19,8 @@ import {
   X,
   Check,
   RotateCcw,
+  CheckCircle2,
+  Clock,
 } from 'lucide-react';
 import {
   INITIAL_GOVERNMENTAL_PROJECTS,
@@ -395,13 +397,27 @@ export const GovernmentalProjectsView: React.FC = () => {
                       {getTechIcon(project.technology)}
                     </div>
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-200 text-slate-700">
                           {project.code}
                         </span>
-                        <h2 className="text-sm sm:text-base font-black text-slate-900 truncate">
+                        <h2 className="text-sm sm:text-base font-black text-slate-900">
                           {project.name}
                         </h2>
+                        {percent === 100 && total > 0 ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            100% Concluído
+                          </span>
+                        ) : percent > 0 ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#002D62] border border-blue-200">
+                            Em Execução ({percent}%)
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                            Por Iniciar
+                          </span>
+                        )}
                       </div>
                       <div className="flex items-center gap-3 text-xs text-slate-500 mt-0.5">
                         <span className="font-semibold text-slate-700">{project.capacity}</span>
@@ -423,7 +439,7 @@ export const GovernmentalProjectsView: React.FC = () => {
                   <div className="flex items-center gap-2 sm:gap-4 shrink-0">
                     {/* Progress indicator */}
                     <div className="text-right">
-                      <div className="text-xs font-bold text-[#002D62]">
+                      <div className={`text-xs font-bold ${percent === 100 ? 'text-emerald-700' : 'text-[#002D62]'}`}>
                         {completed}/{total}{' '}
                         <span className="text-[10px] font-normal text-slate-400">({percent}%)</span>
                       </div>
@@ -477,28 +493,28 @@ export const GovernmentalProjectsView: React.FC = () => {
                             onClick={() => handleToggleMilestone(project.id, milestone.id)}
                             className={`group p-2.5 sm:px-3.5 flex items-center justify-between gap-3 cursor-pointer transition select-none ${
                               isDone
-                                ? 'bg-emerald-50/25 hover:bg-emerald-50/40'
-                                : 'bg-white hover:bg-slate-50'
+                                ? 'bg-emerald-50/70 hover:bg-emerald-50 border-l-4 border-l-emerald-500'
+                                : 'bg-white hover:bg-slate-50 border-l-4 border-l-transparent'
                             }`}
                           >
                             <div className="flex items-center gap-3 min-w-0 flex-1">
                               {/* Clean Checkbox */}
                               <div
-                                className={`w-4 h-4 rounded flex items-center justify-center shrink-0 transition-all ${
+                                className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition-all ${
                                   isDone
-                                    ? 'bg-emerald-600 text-white shadow-2xs'
-                                    : 'border border-slate-300 group-hover:border-slate-500 bg-white'
+                                    ? 'bg-emerald-600 text-white shadow-xs ring-2 ring-emerald-200'
+                                    : 'border-2 border-slate-300 group-hover:border-slate-500 bg-white'
                                 }`}
                               >
                                 {isDone ? (
-                                  <Check className="w-3 h-3 stroke-[3]" />
+                                  <Check className="w-3.5 h-3.5 stroke-[3]" />
                                 ) : (
-                                  <Square className="w-3 h-3 text-transparent" />
+                                  <Square className="w-3.5 h-3.5 text-transparent" />
                                 )}
                               </div>
 
                               {/* Number */}
-                              <span className="text-[11px] font-mono text-slate-400 w-4 shrink-0">
+                              <span className={`text-[11px] font-mono w-4 shrink-0 ${isDone ? 'text-emerald-700 font-bold' : 'text-slate-400'}`}>
                                 {idx + 1}.
                               </span>
 
@@ -506,7 +522,7 @@ export const GovernmentalProjectsView: React.FC = () => {
                               <span
                                 className={`text-xs sm:text-sm leading-relaxed transition ${
                                   isDone
-                                    ? 'line-through text-slate-400'
+                                    ? 'text-emerald-950 font-semibold'
                                     : 'text-slate-800 font-medium'
                                 }`}
                               >
@@ -514,9 +530,22 @@ export const GovernmentalProjectsView: React.FC = () => {
                               </span>
                             </div>
 
-                            <div className="flex items-center gap-2 shrink-0">
+                            <div className="flex items-center gap-2.5 shrink-0">
+                              {/* Explicit Status Badge */}
+                              {isDone ? (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300 shadow-2xs">
+                                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                                  Concluída
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 text-slate-500">
+                                  <Clock className="w-3 h-3 text-slate-400" />
+                                  Pendente
+                                </span>
+                              )}
+
                               {milestone.targetDate && (
-                                <span className="text-[10px] font-mono text-slate-400 px-1.5 py-0.5 rounded bg-slate-100">
+                                <span className="text-[10px] font-mono text-slate-500 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">
                                   {milestone.targetDate}
                                 </span>
                               )}
@@ -524,7 +553,7 @@ export const GovernmentalProjectsView: React.FC = () => {
                               {/* Delete single milestone */}
                               <button
                                 onClick={e => handleDeleteMilestone(project.id, milestone.id, e)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-rose-500 transition"
+                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-rose-500 rounded transition"
                                 title="Remover esta actividade"
                               >
                                 <X className="w-3.5 h-3.5" />
