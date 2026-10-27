@@ -26,7 +26,9 @@ import {
   Pencil,
   Save,
   Filter,
+  Sparkles,
 } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 import {
   INITIAL_GOVERNMENTAL_PROJECTS,
   GovernmentalProject,
@@ -44,6 +46,7 @@ import {
 const STORAGE_KEY = 'edm_governmental_projects_v3';
 
 export const GovernmentalProjectsView: React.FC = () => {
+  const { openAiCopilot } = useApp();
   // View mode: 'table' (Official Presidential Matrix) vs 'cards' (Checklist Cards)
   const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
 
@@ -558,6 +561,14 @@ export const GovernmentalProjectsView: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => openAiCopilot('Auditar prazos e conflitos de cronograma dos projectos governamentais')}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
+            title="Diagnóstico Inteligente de Prazos & Riscos com IA"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
+            <span>Diagnóstico IA</span>
+          </button>
           <button
             onClick={handleResetDefaults}
             className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition"

@@ -18,11 +18,22 @@ import { ExecutiveApprovalsView } from './components/approvals/ExecutiveApproval
 import { GovernmentalProjectsView } from './components/governmental/GovernmentalProjectsView';
 import { ProjectDetailModal } from './components/projects/ProjectDetailModal';
 import { ProjectFormModal } from './components/projects/ProjectFormModal';
+import { EdmAiCopilotModal } from './components/ai/EdmAiCopilotModal';
 import { LoginPage } from './components/auth/LoginPage';
 import { Project } from './types';
+import { Sparkles } from 'lucide-react';
 
 const MainLayout: React.FC = () => {
-  const { activeTab, selectedProjectId, setSelectedProjectId, projects } = useApp();
+  const {
+    activeTab,
+    selectedProjectId,
+    setSelectedProjectId,
+    projects,
+    isAiCopilotOpen,
+    openAiCopilot,
+    closeAiCopilot,
+    aiCopilotInitialPrompt,
+  } = useApp();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -150,6 +161,34 @@ const MainLayout: React.FC = () => {
         }}
         projectToEdit={projectToEdit}
       />
+
+      {/* EDM AI Copilot Modal / Drawer */}
+      <EdmAiCopilotModal
+        isOpen={isAiCopilotOpen}
+        onClose={closeAiCopilot}
+        initialPrompt={aiCopilotInitialPrompt}
+      />
+
+      {/* Floating AI Copilot Trigger */}
+      <button
+        type="button"
+        onClick={() => openAiCopilot()}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-[#002D62] via-[#0A4B8F] to-[#002D62] hover:from-[#002047] hover:to-[#0A4B8F] text-white rounded-full shadow-2xl border border-amber-400/40 hover:scale-105 active:scale-95 transition-all duration-200 cursor-pointer select-none group"
+        title="Abrir Assistente Inteligente (EDM AI Copilot)"
+      >
+        <div className="relative">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-[#F7942D] to-amber-300 flex items-center justify-center text-slate-950 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '6s' }} />
+          </div>
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-[#002D62]" />
+        </div>
+        <div className="flex flex-col text-left leading-tight pr-1">
+          <span className="text-xs font-black tracking-wide text-white flex items-center gap-1 group-hover:text-amber-300 transition">
+            EDM AI Copilot
+          </span>
+          <span className="text-[10px] text-blue-200 font-medium">Auditoria & Prazos</span>
+        </div>
+      </button>
     </div>
   );
 };

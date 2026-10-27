@@ -54,6 +54,12 @@ interface AppContextType {
   selectedProjectId: string | null;
   setSelectedProjectId: (id: string | null) => void;
 
+  // AI Copilot
+  isAiCopilotOpen: boolean;
+  aiCopilotInitialPrompt?: string;
+  openAiCopilot: (initialPrompt?: string) => void;
+  closeAiCopilot: () => void;
+
   // Filters & Global Search
   searchQuery: string;
   setSearchQuery: (query: string) => void;
@@ -199,6 +205,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [activeTab, setActiveTab] = useState<string>('dashboard');
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+
+  // AI Copilot State
+  const [isAiCopilotOpen, setIsAiCopilotOpen] = useState<boolean>(false);
+  const [aiCopilotInitialPrompt, setAiCopilotInitialPrompt] = useState<string | undefined>(undefined);
+
+  const openAiCopilot = (initialPrompt?: string) => {
+    setAiCopilotInitialPrompt(initialPrompt);
+    setIsAiCopilotOpen(true);
+  };
+
+  const closeAiCopilot = () => {
+    setIsAiCopilotOpen(false);
+    setAiCopilotInitialPrompt(undefined);
+  };
 
   // Global filters
   const [searchQuery, setSearchQuery] = useState('');
@@ -683,6 +703,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setActiveTab,
       selectedProjectId,
       setSelectedProjectId,
+      isAiCopilotOpen,
+      aiCopilotInitialPrompt,
+      openAiCopilot,
+      closeAiCopilot,
       searchQuery,
       setSearchQuery,
       filterRegion,
@@ -734,6 +758,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       isMongoConnected,
       activeTab,
       selectedProjectId,
+      isAiCopilotOpen,
+      aiCopilotInitialPrompt,
       searchQuery,
       filterRegion,
       filterStatus,
