@@ -27,6 +27,7 @@ import {
   Save,
   Filter,
   Sparkles,
+  FileText,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import {
@@ -35,6 +36,7 @@ import {
   GovernmentalMilestone,
 } from '../../data/governmentalProjectsData';
 import { GovernmentalProjectsTableView } from './GovernmentalProjectsTableView';
+import { GovernmentalReportModal } from './GovernmentalReportModal';
 import {
   calculateDaysRemaining,
   formatDaysSinceCompletion,
@@ -71,6 +73,20 @@ export const GovernmentalProjectsView: React.FC = () => {
     'gov-namaacha-120mw': false,
     'gov-sligm-fsru': false,
   });
+
+  // Reports Modal State (General & Individual)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [reportTargetProject, setReportTargetProject] = useState<GovernmentalProject | null>(null);
+
+  const handleOpenGeneralReport = () => {
+    setReportTargetProject(null);
+    setIsReportModalOpen(true);
+  };
+
+  const handleOpenProjectReport = (project: GovernmentalProject) => {
+    setReportTargetProject(project);
+    setIsReportModalOpen(true);
+  };
 
   // Modal State for Add / Edit Project
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
@@ -562,6 +578,14 @@ export const GovernmentalProjectsView: React.FC = () => {
 
         <div className="flex items-center gap-2">
           <button
+            onClick={() => handleOpenGeneralReport()}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-orange-300 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer"
+            title="Emitir Relatório Geral Consolidado (Todos os Projectos Governamentais)"
+          >
+            <FileText className="w-3.5 h-3.5 text-[#002D62]" />
+            <span>Relatório Geral</span>
+          </button>
+          <button
             onClick={() => openAiCopilot('Auditar prazos e conflitos de cronograma dos projectos governamentais')}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
             title="Diagnóstico Inteligente de Prazos & Riscos com IA"
@@ -876,6 +900,7 @@ export const GovernmentalProjectsView: React.FC = () => {
           getTechIcon={getTechIcon}
           onClearFilters={handleClearFilters}
           hasActiveFilters={hasActiveFilters}
+          onGenerateReport={handleOpenProjectReport}
         />
       ) : (
         <div className="space-y-4">
@@ -1082,6 +1107,19 @@ export const GovernmentalProjectsView: React.FC = () => {
                         />
                       </div>
                     </div>
+
+                    {/* Report Project Button */}
+                    <button
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleOpenProjectReport(project);
+                      }}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 text-xs font-bold text-[#002D62] hover:bg-white rounded-lg border border-transparent hover:border-orange-200 transition shadow-2xs"
+                      title="Gerar Relatório Individual deste Projecto"
+                    >
+                      <FileText className="w-3.5 h-3.5 text-[#F7942D]" />
+                      <span className="hidden sm:inline">Relatório</span>
+                    </button>
 
                     {/* Edit Project Button */}
                     <button
@@ -1887,6 +1925,15 @@ export const GovernmentalProjectsView: React.FC = () => {
           </button>
         </div>
       )}
+
+      {/* MODAL DE RELATÓRIOS (GERAL & INDIVIDUAL) */}
+      <GovernmentalReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        projects={projects}
+        initialProjectId={reportTargetProject?.id}
+        initialMode={reportTargetProject ? 'single' : 'general'}
+      />
     </div>
   );
 };

@@ -16,6 +16,7 @@ import {
   Pencil,
   Save,
   Zap,
+  FileText,
 } from 'lucide-react';
 import { GovernmentalProject, GovernmentalMilestone } from '../../data/governmentalProjectsData';
 import {
@@ -53,6 +54,7 @@ interface GovernmentalProjectsTableViewProps {
   getTechIcon: (tech: string) => React.ReactNode;
   onClearFilters?: () => void;
   hasActiveFilters?: boolean;
+  onGenerateReport?: (project: GovernmentalProject) => void;
 }
 
 export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableViewProps> = ({
@@ -82,6 +84,7 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
   getTechIcon,
   onClearFilters,
   hasActiveFilters,
+  onGenerateReport,
 }) => {
   // Quick edit project COD state
   const [editingCODProjectId, setEditingCODProjectId] = useState<string | null>(null);
@@ -316,18 +319,29 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                           )}
                         </button>
 
-                        {/* Edit & Delete Actions */}
+                        {/* Report, Edit & Delete Actions */}
                         <div className="flex items-center gap-1 pt-0.5">
                           <button
+                            onClick={e => {
+                              e.stopPropagation();
+                              onGenerateReport?.(project);
+                            }}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold text-[#002D62] hover:bg-white rounded border border-transparent hover:border-orange-200 transition cursor-pointer shadow-2xs"
+                            title="Gerar Relatório Individual deste Projecto"
+                          >
+                            <FileText className="w-3 h-3 text-[#F7942D]" />
+                            <span>Relatório</span>
+                          </button>
+                          <button
                             onClick={e => handleOpenEdit(project, e)}
-                            className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded transition"
+                            className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded transition cursor-pointer"
                             title="Editar dados completos do projecto"
                           >
                             <Edit2 className="w-3 h-3" />
                           </button>
                           <button
                             onClick={e => handleDeleteProject(project.id, project.name, e)}
-                            className="p-1 text-slate-400 hover:text-rose-600 hover:bg-white rounded transition"
+                            className="p-1 text-slate-400 hover:text-rose-600 hover:bg-white rounded transition cursor-pointer"
                             title="Eliminar linha do projecto"
                           >
                             <Trash2 className="w-3 h-3" />
