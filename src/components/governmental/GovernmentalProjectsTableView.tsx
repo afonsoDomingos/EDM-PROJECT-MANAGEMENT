@@ -11,6 +11,7 @@ import {
   Plus,
   X,
   CheckSquare,
+  Calendar,
 } from 'lucide-react';
 import { GovernmentalProject } from '../../data/governmentalProjectsData';
 
@@ -240,11 +241,24 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                                       </span>
                                     )}
 
-                                    {milestone.targetDate && (
-                                      <span className="text-[10px] font-mono text-slate-500 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">
-                                        {milestone.targetDate}
+                                    {/* Controlo de Datas */}
+                                    {isDone && milestone.completedDate ? (
+                                      <span
+                                        className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200"
+                                        title="Data efectiva de conclusão"
+                                      >
+                                        <Calendar className="w-3 h-3 text-emerald-600" />
+                                        Concluído em: <strong className="font-bold">{milestone.completedDate}</strong>
                                       </span>
-                                    )}
+                                    ) : milestone.targetDate ? (
+                                      <span
+                                        className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200"
+                                        title="Prazo previsto para conclusão"
+                                      >
+                                        <Calendar className="w-3 h-3 text-slate-500" />
+                                        Prazo: <strong className="font-bold">{milestone.targetDate}</strong>
+                                      </span>
+                                    ) : null}
 
                                     <button
                                       onClick={e => handleDeleteMilestone(project.id, milestone.id, e)}

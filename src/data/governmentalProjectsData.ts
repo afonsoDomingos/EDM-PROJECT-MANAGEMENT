@@ -3,6 +3,7 @@ export interface GovernmentalMilestone {
   description: string;
   completed: boolean;
   targetDate?: string;
+  completedDate?: string;
   category?: 'Acordo / Contrato' | 'Técnico / Estudos' | 'Procurement / Concurso' | 'Governo / Regulatório' | 'Obras / Operação';
 }
 
@@ -47,14 +48,14 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
     status: 'Em Negociação',
     statusColor: 'bg-orange-100 text-[#c26508] border-orange-200',
     milestones: [
-      { id: 'eni-m1', description: 'Assinatura do Acordo de Confidencialidade (NDA) entre ENH, EDM e ENI', completed: true, category: 'Acordo / Contrato' },
-      { id: 'eni-m2', description: 'Aprovação formal de Temane como local de implantação da central', completed: true, category: 'Técnico / Estudos' },
-      { id: 'eni-m3', description: 'Selecção da tecnologia de geração baseada em motores de combustão interna', completed: true, category: 'Técnico / Estudos' },
-      { id: 'eni-m4', description: 'Definição do escopo, critérios de procurement e especificações técnicas dos equipamentos', completed: true, category: 'Técnico / Estudos' },
-      { id: 'eni-m5', description: 'Preparação e conclusão do Acordo de Desenvolvimento Conjunto (JDA) com a ENI', completed: false, category: 'Acordo / Contrato' },
-      { id: 'eni-m6', description: 'Contratação dos estudos geotécnicos e topográficos de campo', completed: false, category: 'Técnico / Estudos' },
-      { id: 'eni-m7', description: 'Alocação formal de recursos e lançamento do concurso EPC internacional (1º Semestre 2027)', completed: false, targetDate: 'S1 2027', category: 'Procurement / Concurso' },
-      { id: 'eni-m8', description: 'Adjudicação da empreitada e início das obras civis e electromecânicas (3º Trimestre 2027)', completed: false, targetDate: 'Q3 2027', category: 'Obras / Operação' },
+      { id: 'eni-m1', description: 'Assinatura do Acordo de Confidencialidade (NDA) entre ENH, EDM e ENI', completed: true, completedDate: 'Outubro 2025', category: 'Acordo / Contrato' },
+      { id: 'eni-m2', description: 'Aprovação formal de Temane como local de implantação da central', completed: true, completedDate: 'Novembro 2025', category: 'Técnico / Estudos' },
+      { id: 'eni-m3', description: 'Selecção da tecnologia de geração baseada em motores de combustão interna', completed: true, completedDate: 'Dezembro 2025', category: 'Técnico / Estudos' },
+      { id: 'eni-m4', description: 'Definição do escopo, critérios de procurement e especificações técnicas dos equipamentos', completed: true, completedDate: 'Janeiro 2026', category: 'Técnico / Estudos' },
+      { id: 'eni-m5', description: 'Preparação e conclusão do Acordo de Desenvolvimento Conjunto (JDA) com a ENI', completed: false, targetDate: 'Novembro 2026', category: 'Acordo / Contrato' },
+      { id: 'eni-m6', description: 'Contratação dos estudos geotécnicos e topográficos de campo', completed: false, targetDate: '1º Trim 2027', category: 'Técnico / Estudos' },
+      { id: 'eni-m7', description: 'Alocação formal de recursos e lançamento do concurso EPC internacional (1º Semestre 2027)', completed: false, targetDate: '1º Sem 2027', category: 'Procurement / Concurso' },
+      { id: 'eni-m8', description: 'Adjudicação da empreitada e início das obras civis e electromecânicas (3º Trimestre 2027)', completed: false, targetDate: '3º Trim 2027', category: 'Obras / Operação' },
       { id: 'eni-m9', description: 'Ensaios, comissionamento e entrada em operação comercial (COD)', completed: false, targetDate: 'Dezembro 2028', category: 'Obras / Operação' },
     ],
     mainConstraints: [

@@ -30,7 +30,7 @@ import {
 } from '../../data/governmentalProjectsData';
 import { GovernmentalProjectsTableView } from './GovernmentalProjectsTableView';
 
-const STORAGE_KEY = 'edm_governmental_projects_v2';
+const STORAGE_KEY = 'edm_governmental_projects_v3';
 
 export const GovernmentalProjectsView: React.FC = () => {
   // View mode: 'table' (Official Presidential Matrix) vs 'cards' (Checklist Cards)
@@ -92,16 +92,23 @@ export const GovernmentalProjectsView: React.FC = () => {
     setExpandedProjects(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  // Toggle milestone completion
+  // Toggle milestone completion with automatic completion date recording
   const handleToggleMilestone = (projectId: string, milestoneId: string) => {
+    const todayStr = new Date().toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
     setProjects(prev =>
       prev.map(p => {
         if (p.id !== projectId) return p;
         return {
           ...p,
-          milestones: p.milestones.map(m =>
-            m.id === milestoneId ? { ...m, completed: !m.completed } : m
-          ),
+          milestones: p.milestones.map(m => {
+            if (m.id !== milestoneId) return m;
+            const nextDone = !m.completed;
+            return {
+              ...m,
+              completed: nextDone,
+              completedDate: nextDone ? (m.completedDate || todayStr) : undefined,
+            };
+          }),
         };
       })
     );
@@ -608,11 +615,24 @@ export const GovernmentalProjectsView: React.FC = () => {
                                 </span>
                               )}
 
-                              {milestone.targetDate && (
-                                <span className="text-[10px] font-mono text-slate-500 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">
-                                  {milestone.targetDate}
+                              {/* Controlo de Datas */}
+                              {isDone && milestone.completedDate ? (
+                                <span
+                                  className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200"
+                                  title="Data em que a actividade foi concluída"
+                                >
+                                  <Calendar className="w-3 h-3 text-emerald-600" />
+                                  Concluído em: <strong className="font-bold">{milestone.completedDate}</strong>
                                 </span>
-                              )}
+                              ) : milestone.targetDate ? (
+                                <span
+                                  className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-slate-700 bg-slate-100 px-2.5 py-0.5 rounded-md border border-slate-200"
+                                  title="Prazo previsto para conclusão"
+                                >
+                                  <Calendar className="w-3 h-3 text-slate-500" />
+                                  Prazo: <strong className="font-bold">{milestone.targetDate}</strong>
+                                </span>
+                              ) : null}
 
                               {/* Delete single milestone */}
                               <button
