@@ -286,16 +286,22 @@ export const LoginPage: React.FC = () => {
 
           {/* Footer Note with Powered by MUV */}
           <div className="text-center pt-2 space-y-2">
-            <div className="inline-flex items-center gap-2 bg-slate-900/90 px-3.5 py-1 rounded-full border border-slate-800 shadow-xs select-none">
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+            <a
+              href="https://www.muv.co.mz/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2.5 bg-slate-900/95 hover:bg-slate-800 px-4 py-1.5 rounded-full border border-slate-800 hover:border-slate-700 shadow-md select-none group cursor-pointer transition"
+              title="Visitar MUV Educação & Engenharia (https://www.muv.co.mz/)"
+            >
+              <span className="text-[10px] font-black text-slate-400 group-hover:text-amber-400 uppercase tracking-wider transition">
                 Powered by
               </span>
               <img
                 src="/muv logo.png"
                 alt="MUV Educação & Engenharia"
-                className="h-5 w-auto object-contain bg-white/95 px-1.5 py-0.5 rounded"
+                className="h-7 sm:h-8 w-auto object-contain bg-white/95 px-2 py-1 rounded group-hover:scale-105 transition shadow-xs"
               />
-            </div>
+            </a>
             <p className="text-[11px] text-slate-500">
               EDM • Direcção de Tecnologias de Informação (DTIT)
             </p>

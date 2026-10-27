@@ -115,17 +115,22 @@ const MainLayout: React.FC = () => {
           <span className="font-bold text-slate-800">Electricidade de Moçambique, E.P.</span>
           <span className="hidden md:inline text-slate-400">• Portal Integrado de Gestão e Monitorização de Projectos</span>
         </div>
-        <div className="inline-flex items-center gap-2 bg-slate-50 hover:bg-slate-100 px-3.5 py-1 rounded-full border border-slate-200 shadow-2xs transition">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+        <a
+          href="https://www.muv.co.mz/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 bg-slate-50 hover:bg-white px-4 py-1.5 rounded-full border border-slate-200 hover:border-orange-300 shadow-2xs hover:shadow-xs transition select-none group cursor-pointer"
+          title="Visitar MUV Educação & Engenharia (https://www.muv.co.mz/)"
+        >
+          <span className="text-[10px] font-black text-slate-400 group-hover:text-[#002D62] uppercase tracking-wider transition">
             Powered by
           </span>
           <img
             src="/muv logo.png"
             alt="MUV Educação & Engenharia"
-            className="h-5 w-auto object-contain"
-            title="MUV Educação & Engenharia"
+            className="h-7 sm:h-8 w-auto object-contain group-hover:scale-105 transition drop-shadow-2xs"
           />
-        </div>
+        </a>
       </footer>
 
       {/* Project Detail Modal */}

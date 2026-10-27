@@ -261,17 +261,23 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </button>
               </div>
 
-              <div className="text-center pt-2 border-t border-slate-100 flex flex-col items-center justify-center gap-1.5">
-                <div className="inline-flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-full border border-slate-200 shadow-2xs hover:border-emerald-300 transition select-none">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-wider">
+              <div className="text-center pt-2 border-t border-slate-100 flex flex-col items-center justify-center gap-2">
+                <a
+                  href="https://www.muv.co.mz/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-slate-200 shadow-2xs hover:border-orange-300 hover:shadow-xs transition select-none group cursor-pointer"
+                  title="Visitar MUV Educação & Engenharia (https://www.muv.co.mz/)"
+                >
+                  <span className="text-[10px] font-black text-slate-400 group-hover:text-[#002D62] uppercase tracking-wider transition">
                     Powered by
                   </span>
                   <img
                     src="/muv logo.png"
                     alt="MUV Educação & Engenharia"
-                    className="h-4.5 w-auto object-contain"
+                    className="h-7 sm:h-8 w-auto object-contain group-hover:scale-105 transition"
                   />
-                </div>
+                </a>
                 <div>
                   <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">
                     Electricidade de Moçambique
@@ -289,12 +295,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <LogOut className="w-4 h-4" />
               </button>
-              <img
-                src="/muv logo.png"
-                alt="MUV"
-                title="Powered by MUV"
-                className="w-5 h-5 object-contain opacity-80 hover:opacity-100 transition"
-              />
+              <a
+                href="https://www.muv.co.mz/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Visitar MUV Educação & Engenharia (https://www.muv.co.mz/)"
+                className="cursor-pointer p-1 rounded-lg hover:bg-slate-100 transition"
+              >
+                <img
+                  src="/muv logo.png"
+                  alt="MUV"
+                  className="w-7 h-7 object-contain opacity-90 hover:opacity-100 hover:scale-110 transition"
+                />
+              </a>
             </div>
           )}
         </div>
