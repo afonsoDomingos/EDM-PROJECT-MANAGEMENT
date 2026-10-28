@@ -258,7 +258,7 @@ export function processAiQuery(
         timestamp,
         category: 'audit',
         badge: 'Auditoria de Prazos',
-        text: `⚡ Diagnóstico de Cronogramas e Inconsistências de Prazo:\n\nIdentifiquei ${conflicts.length} projecto(s) onde as actividades ultrapassam a data de finalização prevista do projecto (COD):\n\n${conflictList}\n\n💡 Sugestão da IA: Pode utilizar o botão inteligente [⚡ Prolongar Projecto] na Matriz de Projectos Governamentais para atualizar a data com 1 clique e manter a integridade dos relatórios executivos.`,
+        text: `Diagnóstico de Cronogramas e Inconsistências de Prazo:\n\nIdentifiquei ${conflicts.length} projecto(s) onde as actividades ultrapassam a data de finalização prevista do projecto (COD):\n\n${conflictList}\n\nSugestão da IA: Pode utilizar o botão inteligente [Prolongar Projecto] na Matriz de Projectos Governamentais para atualizar a data com 1 clique e manter a integridade dos relatórios executivos.`,
         suggestions: [
           'Ver Projectos Governamentais',
           'Gerar Relatório Executivo',
@@ -279,7 +279,7 @@ export function processAiQuery(
         timestamp,
         category: 'audit',
         badge: 'Cronogramas OK',
-        text: `✅ Auditoria Concluída com Sucesso!\n\nTodos os marcos e actividades dos projectos governamentais estão em perfeita conformidade com os prazos finais de conclusão (COD). Não há conflitos temporais pendentes.`,
+        text: `Auditoria Concluída com Sucesso!\n\nTodos os marcos e actividades dos projectos governamentais estão em perfeita conformidade com os prazos finais de conclusão (COD). Não há conflitos temporais pendentes.`,
         suggestions: ['Gerar Relatório Executivo', 'Analisar Riscos Críticos', 'Ver Centrais de Geração'],
       };
     }
@@ -334,7 +334,7 @@ export function processAiQuery(
     const delayed = context.projects.filter(p => p.status === 'Atrasado' || p.status === 'Em Risco');
     const criticalRisks = context.risks.filter(r => r.level === 'Crítico');
 
-    let text = `🚨 Análise de Projectos Críticos e em Atraso:\n\n`;
+    let text = `Análise de Projectos Críticos e em Atraso:\n\n`;
 
     if (delayed.length > 0) {
       text += `Existem ${delayed.length} projectos a requerer intervenção imediata:\n\n`;
@@ -342,11 +342,11 @@ export function processAiQuery(
         text += `• ${p.code} - ${p.name}\n  - Estado: ${p.status} (Avanço Físico: ${p.physicalProgress}%)\n  - Conclusão Prevista: ${p.expectedEndDate} | Gestor: ${p.manager}\n  - Constrangimento: ${p.constraints || 'Logística / Fornecedores'}\n\n`;
       });
     } else {
-      text += `✅ Nenhum projecto da carteira principal está registado com atraso crítico.\n\n`;
+      text += `Nenhum projecto da carteira principal está registado com atraso crítico.\n\n`;
     }
 
     if (criticalRisks.length > 0) {
-      text += `⚠️ Riscos de Nível Crítico Activos (${criticalRisks.length}):\n`;
+      text += `Riscos de Nível Crítico Activos (${criticalRisks.length}):\n`;
       criticalRisks.forEach(r => {
         text += `• ${r.title}: ${r.mitigationPlan} (Prazo: ${r.resolutionDeadline})\n`;
       });
@@ -391,14 +391,14 @@ export function processAiQuery(
   ) {
     const discrepancies = auditFinancialDiscrepancies(context.projects);
 
-    let text = `💰 Análise de Descompasso Físico-Financeiro:\n\n`;
+    let text = `Análise de Descompasso Físico-Financeiro:\n\n`;
     if (discrepancies.length > 0) {
       text += `Identifiquei ${discrepancies.length} projecto(s) onde a execução financeira está adiantada em relação ao avanço físico:\n\n`;
       discrepancies.forEach(d => {
         text += `• ${d.projectCode} - ${d.projectName}\n  - Execução Financeira: ${d.financialExecution}% (${formatCurrency(d.spent)})\n  - Avanço Físico: ${d.physicalProgress}% (Desvio de +${d.gap}% financeiro)\n  - Gestor: ${d.manager}\n  - Recomendação: Solicitar auto de medição recente antes de novas autorizações.\n\n`;
       });
     } else {
-      text += `✅ Não foram detectados desvios anormais entre gastos financeiros e avanço físico das obras. Os pagamentos acompanham o progresso civil e electromecânico.`;
+      text += `Não foram detectados desvios anormais entre gastos financeiros e avanço físico das obras. Os pagamentos acompanham o progresso civil e electromecânico.`;
     }
 
     return {
@@ -445,7 +445,7 @@ export function processAiQuery(
       timestamp,
       category: 'general',
       badge: foundGov.code,
-      text: `📋 Ficha Técnica & Diagnóstico IA: ${foundGov.name}\n\n` +
+      text: `Ficha Técnica & Diagnóstico IA: ${foundGov.name}\n\n` +
         `• Código: ${foundGov.code} | Capacidade: ${foundGov.capacity}\n` +
         `• Tecnologia: ${foundGov.technology} | Localização: ${foundGov.location}\n` +
         `• Data Prevista de Entrada em Operação (COD): ${foundGov.commercialOperationDate}\n` +
@@ -453,8 +453,8 @@ export function processAiQuery(
         `• Parceiros: ${foundGov.partnerEntities.join(', ')}\n` +
         `• Progresso de Marcos: ${completedCount}/${totalCount} concluídos (${progress}%)\n` +
         (conflicts.hasConflicts
-          ? `\n⚠️ Alerta de Inconsistência: Existem ${conflicts.conflictCount} actividade(s) programada(s) para além de ${foundGov.commercialOperationDate}!\n`
-          : `\n✅ Cronograma: Sem conflitos de data detectados.\n`) +
+          ? `\nAlerta de Inconsistência: Existem ${conflicts.conflictCount} actividade(s) programada(s) para além de ${foundGov.commercialOperationDate}!\n`
+          : `\nCronograma: Sem conflitos de data detectados.\n`) +
         `\nSituação Actual: ${foundGov.currentSituationSummary}\n` +
         `Prioridade Imediata: ${foundGov.priorityActionSummary || foundGov.priorityActions[0]}`,
       suggestions: [
@@ -488,7 +488,7 @@ export function processAiQuery(
       govByTech[p.technology].mw += p.capacityMW || 0;
     });
 
-    let text = `⚡ Distribuição da Matriz Energética Estratégica:\n\n`;
+    let text = `Distribuição da Matriz Energética Estratégica:\n\n`;
     Object.entries(govByTech).forEach(([tech, data]) => {
       text += `• ${tech}: ${data.count} projecto(s) • Total de ${data.mw} MW em desenvolvimento\n`;
     });
@@ -525,13 +525,13 @@ export function processAiQuery(
       timestamp,
       category: 'general',
       badge: 'Certificação Inteligente',
-      text: `🎯 Fluxo de Auto-Conclusão & Certificação por Prazo:\n\n` +
+      text: `Fluxo de Auto-Conclusão & Certificação por Prazo:\n\n` +
         `A inteligência do sistema funciona em 3 passos seguros:\n\n` +
         `1. Gatilho Temporal: Quando uma actividade atinge a data limite planeada, o sistema marca-a temporariamente como Auto-Concluída.\n` +
-        `2. Quarentena de Certificação: Fica visível no painel do Gestor com o selo amarelo de validação pendente.\n` +
+        `2. Quarentena de Certificação: Fica visível no painel do Gestor com o selo de validação pendente.\n` +
         `3. Despacho em 1 Clique:\n` +
-        `   - [✓ Certificar Conclusão]: Torna a actividade 100% finalizada e grava o carimbo do Director.\n` +
-        `   - [⏱ Prorrogar Prazo]: Se a obra no terreno atrasou, adiciona dias sem penalizar o histórico.`,
+        `   - [Certificar Conclusão]: Torna a actividade 100% finalizada e grava o carimbo do Director.\n` +
+        `   - [Prorrogar Prazo]: Se a obra no terreno atrasou, adiciona dias sem penalizar o histórico.`,
       suggestions: [
         'Auditar Prazos dos Projectos',
         'Gerar Relatório Executivo',
@@ -555,10 +555,10 @@ export function processAiQuery(
       `• Detectar descompassos entre execução financeira e avanço físico das obras\n` +
       `• Consultar o estado detalhado de projectos específicos (ex.: Temane, Metuchira, Dondo)`,
     suggestions: [
-      '⚡ Auditar Prazos & Inconsistências COD',
-      '📊 Gerar Relatório Executivo para o PCA',
-      '🚨 Quais projectos estão em risco crítico?',
-      '💰 Analisar descompasso físico-financeiro',
+      'Auditar Prazos & Inconsistências COD',
+      'Gerar Relatório Executivo para o PCA',
+      'Quais projectos estão em risco crítico?',
+      'Analisar descompasso físico-financeiro',
     ],
   };
 }

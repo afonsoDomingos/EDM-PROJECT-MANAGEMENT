@@ -18,6 +18,7 @@ import {
   Zap,
   FileText,
   Table,
+  ArrowRightLeft,
 } from 'lucide-react';
 import { GovernmentalProject, GovernmentalMilestone } from '../../data/governmentalProjectsData';
 import {
@@ -136,8 +137,9 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
           <Table className="w-3.5 h-3.5 text-[#f08519]" />
           Matriz Oficial
         </span>
-        <span className="text-[10px] font-bold bg-white text-orange-800 px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
-          Deslize para ver colunas ⇄
+        <span className="inline-flex items-center gap-1 text-[10px] font-bold bg-white text-orange-800 px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
+          <span>Deslize para ver colunas</span>
+          <ArrowRightLeft className="w-2.5 h-2.5 text-[#f08519]" />
         </span>
       </div>
 
@@ -305,7 +307,7 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                             <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           )}
                           <span className="truncate">
-                            {delayStatus.label.replace(/^[⚠️✓]\s*/, '')}
+                            {delayStatus.label}
                           </span>
                         </div>
 

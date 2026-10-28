@@ -662,7 +662,7 @@ export const GovernmentalProjectsView: React.FC = () => {
               onChange={e => setFilterTechnology(e.target.value)}
               className="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer"
             >
-              <option value="all">⚡ Todas as Tecnologias</option>
+              <option value="all">Todas as Tecnologias</option>
               <option value="Gás / Térmica">Gás / Térmica</option>
               <option value="Turbinas Móveis a Gás">Turbinas Móveis a Gás</option>
               <option value="Solar Fotovoltaica">Solar Fotovoltaica</option>
@@ -676,7 +676,7 @@ export const GovernmentalProjectsView: React.FC = () => {
               onChange={e => setFilterStatus(e.target.value)}
               className="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer"
             >
-              <option value="all">📋 Todos os Estados</option>
+              <option value="all">Todos os Estados</option>
               <option value="Em Negociação">Em Negociação</option>
               <option value="Aguardando Parecer">Aguardando Parecer</option>
               <option value="Impasse Tarifário">Impasse Tarifário</option>
@@ -1646,9 +1646,10 @@ export const GovernmentalProjectsView: React.FC = () => {
                               <button
                                 type="button"
                                 onClick={() => setFormCOD(modalConflicts.latestSuggestedCOD)}
-                                className="mt-1 block text-[10px] font-bold text-[#002D62] hover:underline cursor-pointer"
+                                className="mt-1 inline-flex items-center gap-1 text-[10px] font-bold text-[#002D62] hover:underline cursor-pointer"
                               >
-                                ⚡ Harmonizar e definir para "{modalConflicts.latestSuggestedCOD}"
+                                <Zap className="w-3 h-3 text-amber-500" />
+                                <span>Harmonizar e definir para "{modalConflicts.latestSuggestedCOD}"</span>
                               </button>
                             )}
                           </div>

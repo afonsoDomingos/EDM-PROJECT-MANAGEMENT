@@ -87,10 +87,10 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
       category: 'general',
       text: `Olá! Sou o EDM AI Copilot, o assistente inteligente para gestão de projectos e auditoria da EDM.\n\nComo posso ajudar? Escolha uma acção rápida abaixo ou escreva a sua questão.`,
       suggestions: [
-        '⚡ Auditar Prazos & Inconsistências COD',
-        '📊 Gerar Relatório Executivo para o PCA',
-        '🚨 Quais projectos estão em risco crítico?',
-        '💰 Analisar descompasso físico-financeiro',
+        'Auditar Prazos & Inconsistências COD',
+        'Gerar Relatório Executivo para o PCA',
+        'Quais projectos estão em risco crítico?',
+        'Analisar descompasso físico-financeiro',
       ],
     },
   ]);
@@ -169,9 +169,9 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
         category: 'general',
         text: `Conversa reiniciada. Em que posso apoiar a sua gestão de projectos agora?`,
         suggestions: [
-          '⚡ Auditar Prazos & Inconsistências COD',
-          '📊 Gerar Relatório Executivo para o PCA',
-          '🚨 Quais projectos estão em risco crítico?',
+          'Auditar Prazos & Inconsistências COD',
+          'Gerar Relatório Executivo para o PCA',
+          'Quais projectos estão em risco crítico?',
         ],
       },
     ]);

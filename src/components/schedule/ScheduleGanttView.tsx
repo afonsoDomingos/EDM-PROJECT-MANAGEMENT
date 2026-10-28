@@ -166,8 +166,9 @@ export const ScheduleGanttView: React.FC = () => {
                       className="h-full bg-black/20"
                       style={{ width: `${p.physicalProgress}%` }}
                     />
-                    <span className="absolute left-2 text-[10px] font-bold text-white whitespace-nowrap drop-shadow-xs">
-                      {p.physicalProgress}% {isDelayed ? '⚠️' : ''}
+                    <span className="absolute left-2 text-[10px] font-bold text-white whitespace-nowrap drop-shadow-xs inline-flex items-center gap-1">
+                      <span>{p.physicalProgress}%</span>
+                      {isDelayed && <AlertTriangle className="w-2.5 h-2.5 text-amber-200 shrink-0" />}
                     </span>
                   </div>
                 </div>

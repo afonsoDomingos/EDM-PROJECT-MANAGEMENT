@@ -380,7 +380,10 @@ export const GovernmentalReportModal: React.FC<GovernmentalReportModalProps> = (
                               <td className="p-2.5 text-center font-mono font-medium text-slate-700">
                                 {p.commercialOperationDate}
                                 {conflictInfo.hasConflicts && (
-                                  <span className="block text-[9px] text-rose-600 font-bold">⚠️ Conflito</span>
+                                  <span className="inline-flex items-center gap-0.5 text-[9px] text-rose-600 font-bold">
+                                    <AlertTriangle className="w-2.5 h-2.5 text-rose-600 shrink-0" />
+                                    Conflito
+                                  </span>
                                 )}
                               </td>
                               <td className="p-2.5 text-center">

@@ -436,7 +436,7 @@ export const getProjectDelayStatus = (
       overdueCount: 0,
       upcomingCount: 0,
       minUpcomingDays: null,
-      label: '✓ 100% Concluído',
+      label: '100% Concluído',
       badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       statusText: 'Todas as actividades concluídas com sucesso',
     };
@@ -449,7 +449,7 @@ export const getProjectDelayStatus = (
       overdueCount,
       upcomingCount,
       minUpcomingDays,
-      label: `⚠️ Atrasado há ${maxDelayDays} ${maxDelayDays === 1 ? 'dia' : 'dias'}`,
+      label: `Atrasado há ${maxDelayDays} ${maxDelayDays === 1 ? 'dia' : 'dias'}`,
       badgeClass: 'bg-rose-100 text-rose-800 border-rose-300 shadow-2xs font-black animate-pulse',
       statusText: `${overdueCount} ${overdueCount === 1 ? 'actividade em atraso' : 'actividades em atraso'} (máx. ${maxDelayDays} dias)`,
     };
@@ -463,7 +463,7 @@ export const getProjectDelayStatus = (
         overdueCount: 0,
         upcomingCount,
         minUpcomingDays: 0,
-        label: '⚠️ Prazo termina hoje',
+        label: 'Prazo termina hoje',
         badgeClass: 'bg-amber-100 text-amber-900 border-amber-300 font-bold',
         statusText: 'Actividade com prazo a terminar hoje',
       };
@@ -474,7 +474,7 @@ export const getProjectDelayStatus = (
       overdueCount: 0,
       upcomingCount,
       minUpcomingDays,
-      label: `✓ No Prazo (Faltam ${minUpcomingDays}d)`,
+      label: `No Prazo (Faltam ${minUpcomingDays}d)`,
       badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200 font-bold',
       statusText: `Próximo marco em ${minUpcomingDays} dias`,
     };
