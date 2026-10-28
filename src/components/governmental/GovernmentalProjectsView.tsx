@@ -559,27 +559,35 @@ export const GovernmentalProjectsView: React.FC = () => {
   return (
     <div className="space-y-6 max-w-5xl mx-auto pb-16 animate-fade-in">
       {/* Clean & Elegant Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-orange-100 text-[#c26508]">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-orange-100 text-[#c26508]">
               <Landmark className="w-3.5 h-3.5" />
               Presidência da República
             </span>
-            <span className="text-xs text-slate-400 font-medium">• Acompanhamento Directo</span>
+            <span className="text-[11px] sm:text-xs text-slate-400 font-medium">• Acompanhamento Directo</span>
           </div>
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Projectos Governamentais
           </h1>
-          <p className="text-xs text-slate-500 mt-0.5">
+          <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
             Checklist de execução: marque as caixas de selecção para assinalar actividades concluídas.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        {/* Action Buttons: Responsive Grid on Mobile, Flex on Desktop */}
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleOpenCreate}
+            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#002D62] hover:bg-[#083b77] text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer order-first sm:order-last"
+          >
+            <Plus className="w-4 h-4 text-[#F7942D]" />
+            <span>Adicionar Projecto</span>
+          </button>
           <button
             onClick={() => handleOpenGeneralReport()}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-orange-300 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-orange-300 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer"
             title="Emitir Relatório Geral Consolidado (Todos os Projectos Governamentais)"
           >
             <FileText className="w-3.5 h-3.5 text-[#002D62]" />
@@ -587,7 +595,7 @@ export const GovernmentalProjectsView: React.FC = () => {
           </button>
           <button
             onClick={() => openAiCopilot('Auditar prazos e conflitos de cronograma dos projectos governamentais')}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
             title="Diagnóstico Inteligente de Prazos & Riscos com IA"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
@@ -595,44 +603,37 @@ export const GovernmentalProjectsView: React.FC = () => {
           </button>
           <button
             onClick={handleResetDefaults}
-            className="p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition"
+            className="hidden sm:inline-flex p-2 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer"
             title="Restaurar dados originais"
           >
             <RotateCcw className="w-4 h-4" />
           </button>
-          <button
-            onClick={handleOpenCreate}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-[#002D62] hover:bg-[#083b77] text-white text-xs font-bold shadow-sm transition active:scale-95"
-          >
-            <Plus className="w-4 h-4 text-[#F7942D]" />
-            Adicionar Projecto
-          </button>
         </div>
       </div>
 
-      {/* Mini Stats Bar (Simple & Clean) */}
-      <div className="grid grid-cols-3 gap-3 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="text-center border-r border-slate-100">
-          <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Projectos</p>
-          <p className="text-xl font-black text-slate-800 mt-0.5">{stats.total}</p>
+      {/* Mini Stats Bar (Simple & Clean - Mobile Responsive) */}
+      <div className="grid grid-cols-3 gap-1.5 sm:gap-3 bg-white p-2.5 sm:p-3.5 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="text-center border-r border-slate-100 pr-1 sm:pr-2">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Projectos</p>
+          <p className="text-lg sm:text-xl font-black text-slate-800 mt-0.5">{stats.total}</p>
         </div>
-        <div className="text-center border-r border-slate-100">
-          <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Actividades Concluídas</p>
-          <p className="text-xl font-black text-emerald-600 mt-0.5">
+        <div className="text-center border-r border-slate-100 px-1 sm:px-2">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider leading-tight">Actividades Concluídas</p>
+          <p className="text-lg sm:text-xl font-black text-emerald-600 mt-0.5">
             {stats.completedMilestones}{' '}
-            <span className="text-xs font-normal text-slate-400">/ {stats.totalMilestones}</span>
+            <span className="text-[10px] sm:text-xs font-normal text-slate-400">/ {stats.totalMilestones}</span>
           </p>
         </div>
-        <div className="text-center">
-          <p className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Progresso Global</p>
-          <p className="text-xl font-black text-[#002D62] mt-0.5">{stats.percent}%</p>
+        <div className="text-center pl-1 sm:pl-2">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Progresso Global</p>
+          <p className="text-lg sm:text-xl font-black text-[#002D62] mt-0.5">{stats.percent}%</p>
         </div>
       </div>
 
       {/* Painel Interativo de Filtros e Pesquisa */}
-      <div className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
+      <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
         {/* Linha 1: Campo de Pesquisa + Selectores de Tecnologia e Estado */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2.5">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 sm:gap-2.5">
           {/* Pesquisa por Texto */}
           <div className="relative flex-1">
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -640,7 +641,7 @@ export const GovernmentalProjectsView: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Pesquisar projecto, código, localização ou actividade..."
+              placeholder="Pesquisar projecto ou actividade..."
               className="w-full pl-10 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D62] transition"
             />
             {searchQuery && (
@@ -832,35 +833,37 @@ export const GovernmentalProjectsView: React.FC = () => {
         </div>
       </div>
 
-      {/* View Switcher: Tabela Executiva Oficial (Screenshot) vs Checklist */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2.5 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl shrink-0">
+      {/* View Switcher: Tabela Executiva Oficial vs Checklist */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-2xs">
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 p-1 bg-slate-100 rounded-xl w-full sm:w-auto">
           <button
             onClick={() => setViewMode('table')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
               viewMode === 'table'
                 ? 'bg-[#f08519] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <Table className="w-3.5 h-3.5" />
-            Matriz Executiva Oficial (Tabela)
+            <Table className="w-3.5 h-3.5 shrink-0" />
+            <span className="sm:hidden">Tabela</span>
+            <span className="hidden sm:inline">Matriz Executiva Oficial (Tabela)</span>
           </button>
           <button
             onClick={() => setViewMode('cards')}
-            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
+            className={`inline-flex items-center justify-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-2 sm:py-1.5 rounded-lg text-xs font-bold transition cursor-pointer ${
               viewMode === 'cards'
                 ? 'bg-[#002D62] text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <CheckSquare className="w-3.5 h-3.5" />
-            Checklist de Actividades
+            <CheckSquare className="w-3.5 h-3.5 shrink-0" />
+            <span className="sm:hidden">Checklist</span>
+            <span className="hidden sm:inline">Checklist de Actividades</span>
           </button>
         </div>
 
         {/* Indicador Dinâmico de Resultados e Filtros */}
-        <div className="flex items-center gap-2 px-2 flex-wrap">
+        <div className="flex items-center justify-between sm:justify-end gap-2 px-1 sm:px-2 flex-wrap">
           <span className="text-[11px] text-slate-500 font-medium">
             A mostrar <strong>{filteredProjects.length}</strong> de {projects.length} projectos
           </span>

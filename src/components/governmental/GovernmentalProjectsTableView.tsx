@@ -17,6 +17,7 @@ import {
   Save,
   Zap,
   FileText,
+  Table,
 } from 'lucide-react';
 import { GovernmentalProject, GovernmentalMilestone } from '../../data/governmentalProjectsData';
 import {
@@ -129,8 +130,19 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
 
   return (
     <div className="bg-white rounded-2xl border border-[#f08519]/40 shadow-sm overflow-hidden animate-fade-in">
-      <div className="overflow-x-auto">
-        <table className="w-full text-left border-collapse min-w-[800px]">
+      {/* Mobile Scroll Indicator Banner */}
+      <div className="md:hidden flex items-center justify-between px-3.5 py-2 bg-orange-50 border-b border-orange-200/70 text-[11px] text-orange-950">
+        <span className="font-bold flex items-center gap-1.5">
+          <Table className="w-3.5 h-3.5 text-[#f08519]" />
+          Matriz Oficial
+        </span>
+        <span className="text-[10px] font-bold bg-white text-orange-800 px-2 py-0.5 rounded-full border border-orange-200 shadow-2xs">
+          Deslize para ver colunas ⇄
+        </span>
+      </div>
+
+      <div className="overflow-x-auto overscroll-x-contain touch-pan-x">
+        <table className="w-full text-left border-collapse min-w-[780px]">
           <thead>
             <tr className="bg-[#f08519] text-white select-none">
               <th className="py-3.5 px-4 text-center font-black text-xs uppercase tracking-wider w-[26%] border-r border-orange-400/50">
@@ -284,67 +296,73 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                         )}
 
                         {/* Project Delay / On-Track Status Alert Badge */}
-                        <div className="pt-0.5">
-                          <span
-                            className={`inline-flex items-center gap-1 text-[11px] px-2.5 py-0.5 rounded-full border ${delayStatus.badgeClass}`}
-                            title={delayStatus.statusText}
-                          >
-                            {delayStatus.isDelayed && (
-                              <AlertTriangle className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
-                            )}
-                            {delayStatus.label}
+                        <div
+                          className={`w-[180px] h-8 flex items-center justify-center gap-1.5 px-2.5 rounded-lg border text-center shadow-2xs select-none transition text-[11px] ${delayStatus.badgeClass}`}
+                          title={delayStatus.statusText}
+                        >
+                          {delayStatus.isDelayed ? (
+                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0 animate-pulse" />
+                          ) : percent === 100 ? (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          ) : (
+                            <Clock className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          )}
+                          <span className="truncate">
+                            {delayStatus.label.replace(/^[⚠️✓]\s*/, '')}
                           </span>
                         </div>
 
-                        {/* Checklist mini button */}
+                        {/* Checklist button - Harmonized size matching Status badge */}
                         <button
                           onClick={() => toggleExpand(project.id)}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer mt-1 ${
+                          className={`w-[180px] h-8 flex items-center justify-between px-3 rounded-lg text-[11px] font-bold transition cursor-pointer border shadow-2xs ${
                             percent === 100
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
-                              : 'bg-white text-[#002D62] border border-slate-200 hover:border-orange-300 shadow-2xs'
+                              ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
+                              : 'bg-white text-[#002D62] border-slate-200 hover:border-orange-300 hover:bg-orange-50/40'
                           }`}
                           title="Ver / assinalar actividades"
                         >
-                          {percent === 100 ? (
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-                          ) : (
-                            <CheckSquare className="w-3 h-3 text-[#f08519]" />
-                          )}
-                          <span>Checklist {completed}/{total}</span>
+                          <span className="inline-flex items-center gap-1.5">
+                            {percent === 100 ? (
+                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                            ) : (
+                              <CheckSquare className="w-3.5 h-3.5 text-[#f08519] shrink-0" />
+                            )}
+                            <span>Checklist {completed}/{total}</span>
+                          </span>
                           {isExpanded ? (
-                            <ChevronUp className="w-3 h-3 text-slate-400" />
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           ) : (
-                            <ChevronDown className="w-3 h-3 text-slate-400" />
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                           )}
                         </button>
 
                         {/* Report, Edit & Delete Actions */}
-                        <div className="flex items-center gap-1 pt-0.5">
+                        <div className="w-[180px] flex items-center justify-center gap-1.5 pt-0.5">
                           <button
                             onClick={e => {
                               e.stopPropagation();
                               onGenerateReport?.(project);
                             }}
-                            className="inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-bold text-[#002D62] hover:bg-white rounded border border-transparent hover:border-orange-200 transition cursor-pointer shadow-2xs"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold text-[#002D62] bg-white hover:bg-orange-50 rounded-lg border border-slate-200 hover:border-orange-300 transition cursor-pointer shadow-2xs"
                             title="Gerar Relatório Individual deste Projecto"
                           >
-                            <FileText className="w-3 h-3 text-[#F7942D]" />
+                            <FileText className="w-3.5 h-3.5 text-[#F7942D]" />
                             <span>Relatório</span>
                           </button>
                           <button
                             onClick={e => handleOpenEdit(project, e)}
-                            className="p-1 text-slate-400 hover:text-blue-600 hover:bg-white rounded transition cursor-pointer"
+                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
                             title="Editar dados completos do projecto"
                           >
-                            <Edit2 className="w-3 h-3" />
+                            <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={e => handleDeleteProject(project.id, project.name, e)}
-                            className="p-1 text-slate-400 hover:text-rose-600 hover:bg-white rounded transition cursor-pointer"
+                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-white rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
                             title="Eliminar linha do projecto"
                           >
-                            <Trash2 className="w-3 h-3" />
+                            <Trash2 className="w-3.5 h-3.5" />
                           </button>
                         </div>
                       </div>
