@@ -15,8 +15,8 @@ import {
   Zap,
   Building,
   MapPin,
-  ChevronRight,
   TrendingUp,
+  StickyNote,
 } from 'lucide-react';
 import { GovernmentalProject, GovernmentalMilestone } from '../../data/governmentalProjectsData';
 import {
@@ -154,6 +154,7 @@ export const GovernmentalReportModal: React.FC<GovernmentalReportModalProps> = (
         'Projecto Código',
         'Projecto Nome',
         'Actividade / Marco',
+        'Nota / Observação',
         'Categoria',
         'Prazo Previsto',
         'Data de Conclusão',
@@ -164,6 +165,7 @@ export const GovernmentalReportModal: React.FC<GovernmentalReportModalProps> = (
         currentProject.code,
         currentProject.name,
         m.description,
+        m.notes || '',
         m.category || 'Geral',
         m.targetDate || '',
         m.completedDate || '',
@@ -581,7 +583,18 @@ export const GovernmentalReportModal: React.FC<GovernmentalReportModalProps> = (
                             return (
                               <tr key={m.id || idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
                                 <td className="p-2.5 text-center font-bold text-slate-400">{idx + 1}</td>
-                                <td className="p-2.5 font-semibold text-slate-800">{m.description}</td>
+                                <td className="p-2.5 font-semibold text-slate-800">
+                                  <div>{m.description}</div>
+                                  {m.notes && (
+                                    <div className="mt-1 flex items-start gap-1.5 text-[11px] font-normal text-slate-700 bg-amber-50/80 border border-amber-200/90 rounded px-2 py-0.5 max-w-xl">
+                                      <StickyNote className="w-3 h-3 text-amber-600 shrink-0 mt-0.5" />
+                                      <span>
+                                        <strong className="text-amber-900 font-bold uppercase text-[9px] tracking-wider mr-1">Nota:</strong>
+                                        {m.notes}
+                                      </span>
+                                    </div>
+                                  )}
+                                </td>
                                 <td className="p-2.5 text-slate-500">{m.category || 'Técnico / Estudos'}</td>
                                 <td className="p-2.5 text-center font-mono font-medium text-slate-700">
                                   {m.targetDate || '—'}

@@ -5,6 +5,7 @@ export interface GovernmentalMilestone {
   targetDate?: string;
   completedDate?: string;
   category?: 'Acordo / Contrato' | 'Técnico / Estudos' | 'Procurement / Concurso' | 'Governo / Regulatório' | 'Obras / Operação';
+  notes?: string;
 }
 
 export interface GovernmentalProject {
@@ -94,7 +95,7 @@ export const INITIAL_GOVERNMENTAL_PROJECTS: GovernmentalProject[] = [
       { id: 'arg-m4', description: 'Conclusão dos estudos preliminares de integração e matriz de responsabilidades operacionais', completed: true, category: 'Técnico / Estudos' },
       { id: 'arg-m5', description: 'Submissão e validação institucional do Acordo Intergovernamental entre os Ministros da Energia', completed: true, category: 'Governo / Regulatório' },
       { id: 'arg-m6', description: 'Designação de ponto focal pelo MIREME e emissão de parecer favorável pelo MINEC', completed: true, category: 'Governo / Regulatório' },
-      { id: 'arg-m7', description: 'Emissão do parecer do Ministério das Finanças e Autoridade Tributária sobre isenções de impostos e direitos aduaneiros', completed: false, category: 'Governo / Regulatório' },
+      { id: 'arg-m7', description: 'Emissão do parecer do Ministério das Finanças e Autoridade Tributária sobre isenções de impostos e direitos aduaneiros', completed: false, category: 'Governo / Regulatório', notes: 'Processo remetido à Direcção-Geral das Alfândegas; pendente validação de isenção de IVA e Direitos de Importação.' },
       { id: 'arg-m8', description: 'Assinatura formal do Acordo Intergovernamental com o Governo Argelino', completed: false, category: 'Acordo / Contrato' },
       { id: 'arg-m9', description: 'Confirmação do plano logístico, transporte marítimo das turbinas e plano de instalação em Temane', completed: false, category: 'Obras / Operação' },
       { id: 'arg-m10', description: 'Montagem mecânica, testes de energização e operação comercial das duas turbinas de 20 MW', completed: false, category: 'Obras / Operação' },

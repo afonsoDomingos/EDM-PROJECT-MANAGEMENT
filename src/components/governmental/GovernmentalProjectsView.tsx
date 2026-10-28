@@ -27,6 +27,7 @@ import {
   Filter,
   Sparkles,
   FileText,
+  StickyNote,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import {
@@ -107,11 +108,17 @@ export const GovernmentalProjectsView: React.FC = () => {
   const [addingMilestoneTo, setAddingMilestoneTo] = useState<string | null>(null);
   const [newMilestoneText, setNewMilestoneText] = useState('');
   const [newMilestoneDate, setNewMilestoneDate] = useState('');
+  const [newMilestoneNote, setNewMilestoneNote] = useState('');
 
   // Inline Edit Milestone State
   const [editingMilestoneId, setEditingMilestoneId] = useState<string | null>(null);
   const [editingMilestoneText, setEditingMilestoneText] = useState('');
   const [editingMilestoneDate, setEditingMilestoneDate] = useState('');
+  const [editingMilestoneNote, setEditingMilestoneNote] = useState('');
+
+  // Dedicated Quick Note Editor State
+  const [editingNoteMilestone, setEditingNoteMilestone] = useState<{ projectId: string; milestoneId: string } | null>(null);
+  const [editingNoteText, setEditingNoteText] = useState('');
 
   // Inline Edit Project COD State for Cards View
   const [editingCODProjectId, setEditingCODProjectId] = useState<string | null>(null);
@@ -243,6 +250,7 @@ export const GovernmentalProjectsView: React.FC = () => {
       description: newMilestoneText.trim(),
       completed: false,
       targetDate: newMilestoneDate.trim() || undefined,
+      notes: newMilestoneNote.trim() || undefined,
     };
 
     setProjects(prev =>
@@ -257,6 +265,7 @@ export const GovernmentalProjectsView: React.FC = () => {
 
     setNewMilestoneText('');
     setNewMilestoneDate('');
+    setNewMilestoneNote('');
     setAddingMilestoneTo(null);
   };
 
@@ -280,6 +289,7 @@ export const GovernmentalProjectsView: React.FC = () => {
     setEditingMilestoneId(milestone.id);
     setEditingMilestoneText(milestone.description);
     setEditingMilestoneDate(milestone.completed ? (milestone.completedDate || '') : (milestone.targetDate || ''));
+    setEditingMilestoneNote(milestone.notes || '');
   };
 
   // Save edited milestone
@@ -298,6 +308,7 @@ export const GovernmentalProjectsView: React.FC = () => {
               description: editingMilestoneText.trim(),
               targetDate: !m.completed ? (editingMilestoneDate.trim() || undefined) : m.targetDate,
               completedDate: m.completed ? (editingMilestoneDate.trim() || m.completedDate) : m.completedDate,
+              notes: editingMilestoneNote.trim() || undefined,
             };
           }),
         };
@@ -306,6 +317,7 @@ export const GovernmentalProjectsView: React.FC = () => {
     setEditingMilestoneId(null);
     setEditingMilestoneText('');
     setEditingMilestoneDate('');
+    setEditingMilestoneNote('');
   };
 
   // Cancel editing milestone
@@ -314,6 +326,67 @@ export const GovernmentalProjectsView: React.FC = () => {
     setEditingMilestoneId(null);
     setEditingMilestoneText('');
     setEditingMilestoneDate('');
+    setEditingMilestoneNote('');
+  };
+
+  // Dedicated Note Handlers for Activities
+  const handleOpenNoteEditor = (projectId: string, milestone: GovernmentalMilestone) => {
+    setEditingNoteMilestone({ projectId, milestoneId: milestone.id });
+    setEditingNoteText(milestone.notes || '');
+  };
+
+  const handleSaveNote = (projectId: string, milestoneId: string) => {
+    const trimmed = editingNoteText.trim();
+    setProjects(prev =>
+      prev.map(p => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          milestones: p.milestones.map(m => {
+            if (m.id !== milestoneId) return m;
+            return {
+              ...m,
+              notes: trimmed || undefined,
+            };
+          }),
+        };
+      })
+    );
+    setEditingNoteMilestone(null);
+    setEditingNoteText('');
+    showToast(
+      'success',
+      trimmed ? 'Nota Guardada com Sucesso!' : 'Nota Removida!',
+      trimmed ? 'A observação foi associada à actividade.' : 'A nota da actividade foi eliminada.'
+    );
+  };
+
+  const handleCancelNoteEditor = () => {
+    setEditingNoteMilestone(null);
+    setEditingNoteText('');
+  };
+
+  const handleDeleteNote = (projectId: string, milestoneId: string) => {
+    setProjects(prev =>
+      prev.map(p => {
+        if (p.id !== projectId) return p;
+        return {
+          ...p,
+          milestones: p.milestones.map(m => {
+            if (m.id !== milestoneId) return m;
+            return {
+              ...m,
+              notes: undefined,
+            };
+          }),
+        };
+      })
+    );
+    if (editingNoteMilestone?.milestoneId === milestoneId) {
+      setEditingNoteMilestone(null);
+      setEditingNoteText('');
+    }
+    showToast('info', 'Nota Removida', 'A nota foi removida da actividade.');
   };
 
   // Directly update project COD (Completion Date)
@@ -890,6 +963,8 @@ export const GovernmentalProjectsView: React.FC = () => {
           setEditingMilestoneText={setEditingMilestoneText}
           editingMilestoneDate={editingMilestoneDate}
           setEditingMilestoneDate={setEditingMilestoneDate}
+          editingMilestoneNote={editingMilestoneNote}
+          setEditingMilestoneNote={setEditingMilestoneNote}
           handleUpdateProjectCOD={handleUpdateProjectCOD}
           addingMilestoneTo={addingMilestoneTo}
           setAddingMilestoneTo={setAddingMilestoneTo}
@@ -897,6 +972,15 @@ export const GovernmentalProjectsView: React.FC = () => {
           setNewMilestoneText={setNewMilestoneText}
           newMilestoneDate={newMilestoneDate}
           setNewMilestoneDate={setNewMilestoneDate}
+          newMilestoneNote={newMilestoneNote}
+          setNewMilestoneNote={setNewMilestoneNote}
+          editingNoteMilestone={editingNoteMilestone}
+          editingNoteText={editingNoteText}
+          setEditingNoteText={setEditingNoteText}
+          handleOpenNoteEditor={handleOpenNoteEditor}
+          handleSaveNote={handleSaveNote}
+          handleCancelNoteEditor={handleCancelNoteEditor}
+          handleDeleteNote={handleDeleteNote}
           getTechIcon={getTechIcon}
           onClearFilters={handleClearFilters}
           hasActiveFilters={hasActiveFilters}
@@ -1243,6 +1327,25 @@ export const GovernmentalProjectsView: React.FC = () => {
                                 </div>
                               </div>
 
+                              {/* Campo de Nota / Observação na Edição */}
+                              <div className="flex items-center gap-2 pt-1 border-t border-amber-200/50">
+                                <span className="text-[11px] font-bold text-amber-800 flex items-center gap-1 shrink-0">
+                                  <StickyNote className="w-3.5 h-3.5 text-amber-600" />
+                                  Nota:
+                                </span>
+                                <input
+                                  type="text"
+                                  value={editingMilestoneNote}
+                                  onChange={e => setEditingMilestoneNote(e.target.value)}
+                                  placeholder="Nota, observação ou detalhe adicional (opcional)..."
+                                  className="flex-1 px-3 py-1 text-xs bg-white border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter') handleSaveEditMilestone(project.id, milestone.id);
+                                    if (e.key === 'Escape') handleCancelEditMilestone();
+                                  }}
+                                />
+                              </div>
+
                               {/* Alerta inteligente se a data em edição ultrapassar a data final do projecto */}
                               {editingConflict.hasConflict && (
                                 <div className="w-full flex flex-wrap items-center justify-between gap-2 p-2 rounded-lg bg-amber-100 border border-amber-300 text-amber-950 text-xs animate-fade-in shadow-2xs">
@@ -1391,6 +1494,23 @@ export const GovernmentalProjectsView: React.FC = () => {
                                   </span>
                                 )}
 
+                                {/* Botão de Nota da Actividade */}
+                                <button
+                                  type="button"
+                                  onClick={e => {
+                                    e.stopPropagation();
+                                    handleOpenNoteEditor(project.id, milestone);
+                                  }}
+                                  className={`p-1 rounded transition cursor-pointer ${
+                                    milestone.notes
+                                      ? 'text-amber-700 bg-amber-100 hover:bg-amber-200 ring-1 ring-amber-300'
+                                      : 'text-slate-400 hover:text-amber-600 hover:bg-amber-50'
+                                  }`}
+                                  title={milestone.notes ? 'Ver / Editar nota desta actividade' : 'Adicionar nota a esta actividade'}
+                                >
+                                  <StickyNote className="w-3.5 h-3.5" />
+                                </button>
+
                                 {/* Botão de Edição da Actividade */}
                                 <button
                                   onClick={e => handleStartEditMilestone(milestone, e)}
@@ -1410,6 +1530,95 @@ export const GovernmentalProjectsView: React.FC = () => {
                                 </button>
                               </div>
                             </div>
+
+                            {/* Nota da Actividade (se existir e não estiver em edição de nota) */}
+                            {milestone.notes && editingNoteMilestone?.milestoneId !== milestone.id && (
+                              <div className="mt-1 flex items-start gap-2 text-xs text-slate-700 bg-amber-50/80 border border-amber-200/90 rounded-lg p-2 max-w-full sm:max-w-3xl shadow-2xs">
+                                <StickyNote className="w-3.5 h-3.5 text-amber-600 shrink-0 mt-0.5" />
+                                <div className="flex-1 min-w-0">
+                                  <span className="font-bold text-amber-900 text-[10px] uppercase tracking-wider mr-1.5">Nota:</span>
+                                  <span className="text-slate-800 text-xs leading-relaxed break-words">{milestone.notes}</span>
+                                </div>
+                                <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                                  <button
+                                    type="button"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      handleOpenNoteEditor(project.id, milestone);
+                                    }}
+                                    className="text-[10px] text-amber-800 hover:text-amber-950 font-bold underline cursor-pointer"
+                                  >
+                                    Editar
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={e => {
+                                      e.stopPropagation();
+                                      handleDeleteNote(project.id, milestone.id);
+                                    }}
+                                    className="text-slate-400 hover:text-rose-600 p-0.5 rounded cursor-pointer"
+                                    title="Remover nota"
+                                  >
+                                    <X className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Editor Inline de Nota Rápida */}
+                            {editingNoteMilestone?.projectId === project.id && editingNoteMilestone?.milestoneId === milestone.id && (
+                              <div
+                                onClick={e => e.stopPropagation()}
+                                className="mt-2 p-3 bg-amber-50/95 border border-amber-300 rounded-lg flex flex-col gap-2 animate-fade-in shadow-2xs"
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900">
+                                    <StickyNote className="w-3.5 h-3.5 text-amber-600" />
+                                    <span>Nota / Observação da Actividade #{idx + 1}:</span>
+                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={handleCancelNoteEditor}
+                                    className="text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                                  >
+                                    <X className="w-3.5 h-3.5" />
+                                  </button>
+                                </div>
+                                <textarea
+                                  value={editingNoteText}
+                                  onChange={e => setEditingNoteText(e.target.value)}
+                                  placeholder="Escreva aqui uma nota, observação, ponto de atenção ou registo de reunião para esta actividade..."
+                                  rows={2}
+                                  className="w-full px-3 py-1.5 text-xs bg-white border border-amber-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 text-slate-800"
+                                  autoFocus
+                                  onKeyDown={e => {
+                                    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                                      handleSaveNote(project.id, milestone.id);
+                                    }
+                                  }}
+                                />
+                                <div className="flex items-center justify-between text-[11px] text-slate-500">
+                                  <span>Dica: Ctrl+Enter para guardar</span>
+                                  <div className="flex items-center gap-1.5">
+                                    <button
+                                      type="button"
+                                      onClick={() => handleSaveNote(project.id, milestone.id)}
+                                      className="px-2.5 py-1 text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 rounded-md transition flex items-center gap-1 cursor-pointer shadow-xs"
+                                    >
+                                      <Check className="w-3 h-3" />
+                                      Guardar Nota
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={handleCancelNoteEditor}
+                                      className="px-2 py-1 text-xs text-slate-600 hover:text-slate-800 bg-white border border-slate-200 rounded-md transition cursor-pointer"
+                                    >
+                                      Cancelar
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
 
                             {/* Alerta Inteligente de Incoerência de Cronograma e Botão 1-Clique para Prolongar Projecto */}
                             {!isDone && conflict?.hasConflict && (
@@ -1442,7 +1651,7 @@ export const GovernmentalProjectsView: React.FC = () => {
                     {/* Quick Add Milestone Row com Verificação Inteligente */}
                     {addingMilestoneTo === project.id ? (
                       <div className="space-y-2 pt-1 animate-fade-in">
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                           <input
                             type="text"
                             value={newMilestoneText}
@@ -1460,20 +1669,34 @@ export const GovernmentalProjectsView: React.FC = () => {
                             value={newMilestoneDate}
                             onChange={e => setNewMilestoneDate(e.target.value)}
                             placeholder="Prazo (Ex: 15/12/2026, 40 dias)"
-                            className="w-36 px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                            className="w-full sm:w-44 px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
                           />
-                          <button
-                            onClick={() => handleAddMilestone(project.id)}
-                            className="px-3 py-1.5 text-xs font-bold text-white bg-[#002D62] hover:bg-[#083b77] rounded-lg transition cursor-pointer"
-                          >
-                            Adicionar
-                          </button>
-                          <button
-                            onClick={() => setAddingMilestoneTo(null)}
-                            className="px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded-lg transition cursor-pointer"
-                          >
-                            Cancelar
-                          </button>
+                          <input
+                            type="text"
+                            value={newMilestoneNote}
+                            onChange={e => setNewMilestoneNote(e.target.value)}
+                            placeholder="Nota opcional..."
+                            className="w-full sm:w-44 px-3 py-1.5 text-xs bg-slate-50 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#002D62]"
+                          />
+                          <div className="flex items-center gap-1.5 shrink-0 justify-end">
+                            <button
+                              onClick={() => handleAddMilestone(project.id)}
+                              className="px-3 py-1.5 text-xs font-bold text-white bg-[#002D62] hover:bg-[#083b77] rounded-lg transition cursor-pointer"
+                            >
+                              Adicionar
+                            </button>
+                            <button
+                              onClick={() => {
+                                setAddingMilestoneTo(null);
+                                setNewMilestoneText('');
+                                setNewMilestoneDate('');
+                                setNewMilestoneNote('');
+                              }}
+                              className="px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-700 bg-white border border-slate-200 rounded-lg transition cursor-pointer"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
                         </div>
 
                         {/* Alerta inteligente se a data da nova actividade ultrapassar o projecto */}
