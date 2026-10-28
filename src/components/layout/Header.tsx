@@ -169,24 +169,6 @@ export const Header: React.FC<HeaderProps> = ({
               </p>
             </div>
           </div>
-
-          {/* Powered by MUV Logo (Bigger & Clickable) */}
-          <a
-            href="https://www.muv.co.mz/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:flex items-center gap-2.5 pl-3 border-l border-slate-200 select-none group cursor-pointer hover:opacity-95 transition"
-            title="Visitar MUV Educação & Engenharia (https://www.muv.co.mz/)"
-          >
-            <span className="text-[10px] font-black tracking-wider text-slate-400 group-hover:text-[#002D62] uppercase transition">
-              Powered by
-            </span>
-            <img
-              src="/muv logo.png"
-              alt="MUV Educação & Engenharia"
-              className="h-9 sm:h-10 w-auto object-contain group-hover:scale-105 transition drop-shadow-2xs"
-            />
-          </a>
         </div>
 
         {/* Center: Search with Live Interactive Results Popover */}
