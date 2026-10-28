@@ -199,12 +199,12 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
 
                         {/* Data de Finalização do Projecto (COD) - Editável em Data ou Dias */}
                         {editingCODProjectId === project.id ? (
-                          <div className="w-full max-w-[220px] flex items-center gap-1 bg-white p-1 rounded-lg border-2 border-orange-400 shadow-xs">
+                          <div className="w-[190px] flex items-center gap-1 bg-white p-1 rounded-lg border-2 border-orange-400 shadow-xs">
                             <input
                               type="text"
                               value={editingCODValue}
                               onChange={e => setEditingCODValue(e.target.value)}
-                              placeholder="Data (ex: 31/12/2028) ou Dias (ex: 40 dias)"
+                              placeholder="Data ou Dias"
                               className="w-full text-[11px] px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-slate-800 font-bold focus:outline-none"
                               autoFocus
                               onKeyDown={e => {
@@ -228,20 +228,30 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                             </button>
                           </div>
                         ) : (
-                          <div className="group/cod inline-flex items-center gap-1.5 bg-white/90 hover:bg-white text-[11px] font-semibold text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs flex-wrap justify-center">
-                            <Calendar className="w-3.5 h-3.5 text-[#f08519] shrink-0" />
-                            <span className="text-slate-500 font-normal">Prazo Final (COD):</span>
-                            <span className="font-bold text-[#002D62]">
-                              {project.commercialOperationDate || 'A definir'}
-                            </span>
-                            {codRemaining?.targetDateFormatted && codRemaining.inputMode === 'days' && (
-                              <span className="text-[10px] text-slate-500 font-normal">
-                                ({codRemaining.targetDateFormatted})
+                          <div className="group/cod w-[190px] bg-white/95 hover:bg-white text-[11px] font-semibold text-slate-700 p-2 rounded-lg border border-slate-200 shadow-2xs flex flex-col items-center justify-center gap-1 transition">
+                            <div className="flex items-center gap-1.5 text-center flex-wrap justify-center">
+                              <Calendar className="w-3.5 h-3.5 text-[#f08519] shrink-0" />
+                              <span className="text-slate-500 font-normal">Prazo Final (COD):</span>
+                              <span className="font-bold text-[#002D62]">
+                                {project.commercialOperationDate || 'A definir'}
                               </span>
-                            )}
+                              <button
+                                onClick={e =>
+                                  startEditCOD(
+                                    project.id,
+                                    project.commercialOperationDate || '',
+                                    e
+                                  )
+                                }
+                                className="opacity-0 group-hover/cod:opacity-100 p-0.5 text-slate-400 hover:text-orange-600 rounded transition cursor-pointer"
+                                title="Alterar prazo de finalização (pode ser data ou em dias, ex: 40 dias)"
+                              >
+                                <Pencil className="w-2.5 h-2.5" />
+                              </button>
+                            </div>
                             {codRemaining?.label && (
                               <span
-                                className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
+                                className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
                                   codRemaining.isOverdue
                                     ? 'bg-rose-100 text-rose-800 border border-rose-200'
                                     : codRemaining.isToday
@@ -252,25 +262,12 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                                 {codRemaining.label}
                               </span>
                             )}
-                            <button
-                              onClick={e =>
-                                startEditCOD(
-                                  project.id,
-                                  project.commercialOperationDate || '',
-                                  e
-                                )
-                              }
-                              className="opacity-0 group-hover/cod:opacity-100 p-0.5 text-slate-400 hover:text-orange-600 rounded transition cursor-pointer"
-                              title="Alterar prazo de finalização (pode ser data ou em dias, ex: 40 dias)"
-                            >
-                              <Pencil className="w-2.5 h-2.5" />
-                            </button>
                           </div>
                         )}
 
                         {/* Project Schedule Conflict Warning & Quick Harmonize Button */}
                         {scheduleConflicts.hasConflicts && (
-                          <div className="w-full max-w-[220px] bg-amber-50 border border-amber-300 rounded-lg p-2 text-center shadow-2xs animate-fade-in">
+                          <div className="w-[190px] bg-amber-50 border border-amber-300 rounded-lg p-2 text-center shadow-2xs animate-fade-in">
                             <div className="flex items-center justify-center gap-1 text-[10px] font-black text-amber-900">
                               <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                               Conflito de Prazo ({scheduleConflicts.conflictCount})
@@ -297,7 +294,7 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
 
                         {/* Project Delay / On-Track Status Alert Badge */}
                         <div
-                          className={`w-[180px] h-8 flex items-center justify-center gap-1.5 px-2.5 rounded-lg border text-center shadow-2xs select-none transition text-[11px] ${delayStatus.badgeClass}`}
+                          className={`w-[190px] h-8 flex items-center justify-center gap-1.5 px-2.5 rounded-lg border text-center shadow-2xs select-none transition text-[11px] font-bold ${delayStatus.badgeClass}`}
                           title={delayStatus.statusText}
                         >
                           {delayStatus.isDelayed ? (
@@ -312,54 +309,52 @@ export const GovernmentalProjectsTableView: React.FC<GovernmentalProjectsTableVi
                           </span>
                         </div>
 
-                        {/* Checklist button - Harmonized size matching Status badge */}
+                        {/* Checklist button - Perfectly centered and matching 190px size */}
                         <button
                           onClick={() => toggleExpand(project.id)}
-                          className={`w-[180px] h-8 flex items-center justify-between px-3 rounded-lg text-[11px] font-bold transition cursor-pointer border shadow-2xs ${
+                          className={`w-[190px] h-8 flex items-center justify-center gap-2 px-3 rounded-lg text-[11px] font-bold transition cursor-pointer border shadow-2xs ${
                             percent === 100
                               ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
                               : 'bg-white text-[#002D62] border-slate-200 hover:border-orange-300 hover:bg-orange-50/40'
                           }`}
                           title="Ver / assinalar actividades"
                         >
-                          <span className="inline-flex items-center gap-1.5">
-                            {percent === 100 ? (
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                            ) : (
-                              <CheckSquare className="w-3.5 h-3.5 text-[#f08519] shrink-0" />
-                            )}
-                            <span>Checklist {completed}/{total}</span>
-                          </span>
-                          {isExpanded ? (
-                            <ChevronUp className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                          {percent === 100 ? (
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                           ) : (
-                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <CheckSquare className="w-3.5 h-3.5 text-[#f08519] shrink-0" />
+                          )}
+                          <span>Checklist {completed}/{total}</span>
+                          {isExpanded ? (
+                            <ChevronUp className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-0.5" />
+                          ) : (
+                            <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0 ml-0.5" />
                           )}
                         </button>
 
-                        {/* Report, Edit & Delete Actions */}
-                        <div className="w-[180px] flex items-center justify-center gap-1.5 pt-0.5">
+                        {/* Report, Edit & Delete Actions - Flush to exact same 190px width */}
+                        <div className="w-[190px] flex items-center gap-1.5 pt-0.5">
                           <button
                             onClick={e => {
                               e.stopPropagation();
                               onGenerateReport?.(project);
                             }}
-                            className="inline-flex items-center gap-1 px-2.5 py-1 text-[11px] font-bold text-[#002D62] bg-white hover:bg-orange-50 rounded-lg border border-slate-200 hover:border-orange-300 transition cursor-pointer shadow-2xs"
+                            className="flex-1 h-8 inline-flex items-center justify-center gap-1.5 px-2.5 text-[11px] font-bold text-[#002D62] bg-white hover:bg-orange-50 rounded-lg border border-slate-200 hover:border-orange-300 transition cursor-pointer shadow-2xs"
                             title="Gerar Relatório Individual deste Projecto"
                           >
-                            <FileText className="w-3.5 h-3.5 text-[#F7942D]" />
+                            <FileText className="w-3.5 h-3.5 text-[#F7942D] shrink-0" />
                             <span>Relatório</span>
                           </button>
                           <button
                             onClick={e => handleOpenEdit(project, e)}
-                            className="p-1.5 text-slate-400 hover:text-blue-600 hover:bg-white rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
+                            className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-blue-600 bg-white hover:bg-blue-50 rounded-lg transition cursor-pointer border border-slate-200 hover:border-blue-300 shadow-2xs shrink-0"
                             title="Editar dados completos do projecto"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
                           </button>
                           <button
                             onClick={e => handleDeleteProject(project.id, project.name, e)}
-                            className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-white rounded-lg transition cursor-pointer border border-transparent hover:border-slate-200"
+                            className="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-rose-600 bg-white hover:bg-rose-50 rounded-lg transition cursor-pointer border border-slate-200 hover:border-rose-300 shadow-2xs shrink-0"
                             title="Eliminar linha do projecto"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
