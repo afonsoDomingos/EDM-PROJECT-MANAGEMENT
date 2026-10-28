@@ -83,9 +83,9 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
       id: 'welcome',
       sender: 'ai',
       timestamp: new Date().toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }),
-      badge: 'EDM AI Copilot',
+      badge: 'Edm Ai',
       category: 'general',
-      text: `Olá! Sou o EDM AI Copilot, o assistente inteligente para gestão de projectos e auditoria da EDM.\n\nComo posso ajudar? Escolha uma acção rápida abaixo ou escreva a sua questão.`,
+      text: `Olá! Sou o Edm Ai, o assistente inteligente para gestão de projectos e auditoria da EDM.\n\nComo posso ajudar? Escolha uma acção rápida abaixo ou escreva a sua questão.`,
       suggestions: [
         'Auditar Prazos & Inconsistências COD',
         'Gerar Relatório Executivo para o PCA',
@@ -165,7 +165,7 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
         id: `welcome-${Date.now()}`,
         sender: 'ai',
         timestamp: new Date().toLocaleTimeString('pt-MZ', { hour: '2-digit', minute: '2-digit' }),
-        badge: 'EDM AI Copilot',
+        badge: 'Edm Ai',
         category: 'general',
         text: `Conversa reiniciada. Em que posso apoiar a sua gestão de projectos agora?`,
         suggestions: [
@@ -224,10 +224,10 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
             type="button"
             onClick={() => setIsMinimized(false)}
             className="inline-flex items-center gap-1.5 cursor-pointer text-xs font-bold"
-            title="Expandir AI Copilot"
+            title="Expandir Edm Ai"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F7942D] animate-spin" style={{ animationDuration: '6s' }} />
-            <span>AI Copilot</span>
+            <span>Edm Ai</span>
             {conflicts.length > 0 && (
               <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
             )}
@@ -266,7 +266,7 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <h4 className="font-bold text-xs tracking-tight">EDM AI Copilot</h4>
+              <h4 className="font-bold text-xs tracking-tight">Edm Ai</h4>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             </div>
             <p className="text-[10px] text-blue-200/80 leading-none">Auditoria & Prazos</p>
@@ -367,7 +367,7 @@ export const EdmAiCopilotModal: React.FC<EdmAiCopilotModalProps> = ({
                     <div className="flex items-center justify-between gap-2 pb-1 mb-1.5 border-b border-slate-100 text-[10px] text-slate-400">
                       <div className="flex items-center gap-1 font-bold text-slate-700">
                         <Sparkles className="w-3 h-3 text-[#F7942D]" />
-                        <span>{msg.badge || 'AI Copilot'}</span>
+                        <span>{msg.badge || 'Edm Ai'}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <span>{msg.timestamp}</span>

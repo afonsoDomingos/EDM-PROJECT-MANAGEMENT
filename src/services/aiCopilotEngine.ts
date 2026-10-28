@@ -148,7 +148,7 @@ export function generateExecutiveBriefing(
   return `
 # RELATÓRIO EXECUTIVO DE AUDITORIA & GESTÃO ESTRATÉGICA
 Electricidade de Moçambique, E.P. (EDM)
-Emitido por: EDM AI Copilot • ${dateStr}
+Emitido por: Edm Ai • ${dateStr}
 Destinatário: Conselho de Administração / Direcção Executiva (PCA)
 
 ---
@@ -547,7 +547,7 @@ export function processAiQuery(
     timestamp,
     category: 'general',
     badge: 'Assistente Executivo',
-    text: `Olá! Sou o EDM AI Copilot, o assistente inteligente de gestão estratégica da Electricidade de Moçambique.\n\n` +
+    text: `Olá! Sou o Edm Ai, o assistente inteligente de gestão estratégica da Electricidade de Moçambique.\n\n` +
       `Estou conectado em tempo real a toda a base de dados do sistema (${context.projects.length} projectos estruturantes, ${context.governmentalProjects.length} projectos governamentais presidenciais, ${context.generationPlants.length} centrais de geração e ${context.risks.length} riscos cadastrados).\n\n` +
       `Como posso apoiar a sua tomada de decisão agora?\n` +
       `• Auditar conflitos entre prazos de actividades e COD do projecto\n` +

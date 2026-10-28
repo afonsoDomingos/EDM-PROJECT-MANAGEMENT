@@ -383,15 +383,15 @@ export const Header: React.FC<HeaderProps> = ({
             <Search className="w-5 h-5" />
           </button>
 
-          {/* EDM AI Copilot Header Button */}
+          {/* EDM AI Header Button */}
           <button
             type="button"
             onClick={() => openAiCopilot()}
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold transition shadow-2xs hover:shadow-xs cursor-pointer group"
-            title="Abrir Assistente Inteligente de Gestão (EDM AI Copilot)"
+            title="Abrir Assistente Inteligente de Gestão (Edm Ai)"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
-            <span className="font-extrabold tracking-tight">AI Copilot</span>
+            <span className="font-extrabold tracking-tight">Edm Ai</span>
           </button>
 
           {/* Director Executive Approvals Button */}
