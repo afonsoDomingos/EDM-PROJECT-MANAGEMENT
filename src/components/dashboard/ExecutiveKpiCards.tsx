@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   FolderKanban,
   Activity,
@@ -6,10 +6,16 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { formatPercent } from '../../utils/formatters';
+import { AnimatedCounter } from '../common/AnimatedCounter';
 
 export const ExecutiveKpiCards: React.FC = () => {
-  const { projects, generationPlants, tasks, setActiveTab, setFilterStatus, clearFilters } = useApp();
+  const { projects, tasks, setActiveTab, setFilterStatus, clearFilters } = useApp();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsMounted(true), 40);
+    return () => clearTimeout(timer);
+  }, []);
 
   const totalProjects = projects.length;
   const inExecution = projects.filter(p => p.status === 'Em Execução').length;
@@ -22,17 +28,12 @@ export const ExecutiveKpiCards: React.FC = () => {
       ? projects.reduce((acc, p) => acc + (p.physicalProgress || 0), 0) / totalProjects
       : 0;
 
-  const completedTasks = tasks.filter(t => t.status === 'Concluída').length;
-  const totalTasks = tasks.length;
-  const taskCompletionRate = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-
-  const onScheduleProjects = projects.filter(p => p.status === 'Em Execução' || p.status === 'Concluído').length;
-  const scheduleAdherencePercent = totalProjects > 0 ? (onScheduleProjects / totalProjects) * 100 : 0;
-
   const kpis = [
     {
       title: 'Total de Projectos',
-      value: totalProjects + 5,
+      numericValue: totalProjects + 5,
+      decimals: 0,
+      suffix: '',
       subtitle: `${totalProjects} EDM + 5 Governamentais`,
       icon: FolderKanban,
       color: 'bg-orange-50 text-[#c26508] border-orange-200/80',
@@ -46,7 +47,9 @@ export const ExecutiveKpiCards: React.FC = () => {
     },
     {
       title: 'Em Execução Activa',
-      value: inExecution,
+      numericValue: inExecution,
+      decimals: 0,
+      suffix: '',
       subtitle: `${inExecution} em curso • ${completed} concluído`,
       icon: Activity,
       color: 'bg-blue-50 text-blue-700 border-blue-200',
@@ -60,7 +63,9 @@ export const ExecutiveKpiCards: React.FC = () => {
     },
     {
       title: 'Média de Execução Física',
-      value: formatPercent(avgPhysical),
+      numericValue: avgPhysical,
+      decimals: 1,
+      suffix: '%',
       subtitle: 'Avanço ponderado de obras',
       icon: TrendingUp,
       color: 'bg-emerald-50 text-emerald-800 border-emerald-200',
@@ -73,7 +78,9 @@ export const ExecutiveKpiCards: React.FC = () => {
     },
     {
       title: 'Desvios & Riscos',
-      value: `${delayed + atRisk} Projectos`,
+      numericValue: delayed + atRisk,
+      decimals: 0,
+      suffix: delayed + atRisk === 1 ? ' Projecto' : ' Projectos',
       subtitle: `${delayed} com atraso • ${atRisk} em risco`,
       icon: AlertOctagon,
       color: 'bg-rose-50 text-rose-700 border-rose-200',
@@ -101,7 +108,12 @@ export const ExecutiveKpiCards: React.FC = () => {
                 kpi.onClick();
               }
             }}
-            className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs hover:shadow-md hover:border-[#F7942D]/50 transition-all duration-200 cursor-pointer text-left select-none group"
+            className={`bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs hover:shadow-lg hover:border-[#F7942D]/50 hover:-translate-y-1 transition-all duration-500 cursor-pointer text-left select-none group transform ${
+              isMounted ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-4 scale-[0.98]'
+            }`}
+            style={{
+              transitionDelay: `${index * 80}ms`,
+            }}
             title={`${kpi.tooltip || kpi.title} • Clique para ${kpi.actionLabel.toLowerCase()}`}
           >
             <div className="flex items-start justify-between">
@@ -110,22 +122,27 @@ export const ExecutiveKpiCards: React.FC = () => {
                   {kpi.title}
                 </p>
                 <h3 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1 tracking-tight">
-                  {kpi.value}
+                  <AnimatedCounter
+                    value={kpi.numericValue}
+                    decimals={kpi.decimals}
+                    suffix={kpi.suffix}
+                    duration={1000 + index * 120}
+                  />
                 </h3>
               </div>
               <div
-                className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform ${kpi.iconBg}`}
+                className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300 ${kpi.iconBg}`}
               >
                 <Icon className="w-5 h-5" />
               </div>
             </div>
 
-            {/* Optional mini progress bar */}
+            {/* Dynamic Animated progress bar */}
             {kpi.progress !== undefined && (
               <div className="mt-3 w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                 <div
-                  className="bg-emerald-500 h-full rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min(kpi.progress, 100)}%` }}
+                  className="bg-emerald-500 h-full rounded-full transition-all duration-1000 ease-out"
+                  style={{ width: isMounted ? `${Math.min(kpi.progress, 100)}%` : '0%' }}
                 />
               </div>
             )}
@@ -142,3 +159,4 @@ export const ExecutiveKpiCards: React.FC = () => {
     </div>
   );
 };
+

@@ -36,6 +36,7 @@ import {
 } from '../../data/governmentalProjectsData';
 import { GovernmentalProjectsTableView } from './GovernmentalProjectsTableView';
 import { GovernmentalReportModal } from './GovernmentalReportModal';
+import { AnimatedCounter } from '../common/AnimatedCounter';
 import {
   calculateDaysRemaining,
   formatDaysSinceCompletion,
@@ -607,18 +608,22 @@ export const GovernmentalProjectsView: React.FC = () => {
       <div className="grid grid-cols-3 gap-1.5 sm:gap-3 bg-white p-2.5 sm:p-3.5 rounded-2xl border border-slate-200 shadow-2xs">
         <div className="text-center border-r border-slate-100 pr-1 sm:pr-2">
           <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Projectos</p>
-          <p className="text-lg sm:text-xl font-black text-slate-800 mt-0.5">{stats.total}</p>
+          <p className="text-lg sm:text-xl font-black text-slate-800 mt-0.5">
+            <AnimatedCounter value={stats.total} duration={900} />
+          </p>
         </div>
         <div className="text-center border-r border-slate-100 px-1 sm:px-2">
           <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider leading-tight">Actividades Concluídas</p>
           <p className="text-lg sm:text-xl font-black text-emerald-600 mt-0.5">
-            {stats.completedMilestones}{' '}
+            <AnimatedCounter value={stats.completedMilestones} duration={1100} />{' '}
             <span className="text-[10px] sm:text-xs font-normal text-slate-400">/ {stats.totalMilestones}</span>
           </p>
         </div>
         <div className="text-center pl-1 sm:pl-2">
           <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Progresso Global</p>
-          <p className="text-lg sm:text-xl font-black text-[#002D62] mt-0.5">{stats.percent}%</p>
+          <p className="text-lg sm:text-xl font-black text-[#002D62] mt-0.5">
+            <AnimatedCounter value={stats.percent} suffix="%" duration={1200} />
+          </p>
         </div>
       </div>
 
