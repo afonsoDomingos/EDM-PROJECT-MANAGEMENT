@@ -678,14 +678,14 @@ export const GovernmentalProjectsView: React.FC = () => {
         <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
           <button
             onClick={handleOpenCreate}
-            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#002D62] hover:bg-[#083b77] text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer order-first sm:order-last"
+            className="col-span-2 sm:col-auto inline-flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-[#002D62] hover:bg-[#083b77] text-white text-xs font-bold shadow-sm transition active:scale-95 cursor-pointer order-first sm:order-last"
           >
             <Plus className="w-4 h-4 text-[#F7942D]" />
             <span>Adicionar Projecto</span>
           </button>
           <button
             onClick={() => handleOpenGeneralReport()}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-orange-300 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer"
+            className="inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl bg-white hover:bg-slate-50 text-slate-800 border border-slate-300 hover:border-orange-300 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer"
             title="Emitir Relatório Geral Consolidado (Todos os Projectos Governamentais)"
           >
             <FileText className="w-3.5 h-3.5 text-[#002D62]" />
@@ -693,11 +693,11 @@ export const GovernmentalProjectsView: React.FC = () => {
           </button>
           <button
             onClick={() => openAiCopilot('Auditar prazos e conflitos de cronograma dos projectos governamentais')}
-            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
-            title="Diagnóstico Inteligente de Prazos & Riscos com IA"
+            className="inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
+            title="Assistente Inteligente Edm Ai"
           >
             <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
-            <span>Diagnóstico IA</span>
+            <span>Edm Ai</span>
           </button>
           <button
             onClick={handleResetDefaults}
@@ -711,21 +711,29 @@ export const GovernmentalProjectsView: React.FC = () => {
 
       {/* Mini Stats Bar (Simple & Clean - Mobile Responsive) */}
       <div className="grid grid-cols-3 gap-1.5 sm:gap-3 bg-white p-2.5 sm:p-3.5 rounded-2xl border border-slate-200 shadow-2xs">
-        <div className="text-center border-r border-slate-100 pr-1 sm:pr-2">
-          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Projectos</p>
+        <div className="text-center border-r border-slate-100 pr-1 sm:pr-2 flex flex-col items-center justify-between h-full">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate">
+            Projectos
+          </p>
           <p className="text-lg sm:text-xl font-black text-slate-800 mt-0.5">
             <AnimatedCounter value={stats.total} duration={900} />
           </p>
         </div>
-        <div className="text-center border-r border-slate-100 px-1 sm:px-2">
-          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider leading-tight">Actividades Concluídas</p>
+        <div className="text-center border-r border-slate-100 px-1 sm:px-2 flex flex-col items-center justify-between h-full">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider leading-tight truncate" title="Actividades Concluídas">
+            <span className="sm:hidden">Actividades</span>
+            <span className="hidden sm:inline">Actividades Concluídas</span>
+          </p>
           <p className="text-lg sm:text-xl font-black text-emerald-600 mt-0.5">
             <AnimatedCounter value={stats.completedMilestones} duration={1100} />{' '}
             <span className="text-[10px] sm:text-xs font-normal text-slate-400">/ {stats.totalMilestones}</span>
           </p>
         </div>
-        <div className="text-center pl-1 sm:pl-2">
-          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider">Progresso Global</p>
+        <div className="text-center pl-1 sm:pl-2 flex flex-col items-center justify-between h-full">
+          <p className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate">
+            <span className="sm:hidden">Progresso</span>
+            <span className="hidden sm:inline">Progresso Global</span>
+          </p>
           <p className="text-lg sm:text-xl font-black text-[#002D62] mt-0.5">
             <AnimatedCounter value={stats.percent} suffix="%" duration={1200} />
           </p>
@@ -734,7 +742,7 @@ export const GovernmentalProjectsView: React.FC = () => {
 
       {/* Painel Interativo de Filtros e Pesquisa */}
       <div className="bg-white p-3 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-3">
-        {/* Linha 1: Campo de Pesquisa + Selectores de Tecnologia e Estado */}
+        {/* Linha 1: Campo de Pesquisa + Selectores de Tecnologia e Estado Perfeitamente Alinhados */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-2 sm:gap-2.5">
           {/* Pesquisa por Texto */}
           <div className="relative flex-1">
@@ -744,7 +752,7 @@ export const GovernmentalProjectsView: React.FC = () => {
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Pesquisar projecto ou actividade..."
-              className="w-full pl-10 pr-8 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D62] transition"
+              className="w-full pl-10 pr-8 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#002D62] transition"
             />
             {searchQuery && (
               <button
@@ -757,26 +765,25 @@ export const GovernmentalProjectsView: React.FC = () => {
             )}
           </div>
 
-          {/* Selector de Tecnologia */}
-          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          {/* Selectores de Tecnologia e Estado: Grid 2 colunas 50/50 equilibrado no mobile */}
+          <div className="grid grid-cols-2 md:flex md:items-center gap-2 w-full md:w-auto">
             <select
               value={filterTechnology}
               onChange={e => setFilterTechnology(e.target.value)}
-              className="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer"
+              className="w-full md:w-44 px-2.5 sm:px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer truncate"
             >
               <option value="all">Todas as Tecnologias</option>
               <option value="Gás / Térmica">Gás / Térmica</option>
-              <option value="Turbinas Móveis a Gás">Turbinas Móveis a Gás</option>
+              <option value="Turbinas Móveis a Gás">Turbinas Móveis</option>
               <option value="Solar Fotovoltaica">Solar Fotovoltaica</option>
               <option value="Eólica">Eólica</option>
               <option value="GNL / FSRU">GNL / FSRU</option>
             </select>
 
-            {/* Selector de Estado Institucional */}
             <select
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value)}
-              className="px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer"
+              className="w-full md:w-44 px-2.5 sm:px-3 py-2.5 text-xs bg-slate-50 border border-slate-200 rounded-xl text-slate-700 font-semibold focus:outline-none focus:ring-2 focus:ring-[#002D62] cursor-pointer truncate"
             >
               <option value="all">Todos os Estados</option>
               <option value="Em Negociação">Em Negociação</option>
@@ -785,80 +792,81 @@ export const GovernmentalProjectsView: React.FC = () => {
               <option value="Concursos em Curso">Concursos em Curso</option>
               <option value="Constituição de SPV">Constituição de SPV</option>
             </select>
-
-            {/* Botão Limpar Filtros */}
-            {hasActiveFilters && (
-              <button
-                onClick={handleClearFilters}
-                className="inline-flex items-center gap-1 px-3 py-2 text-xs font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition cursor-pointer shrink-0"
-                title="Limpar todos os filtros activos"
-              >
-                <X className="w-3.5 h-3.5" />
-                <span>Limpar</span>
-              </button>
-            )}
           </div>
         </div>
 
-        {/* Linha 2: Chips / Botões de Filtro Rápido por Cronograma e Situação */}
-        <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-slate-100">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mr-1">
-            <Filter className="w-3 h-3 text-slate-400" />
-            Filtrar por:
-          </span>
+        {/* Linha 2: Chips / Botões de Filtro Rápido com Título Dedicado e Alinhamento Flush */}
+        <div className="pt-2 border-t border-slate-100 space-y-1.5">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
+              <Filter className="w-3 h-3 text-slate-400" />
+              Filtrar por:
+            </span>
+            {hasActiveFilters && (
+              <button
+                onClick={handleClearFilters}
+                className="text-[10px] sm:text-[11px] font-bold text-rose-600 hover:text-rose-700 hover:underline cursor-pointer flex items-center gap-1"
+                title="Limpar todos os filtros activos"
+              >
+                <X className="w-3 h-3" />
+                <span>Limpar filtros</span>
+              </button>
+            )}
+          </div>
 
-          {/* Todos */}
-          <button
-            onClick={() => setFilterSchedule('all')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
-              filterSchedule === 'all'
-                ? 'bg-[#002D62] text-white shadow-2xs'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            <span>Todos</span>
-            <span
-              className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                filterSchedule === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Todos */}
+            <button
+              onClick={() => setFilterSchedule('all')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                filterSchedule === 'all'
+                  ? 'bg-[#002D62] text-white shadow-2xs'
+                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}
             >
-              {filterCounts.total}
-            </span>
-          </button>
+              <span>Todos</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  filterSchedule === 'all' ? 'bg-white/20 text-white' : 'bg-slate-200 text-slate-700'
+                }`}
+              >
+                {filterCounts.total}
+              </span>
+            </button>
 
-          {/* Conflito de Prazo */}
-          <button
-            onClick={() => setFilterSchedule('conflicts')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
-              filterSchedule === 'conflicts'
-                ? 'bg-amber-600 text-white shadow-2xs ring-2 ring-amber-300'
-                : filterCounts.conflicts > 0
-                ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
-                : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
-            }`}
-          >
-            <AlertTriangle className={`w-3 h-3 ${filterSchedule === 'conflicts' ? 'text-white' : 'text-amber-600'}`} />
-            <span>Conflito de Prazo</span>
-            <span
-              className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                filterSchedule === 'conflicts' ? 'bg-white/20 text-white' : 'bg-amber-200 text-amber-900'
+            {/* Conflito de Prazo */}
+            <button
+              onClick={() => setFilterSchedule('conflicts')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                filterSchedule === 'conflicts'
+                  ? 'bg-amber-600 text-white shadow-2xs ring-2 ring-amber-300'
+                  : filterCounts.conflicts > 0
+                  ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
+                  : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
               }`}
             >
-              {filterCounts.conflicts}
-            </span>
-          </button>
+              <AlertTriangle className={`w-3 h-3 ${filterSchedule === 'conflicts' ? 'text-white' : 'text-amber-600'}`} />
+              <span>Conflito de Prazo</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  filterSchedule === 'conflicts' ? 'bg-white/20 text-white' : 'bg-amber-200 text-amber-900'
+                }`}
+              >
+                {filterCounts.conflicts}
+              </span>
+            </button>
 
-          {/* Em Atraso */}
-          <button
-            onClick={() => setFilterSchedule('delayed')}
-            className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
-              filterSchedule === 'delayed'
-                ? 'bg-rose-600 text-white shadow-2xs ring-2 ring-rose-300'
-                : filterCounts.delayed > 0
-                ? 'bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100'
-                : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
-            }`}
-          >
+            {/* Em Atraso */}
+            <button
+              onClick={() => setFilterSchedule('delayed')}
+              className={`px-2.5 py-1 rounded-lg text-xs font-bold transition cursor-pointer flex items-center gap-1.5 ${
+                filterSchedule === 'delayed'
+                  ? 'bg-rose-600 text-white shadow-2xs ring-2 ring-rose-300'
+                  : filterCounts.delayed > 0
+                  ? 'bg-rose-50 text-rose-800 border border-rose-300 hover:bg-rose-100'
+                  : 'bg-slate-100 text-slate-400 hover:bg-slate-200'
+              }`}
+            >
             <span
               className={`w-1.5 h-1.5 rounded-full ${
                 filterSchedule === 'delayed' ? 'bg-white' : 'bg-rose-500 animate-pulse'
@@ -934,6 +942,7 @@ export const GovernmentalProjectsView: React.FC = () => {
           </button>
         </div>
       </div>
+    </div>
 
       {/* View Switcher: Tabela Executiva Oficial vs Checklist */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-2xs">
