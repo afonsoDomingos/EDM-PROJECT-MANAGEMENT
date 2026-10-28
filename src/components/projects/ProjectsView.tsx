@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Clock,
   AlertTriangle,
+  X,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Project, ProjectStatus } from '../../types';
@@ -52,6 +53,7 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
   } = useApp();
 
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
+  const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
 
   const regions = ['Todas', 'Norte', 'Centro', 'Sul'];
   const statuses = ['Todos', 'Em Execução', 'Concluído', 'Atrasado', 'Em Risco', 'Por Iniciar'];
@@ -302,11 +304,9 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                       <button
                         onClick={e => {
                           e.stopPropagation();
-                          if (window.confirm(`Eliminar ${p.code}?`)) {
-                            deleteProject(p.id);
-                          }
+                          setProjectToDelete(p);
                         }}
-                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition"
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
                         title="Eliminar Projecto"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -387,6 +387,64 @@ export const ProjectsView: React.FC<ProjectsViewProps> = ({
                 })}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Visual de Confirmação de Eliminação */}
+      {projectToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl border border-rose-200 max-w-md w-full overflow-hidden animate-scale-in">
+            <div className="px-5 py-4 flex items-center justify-between border-b border-rose-100 bg-rose-50/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs">
+                  <Trash2 className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900">
+                    Eliminar Projecto
+                  </h3>
+                  <span className="text-[11px] font-bold text-rose-700 block">
+                    Confirmação de Segurança
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setProjectToDelete(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-5 space-y-4 text-xs">
+              <p className="text-slate-700 font-medium">
+                Tem a certeza que deseja eliminar o projecto <strong className="text-slate-900">"{projectToDelete.name}"</strong> ({projectToDelete.code})?
+              </p>
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-950 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <span>Esta acção é irreversível e removerá todas as tarefas, cronograma e relatórios deste projecto.</span>
+              </div>
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setProjectToDelete(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    deleteProject(projectToDelete.id);
+                    setProjectToDelete(null);
+                  }}
+                  className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Sim, Eliminar Projecto
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

@@ -164,6 +164,16 @@ export const GovernmentalProjectsView: React.FC = () => {
     completionDateInput: string;
   } | null>(null);
 
+  // Modal de Confirmação Visual para Eliminar Projecto
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<{
+    isOpen: boolean;
+    projectId: string;
+    projectName: string;
+  } | null>(null);
+
+  // Modal de Confirmação Visual para Restaurar Lista Original
+  const [resetConfirmModalOpen, setResetConfirmModalOpen] = useState(false);
+
   // Notificação Visual (Toast)
   const [toast, setToast] = useState<{
     id: string;
@@ -505,21 +515,43 @@ export const GovernmentalProjectsView: React.FC = () => {
   // Delete project
   const handleDeleteProject = (projectId: string, projectName: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (window.confirm(`Tem a certeza que deseja eliminar o projecto "${projectName}"?`)) {
-      setProjects(prev => prev.filter(p => p.id !== projectId));
-    }
+    setDeleteConfirmModal({
+      isOpen: true,
+      projectId,
+      projectName,
+    });
+  };
+
+  const handleConfirmDeleteProject = () => {
+    if (!deleteConfirmModal) return;
+    const { projectId, projectName } = deleteConfirmModal;
+    setProjects(prev => prev.filter(p => p.id !== projectId));
+    setDeleteConfirmModal(null);
+    showToast(
+      'success',
+      'Projecto Eliminado!',
+      `O projecto "${projectName}" foi removido com sucesso.`
+    );
   };
 
   // Restore initial defaults
   const handleResetDefaults = () => {
-    if (window.confirm('Deseja restaurar a lista oficial inicial de projectos governamentais?')) {
-      setProjects(INITIAL_GOVERNMENTAL_PROJECTS);
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        // Ignore
-      }
+    setResetConfirmModalOpen(true);
+  };
+
+  const handleConfirmResetDefaults = () => {
+    setProjects(INITIAL_GOVERNMENTAL_PROJECTS);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Ignore
     }
+    setResetConfirmModalOpen(false);
+    showToast(
+      'info',
+      'Lista Oficial Restaurada',
+      'A matriz de projectos governamentais foi reposta para a lista oficial original.'
+    );
   };
 
   // Statistics
@@ -2110,6 +2142,128 @@ export const GovernmentalProjectsView: React.FC = () => {
                       Sim, Reabrir Actividade
                     </>
                   )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMAÇÃO VISUAL DE ELIMINAÇÃO DE PROJECTO */}
+      {deleteConfirmModal && deleteConfirmModal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl border border-rose-200 max-w-md w-full overflow-hidden animate-scale-in">
+            {/* Modal Header */}
+            <div className="px-5 py-4 flex items-center justify-between border-b border-rose-100 bg-rose-50/70">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-xs">
+                  <Trash2 className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 font-heading">
+                    Eliminar Projecto Governamental
+                  </h3>
+                  <span className="text-[11px] font-bold text-rose-700 block">
+                    Confirmação de Segurança
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setDeleteConfirmModal(null)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white/60 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-5 space-y-4">
+              <div className="space-y-1">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Projecto a remover:
+                </span>
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs sm:text-sm font-bold text-slate-900 leading-relaxed flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                  <span className="break-words">{deleteConfirmModal.projectName}</span>
+                </div>
+              </div>
+
+              <div className="p-3 rounded-xl bg-rose-50/80 border border-rose-200 text-xs text-rose-950 flex items-start gap-2.5">
+                <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                <span className="leading-relaxed">
+                  Tem a certeza de que deseja <strong>eliminar este projecto</strong>? Todas as actividades, prazos e notas associadas serão removidas da sua sessão.
+                </span>
+              </div>
+
+              {/* Modal Buttons */}
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setDeleteConfirmModal(null)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmDeleteProject}
+                  className="px-4 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Sim, Eliminar Projecto
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL DE CONFIRMAÇÃO VISUAL DE RESTAURO DA LISTA OFICIAL */}
+      {resetConfirmModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 max-w-md w-full overflow-hidden animate-scale-in">
+            <div className="px-5 py-4 flex items-center justify-between border-b border-amber-100 bg-amber-50/70">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#002D62] text-white flex items-center justify-center shadow-xs">
+                  <RotateCcw className="w-5 h-5 stroke-[2.5]" />
+                </div>
+                <div>
+                  <h3 className="text-sm sm:text-base font-black text-slate-900 font-heading">
+                    Restaurar Lista Oficial
+                  </h3>
+                  <span className="text-[11px] font-bold text-amber-800 block">
+                    Repor Projectos Iniciais
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setResetConfirmModalOpen(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-white/60 transition cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="p-5 space-y-4">
+              <p className="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                Esta acção irá repor a carteira oficial de projectos governamentais para o estado original, mantendo todas as definições e marcos presidenciais aprovados.
+              </p>
+
+              <div className="pt-3 flex items-center justify-end gap-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => setResetConfirmModalOpen(false)}
+                  className="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmResetDefaults}
+                  className="px-4 py-2 text-xs font-bold text-white bg-[#002D62] hover:bg-[#083b77] rounded-xl transition shadow-xs flex items-center gap-1.5 cursor-pointer active:scale-95"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Restaurar Lista Oficial
                 </button>
               </div>
             </div>
