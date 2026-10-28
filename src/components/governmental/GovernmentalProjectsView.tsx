@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import {
-  Landmark,
   CheckSquare,
   Square,
   Plus,
@@ -561,13 +560,6 @@ export const GovernmentalProjectsView: React.FC = () => {
       {/* Clean & Elegant Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 pb-2 border-b border-slate-200">
         <div>
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-orange-100 text-[#c26508]">
-              <Landmark className="w-3.5 h-3.5" />
-              Presidência da República
-            </span>
-            <span className="text-[11px] sm:text-xs text-slate-400 font-medium">• Acompanhamento Directo</span>
-          </div>
           <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
             Projectos Governamentais
           </h1>
