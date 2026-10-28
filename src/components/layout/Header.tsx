@@ -390,7 +390,9 @@ export const Header: React.FC<HeaderProps> = ({
             className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold transition shadow-2xs hover:shadow-xs cursor-pointer group"
             title="Abrir Assistente Inteligente de Gestão (Edm Ai)"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
+            <div className="w-4 h-4 rounded bg-white p-0.5 flex items-center justify-center overflow-hidden shrink-0 border border-blue-200 shadow-2xs">
+              <img src="/logo-edm.webp" alt="EDM" className="w-full h-full object-contain" />
+            </div>
             <span className="font-extrabold tracking-tight">Edm Ai</span>
           </button>
 

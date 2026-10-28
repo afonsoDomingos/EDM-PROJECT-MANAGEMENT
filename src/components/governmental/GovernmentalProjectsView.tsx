@@ -696,7 +696,9 @@ export const GovernmentalProjectsView: React.FC = () => {
             className="inline-flex items-center justify-center gap-1.5 h-10 px-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-[#002D62] border border-blue-200 text-xs font-bold shadow-2xs hover:shadow-xs transition cursor-pointer group"
             title="Assistente Inteligente Edm Ai"
           >
-            <Sparkles className="w-3.5 h-3.5 text-[#F7942D] group-hover:rotate-12 transition-transform" />
+            <div className="w-4 h-4 rounded bg-white p-0.5 flex items-center justify-center overflow-hidden shrink-0 border border-blue-200 shadow-2xs">
+              <img src="/logo-edm.webp" alt="EDM" className="w-full h-full object-contain" />
+            </div>
             <span>Edm Ai</span>
           </button>
           <button
